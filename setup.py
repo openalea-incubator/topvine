@@ -1,68 +1,49 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-import sys
-import os
-
+import sys, os
 from setuptools import setup, find_packages
+from os.path import join as pj
+
 from openalea.deploy.metainfo import read_metainfo
 
-name = 'OpenAlea.TopVine'
-version = '1.0.0'
-
-description = "TopVine is a package for 3D reconstruction of vine leaves."
-long_description = open('README.md').read()
-
-authors=" "
-authors_email=" "
-
-url = "https://github.com/openalea/topvine"
-
-license = 'cecill-c'
-# dependencies to other eggs
-setup_requires = ['openalea.deploy']
-
-# web sites where to find eggs
-dependency_links = ['http://openalea.gforge.inria.fr/pi']
-
-# find packages
-packages = find_packages('src')
-package_dir={'': 'src'}
-
-setup(
-    name=name,
-    version=version,
-
-    description=description,
-    long_description=long_description,
-    author=authors,
-    author_email=authors_email,
-    url=url,
-    license=license,
-    keywords='vine, canopy, leaves',
-
-    # package installation
-    packages=packages,
-    package_dir=package_dir,
-
-    share_dirs={'share': 'share'},
-
-    # Namespace packages creation by deploy
-    namespace_packages=['openalea'],
-    create_namespaces=True,
-    zip_safe=False,
-
-    # Dependencies
-    setup_requires=setup_requires,
-    dependency_links=dependency_links,
+# Reads the metainfo file
+metadata = read_metainfo('metainfo.ini', verbose=True)
+for key,value in metadata.iteritems():
+    exec("%s = '%s'" % (key, value))
 
 
-    include_package_data=True,
+setup(name = name,
+      version = version,
+      description = description,
+      long_description = long_description,
+      authors = authors,
+      authors_email = authors_email,
+      license = license,
+      namespace_packages = [namespace], 
+      create_namespaces = True,
+      #packages = [pkg_name],
+      zip_safe = False,
+      packages =  [ 'alinea.topvine',
+                    'alinea.topvine.carto',
+                    'alinea.topvine.demo',
+                    'alinea.topvine.macro',
+			  'alinea.topvine.farquhar',
+			  'alinea.topvine.farquhar.demo',
+                    'alinea.topvine.lsystem',
+                    'alinea.topvine.geom',
+                    'alinea.topvine.farquhar',
+                    'alinea.topvine.farquhar.demo',
+                    'alinea.topvine.farquhar.macro',
+                    'alinea.topvine.law',
+                    'alinea.topvine.rammoy',
+                    'alinea.topvine.digit',
+                    'alinea.topvine.data'  ],
 
-    # (you can provide an exclusion dictionary named exclude_package_data to remove parasites).
-    # alternatively to global inclusion, list the file to include
-    package_data={'': ['*.csv', '*.mtg', '*.R*', '*.ipynb']},
+      package_dir = { 'alinea.topvine':  'topvine', },
+      package_data = {'':['*.csv', '*.8', '*.d3d', '*.png', '*.lsys']},
+      entry_points = { 'wralea': [ 'topvine = alinea.topvine',] },
 
-    # Declare scripts and wralea as entry_points (extensions) of your package
-    entry_points={'wralea': ['topvine = openalea.topvine_wralea']},
-    )
+      # Dependencies
+      setup_requires = ['openalea.deploy'],
+      install_requires = [],
+      dependency_links = ['http://openalea.gforge.inria.fr/pi'],
+)
+
