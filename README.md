@@ -2,7 +2,7 @@
 
 TopVine2022:  La version en python 3, en développement.
 
-## Getting started
+## Getting started with a smile
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
