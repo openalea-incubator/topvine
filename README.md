@@ -1,6 +1,6 @@
 # TopVine2022
 
-TopVine2022:  La version en python 3, en développement.
+topvine :  La version en python 3, en développement.
 
 ## Getting started
 
@@ -15,7 +15,7 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://forgemia.inra.fr/grapevine/topvine2022.git
+git remote add origin https://forgemia.inra.fr/grapevine/topvine.git
 git branch -M main
 git push -uf origin main
 ```
