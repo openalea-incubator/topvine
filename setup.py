@@ -19,13 +19,8 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
 
-    # Namespace packages creation by deploy
-    namespace_packages=[metadata['namespace']],
-    create_namespaces=True,
-    zip_safe=False,
-
-    # Dependencies
-    setup_requires=['openalea.deploy'],
-    dependency_links=['http://openalea.gforge.inria.fr/pi'],
-    install_requires=[]
+    package_data = {'':['*.csv', '*.8', '*.d3d', '*.png', '*.lsys']},
+    setup_requires = ['openalea.deploy'],
+    install_requires = [],
+    namespace_packages=[metadata['namespace']]
 )
