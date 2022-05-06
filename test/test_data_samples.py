@@ -8,6 +8,6 @@ def test_readers():
     allometry = ds.allometry_file()
     
 
-def test_normal_canopy():
+def test_normal_canopy(): 
     can = ds.normal_canopy()
-    a
+    
