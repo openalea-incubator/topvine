@@ -32,9 +32,8 @@ setup_kwds = dict(
     keywords='',
     )
     
-setup_kwds['share_dirs'] = {'share': 'share'}
-setup_kwds['entry_points']["wralea"] = ["topvine = alinea.topvine"]
-setup_kwds['setup_requires'] = ['openalea.deploy']
+# setup_kwds['entry_points']["wralea"] = ["topvine = alinea.topvine"]
+# setup_kwds['setup_requires'] = ['openalea.deploy']
 
 if ('CONDA_PREFIX' not in os.environ) and ('PREFIX' not in os.environ):
     setup_kwds['namespace_packages']=['alinea'] # Never used in a conda env...
