@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from numpy import *
+from six.moves import range
 
 def groupOutput_phyto(caribu_dict, key='EiSup', sum_ =False):
     # add a unique id per phytomer

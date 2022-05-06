@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from openalea.plantgl.all import *
 from numpy import sqrt, arccos, array, cos, sin, pi, ceil, exp
 import random
@@ -8,6 +10,7 @@ import random
 import os
 #from os.path import join
 from openalea.core.pkgmanager import PackageManager
+from six.moves import range
 pm = PackageManager()
 pkg = pm.get('alinea.topvine') 
 path_topvine = ''
@@ -46,7 +49,7 @@ def turbid_vineVSP(TT, LADini, LAImax, Hmax, Largmax,  Hpied, dazi=[0., 60.], di
     #surf = LADini*vol
     n1 = surf/dsize
     sd = random.seed(seed)
-    print LAI, LAD, surf, n1, larg, H, larg_calc, 'LAI, LAD, surf, n1, larg, H, larg_calc'
+    print(LAI, LAD, surf, n1, larg, H, larg_calc, 'LAI, LAD, surf, n1, larg, H, larg_calc')
 
     MaScene = Scene()
     for i in range (int(n1)):
@@ -90,7 +93,7 @@ def turbid_vineCyl(TT, LADini, LAImax, Hmax, Hpied, ouverture=270., dazi=[0., 60
     LAD = surf/vol
     n1 = surf/dsize
     sd = random.seed(seed)
-    print LAI, LAD, surf, n1, r, r_calc, 'LAI, LAD, surf, n1, larg, H, larg_calc'
+    print(LAI, LAD, surf, n1, r, r_calc, 'LAI, LAD, surf, n1, larg, H, larg_calc')
 
     MaScene = Scene()
     for i in range (int(n1)):

@@ -1,6 +1,8 @@
+from __future__ import absolute_import
 from numpy import array
 from numpy.random import multivariate_normal, seed
 import random
+from six.moves import range
 
 def cmpf(x,y):
     if x[0]<=y[0]:

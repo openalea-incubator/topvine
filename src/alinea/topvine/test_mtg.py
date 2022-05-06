@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 import openalea.mtg as mtg
+from six.moves import range
 
 
 #print len(g)

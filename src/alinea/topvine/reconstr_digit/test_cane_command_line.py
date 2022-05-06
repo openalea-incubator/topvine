@@ -1,7 +1,10 @@
 
+from __future__ import absolute_import
 from numpy import array, pi
 from openalea.plantgl.all import *
 import random
+from six.moves import map
+from six.moves import range
 
 path_topvine = r'H:\devel\topvine\topvine'
 import sys
@@ -42,16 +45,16 @@ def lII(nII, par):
     return a*nII*nII+b*nII+c#71 cm <-> 15f
 
 def mef_digitcanefile(csv_file_path):
-    f = file(csv_file_path, 'r')
+    f = open(csv_file_path, 'r')
     table = IOtable.table_csv_str (f)
     f.close()
     dat_dict = IOtable.conv_dataframe(IOtable.t_list(table))
 
-    dat_dict['X'] = map(float, dat_dict['X'])
-    dat_dict['Y'] = map(float, dat_dict['Y'])
-    dat_dict['Z'] = map(float, dat_dict['Z'])
-    dat_dict['Cane_nb'] = map(int, dat_dict['Cane_nb'])
-    dat_dict['Plant_Nb'] = map(int, dat_dict['Plant_Nb'])
+    dat_dict['X'] = list(map(float, dat_dict['X']))
+    dat_dict['Y'] = list(map(float, dat_dict['Y']))
+    dat_dict['Z'] = list(map(float, dat_dict['Z']))
+    dat_dict['Cane_nb'] = list(map(int, dat_dict['Cane_nb']))
+    dat_dict['Plant_Nb'] = list(map(int, dat_dict['Plant_Nb']))
     dat_dict = {'X': dat_dict['X'], 'Y': dat_dict['Y'], 'Z':dat_dict['Z'] , 'Cane_nb': dat_dict['Cane_nb'], 'Plant_Nb': dat_dict['Plant_Nb']}
 
     nb_sh = max(dat_dict['Cane_nb'])
@@ -393,7 +396,7 @@ par_gs['m'] = None #a remplacer par a1 et D0 de Leuning
 
 
 #Exemple 1: calcul de An pour chaque feuille de plant_dict (1 rameau)
-id_leaves = plant_dict.keys()
+id_leaves = list(plant_dict.keys())
 
 res = []
 for leaf in id_leaves:

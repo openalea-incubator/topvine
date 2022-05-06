@@ -1,7 +1,9 @@
-from meteo_utils import *
-from compute_gs import *
-from compute_an import *
-from coupling_Anci import *
+from __future__ import absolute_import
+from __future__ import print_function
+from .meteo_utils import *
+from .compute_gs import *
+from .compute_an import *
+from .coupling_Anci import *
 
 
 def Transpiration_rate(Tac, Tlc, ea, gs, gb, Pa = 101.3, epsilon = 0.97):
@@ -102,18 +104,18 @@ def coupling_Angsci(par_photo, par_gs, meteo_dat, lat=0.44, alt=0.,LPI=10., alb=
             # leaf temperature calculation loop
             Rabs = computeRabs(Rg, Tac, meteo_dat['DOY'], meteo_dat['HU'], lat, alt, alb)#% absorbed radiation short wave radiations (W m-2)
             Tlcnew, E = increment_leafT(Tac, Tlc, ea, Rabs, gs, gb) 
-            print Rabs, Tlcnew
+            print(Rabs, Tlcnew)
             if  abs(Tlcnew-Tlc) < delta_Tc :
                 Tlc = Tlcnew
-                print 'nb iteration Tl_'+str(j)
+                print('nb iteration Tl_'+str(j))
                 break #% to the end of Tlc loop
             else :
                 Tlc = Tlcnew
                 Ci = 0.7*Ca # reinitialisation of Ci
-                print 'nb iteration Tl_'+str(j)       
+                print('nb iteration Tl_'+str(j))       
             
             if j>iter-2:
-                print 'warning !!! Tlc calculation does not converge to a solution' 
+                print('warning !!! Tlc calculation does not converge to a solution') 
            
         j=j+1  
 

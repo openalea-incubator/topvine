@@ -1,4 +1,6 @@
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
+from six.moves import range
 
 class stand_generator(object):
     """  Doc... """ 
@@ -9,7 +11,7 @@ class stand_generator(object):
 
     def __call__(self, carto_path, CxT, personalise, nbr, nbp):
         if personalise == False:
-            f = file(carto_path, 'r')
+            f = open(carto_path, 'r')
             tab_carto = IOtable.table_csv(f) 
             f.close()
         else:
@@ -21,7 +23,7 @@ class stand_generator(object):
 
         # en attendant de generer les paramtres geometriques (rpy), lecture dans un fichier
         path_geom = r'C:\Documents and Settings\Karine\.openalea\user_pkg\topvine\geom\ex_geom.csv'
-        f = file(path_geom, 'r')
+        f = open(path_geom, 'r')
         tab_geom = IOtable.table_csv(f) 
         f.close()
         # faire une fonction qui fait le bon nombre de plante / rameaux par plantes

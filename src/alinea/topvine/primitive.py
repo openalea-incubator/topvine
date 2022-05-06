@@ -1,9 +1,11 @@
 ##### Primitives 3D (PlantGL) pour Topvine
 
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
 from openalea.plantgl.all import *
 from numpy import tan, sqrt, sin, cos, array
-from Obj3Dutils import quadform, transformation
+from .Obj3Dutils import quadform, transformation
+from six.moves import range
 
 def en0(n=6):
     return Cylinder(1,1,True,n)

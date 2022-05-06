@@ -1,9 +1,11 @@
-import leaf
-import shoot
-from V3Dutils import *
-from Obj3Dutils import *
+from __future__ import absolute_import
+from . import leaf
+from . import shoot
+from .V3Dutils import *
+from .Obj3Dutils import *
 import numpy
 from numpy import sqrt, arccos, array, cos, sin, pi, ceil
+from six.moves import range
 
 
 

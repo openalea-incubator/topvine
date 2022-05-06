@@ -1,6 +1,8 @@
-from meteo_utils import *
-from compute_gs import *
-from compute_an import *
+from __future__ import absolute_import
+from __future__ import print_function
+from .meteo_utils import *
+from .compute_gs import *
+from .compute_an import *
 
 def incrementCi(Ca, A, gs, gb): # 22/06/2011: sacar el meteo_dat, ea, es_l del parentesis y del parentesis de la linea 44
     '''    increment Ci Value
@@ -46,13 +48,13 @@ def coupling_Anci(par_photo, par_gs, meteo_dat, LPI, w=0.1, iter=50, deltaci=0.0
         Cinew = incrementCi(Ca, An, gs, gb)
         #print i, An, Cinew
         if abs(Cinew-Ci) < deltaci :   
-            print 'nb iteration Ci_'+ str(i)
+            print('nb iteration Ci_'+ str(i))
             Ci = Cinew
             break 
         else:
             Ci = Cinew
             if i>iter-2:
-                print 'warning ! Ci calculation does not converge to a solution'   
+                print('warning ! Ci calculation does not converge to a solution')   
                                       
         i=i+1
 

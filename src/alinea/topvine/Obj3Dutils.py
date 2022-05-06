@@ -1,8 +1,11 @@
 ### set de fonctions utiles pour manipuler les geometry plantGL
 
+from __future__ import absolute_import
 from openalea.plantgl.all import *
-from V3Dutils import *
+from .V3Dutils import *
 from numpy import pi, array, cos, sin
+from six.moves import map
+from six.moves import range
 
 def mesh(geometry):
     """ renvoie le mesh d'une geometry"""
@@ -113,7 +116,7 @@ def compute_normal_list(ind_ls, pt_ls):
 def mesh_points(geometry):
     """ get the mesh points of a geometry """
     g = mesh(geometry)
-    return map(array, g.pointList)
+    return list(map(array, g.pointList))
 
 def triangle_area(p1, p2, p3):
     """ compute surface area of a triangle """

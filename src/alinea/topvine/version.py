@@ -1,8 +1,8 @@
 
-major = 0
+major = 1
 """(int) Version major component."""
 
-minor = 9
+minor = 0
 """(int) Version minor component."""
 
 post = 0

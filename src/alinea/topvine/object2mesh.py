@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import openalea.plantgl.all as pgl
 
 def mesh(geometry):

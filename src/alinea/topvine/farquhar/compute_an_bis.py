@@ -3,10 +3,13 @@
 # version reecrite de compute_an de Prieto et al. 2012 pour sortir les parametres de reponse a la temperature
 # changement des entrees (par_photo) et ajout de sorties (Wx notamment)
 
+from __future__ import absolute_import
+from __future__ import print_function
 from numpy import *
 #from numpy import exp
-from meteo_utils import *
-from compute_gs import *
+from .meteo_utils import *
+from .compute_gs import *
+from six.moves import range
 
 
 ################
@@ -178,7 +181,7 @@ def coupling_Anci(par_photo, par_gs, meteo_dat, LPI, w=0.1, iter=50, deltaci=0.0
         else:
             Ci = Cinew
             if i>iter-2:
-                print 'warning ! Ci calculation does not converge to a solution'   
+                print('warning ! Ci calculation does not converge to a solution')   
                                       
         i=i+1
 
@@ -300,7 +303,7 @@ def coupling_Angsci(par_photo, par_gs, meteo_dat, lat=0.44, alt=0.,LPI=10., alb=
                 ##print 'nb iteration Tl_'+str(j)       
             
             if j>iter-2:
-                print 'warning !!! Tlc calculation does not converge to a solution' 
+                print('warning !!! Tlc calculation does not converge to a solution') 
            
         j=j+1  
 

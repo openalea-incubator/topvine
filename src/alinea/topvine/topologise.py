@@ -1,5 +1,7 @@
 # formerly 'topologise'
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
+from six.moves import range
 
 #add a step to check file format : write a specific procedure
 class topologise(object):
@@ -7,7 +9,7 @@ class topologise(object):
 
     def __call__(self, path):
         #check file format
-        ram_moy = file(path, 'r')
+        ram_moy = open(path, 'r')
         tab_rammoy = IOtable.table_csv(ram_moy) 
         ram_moy.close()
         topo = []

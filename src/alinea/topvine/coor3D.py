@@ -1,5 +1,7 @@
 ### set de fonctions utiles pour manipuler les coordonnees 3D dans l'espace
 
+from __future__ import absolute_import
+from __future__ import print_function
 import numpy
 
 def XyzToPol (coordxy) :
@@ -43,7 +45,7 @@ def Translate (coordxy, t):
     if len(coordxy)==len(t):
         return coordxy + t
     else:
-        print 'vector lengths do not match'
+        print('vector lengths do not match')
 
 ## test
 #c=numpy.array([1.2,1,0.9])

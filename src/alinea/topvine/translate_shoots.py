@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from numpy import array
+from six.moves import range
 
 
 class translate_shoots(object):

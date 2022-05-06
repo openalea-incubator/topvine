@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from rpy import r
+from six.moves import range
 
 def as_matrix(tab):
     """ converts a list of list or a python array into an R matrix Robj """

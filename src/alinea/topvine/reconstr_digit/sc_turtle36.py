@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 from openalea.plantgl.all import *
 from numpy import array, sin, cos, pi, ceil
 import random
 from openalea.core.pkgmanager import PackageManager
+from six.moves import range
 pm = PackageManager()
 pkg = pm.get('alinea.topvine') 
 path_topvine = ''
