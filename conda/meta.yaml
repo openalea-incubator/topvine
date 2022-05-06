@@ -1,0 +1,42 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: alinea.topvine
+  version: {{ data.get('version') }}
+
+source:
+  path: ..
+
+build:
+  noarch: python
+  preserve_egg_dir: True
+  number: 1
+  script: python setup.py install #--single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - python 
+    - openalea.deploy
+  run:
+    - python >=3.6
+    - openalea.plantgl
+    - openalea.mtg
+
+test:
+  requires:
+    - pytest
+    - path
+  imports:
+    - alinea.topvine
+  source_files:
+    - test/**
+
+  commands:
+    - cd test
+    - pytest -v --ignore=test_aml.py  --ignore=test_stat.py
+
+about:
+  home: {{ data.get('url') }}
+  license: CeCILL-C
+  summary: {{ data.get('description') }}
+
