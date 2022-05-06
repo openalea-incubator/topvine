@@ -1,49 +1,43 @@
-import sys, os
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os
+
+# format setup arguments
 from setuptools import setup, find_packages
-from os.path import join as pj
-
-from openalea.deploy.metainfo import read_metainfo
-
-# Reads the metainfo file
-metadata = read_metainfo('metainfo.ini', verbose=True)
-for key,value in metadata.iteritems():
-    exec("%s = '%s'" % (key, value))
 
 
-setup(name = name,
-      version = version,
-      description = description,
-      long_description = long_description,
-      authors = authors,
-      authors_email = authors_email,
-      license = license,
-      namespace_packages = [namespace], 
-      create_namespaces = True,
-      #packages = [pkg_name],
-      zip_safe = False,
-      packages =  [ 'alinea.topvine',
-                    'alinea.topvine.carto',
-                    'alinea.topvine.demo',
-                    'alinea.topvine.macro',
-			  'alinea.topvine.farquhar',
-			  'alinea.topvine.farquhar.demo',
-                    'alinea.topvine.lsystem',
-                    'alinea.topvine.geom',
-                    'alinea.topvine.farquhar',
-                    'alinea.topvine.farquhar.demo',
-                    'alinea.topvine.farquhar.macro',
-                    'alinea.topvine.law',
-                    'alinea.topvine.rammoy',
-                    'alinea.topvine.digit',
-                    'alinea.topvine.data'  ],
+short_descr = "3D reconstruction model of grapevine canopy"
 
-      package_dir = { 'alinea.topvine':  'topvine', },
-      package_data = {'':['*.csv', '*.8', '*.d3d', '*.png', '*.lsys']},
-      entry_points = { 'wralea': [ 'topvine = alinea.topvine',] },
+# find version number in src/openalea/mtg/version.py
+version = {}
+with open("src/alinea/topvine/version.py") as fp:
+    exec(fp.read(), version)
 
-      # Dependencies
-      setup_requires = ['openalea.deploy'],
-      install_requires = [],
-      dependency_links = ['http://openalea.gforge.inria.fr/pi'],
-)
+topvine_version = version["__version__"]
 
+setup_kwds = dict(
+    name='alinea.topvine',
+    version=topvine_version,
+    description=short_descr,
+    long_description=short_descr,
+    author="Gaetan Louarn",
+    author_email="gaetan.louarn__at__inrae.fr",
+    license='cecill-c',
+    zip_safe=False,
+
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    entry_points={},
+    keywords='',
+    )
+    
+setup_kwds['share_dirs'] = {'share': 'share'}
+setup_kwds['entry_points']["wralea"] = ["topvine = alinea.topvine"]
+setup_kwds['setup_requires'] = ['openalea.deploy']
+
+if ('CONDA_PREFIX' not in os.environ) and ('PREFIX' not in os.environ):
+    setup_kwds['namespace_packages']=['alinea'] # Never used in a conda env...
+
+# do not change things below
+setup(**setup_kwds)
