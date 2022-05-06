@@ -1,6 +1,9 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import numpy
 import random
-import leaf
+from . import leaf
+from six.moves import range
 
 class Shoot:
     def __init__(self, Pgeom, topol, law):

@@ -1,6 +1,7 @@
 
 # This file has been generated at Thu Apr 23 20:39:57 2015
 
+from __future__ import absolute_import
 from openalea.core import *
 
 
@@ -458,7 +459,7 @@ primitive_bunch = Factory(name='gen_bunch',
                 category='Unclassified',
                 nodemodule='alinea.topvine.primitive',
                 nodeclass='bunch',
-                inputs=[{'interface': None, 'name': 'scene', 'value': None, 'desc': ''}, {'interface': None, 'name': 'coord', 'value': None, 'desc': ''}, {'interface': IStr, 'name': 'opt', 'value': None, 'desc': ''}, {'interface': IStr, 'name': 'id', 'value': 200000000000L, 'desc': ''}],
+                inputs=[{'interface': None, 'name': 'scene', 'value': None, 'desc': ''}, {'interface': None, 'name': 'coord', 'value': None, 'desc': ''}, {'interface': IStr, 'name': 'opt', 'value': None, 'desc': ''}, {'interface': IStr, 'name': 'id', 'value': 200000000000, 'desc': ''}],
                 outputs=[{'interface': None, 'name': 'scene', 'desc': ''}],
                 widgetmodule=None,
                 widgetclass=None,

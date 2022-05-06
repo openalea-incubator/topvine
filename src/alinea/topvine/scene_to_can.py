@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import openalea.plantgl.all as pgl
 import os
 from openalea.core.pkgmanager import PackageManager
 from os.path import join
+from six.moves import range
 
 
 pm = PackageManager()
@@ -38,7 +40,7 @@ class scene_to_can(object):
             for ind in index:
                 out.append(canline(ind, label,p))
 
-        o = file(join(path, 'temp.can'), 'w')#stockage dans un fichier can temporaire
+        o = open(join(path, 'temp.can'), 'w')#stockage dans un fichier can temporaire
         for i in range(len(out)):
             o.write(out[i]+"\n")
 
@@ -64,7 +66,7 @@ class scene2can(object):
             for ind in index:
                 out.append(canline(ind, label,p))
 
-        o = file(join(path, name), 'w')#stockage dans un fichier can temporaire
+        o = open(join(path, name), 'w')#stockage dans un fichier can temporaire
         for i in range(len(out)):
             o.write(out[i]+"\n")
 

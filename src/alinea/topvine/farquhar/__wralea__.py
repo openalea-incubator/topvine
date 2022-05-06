@@ -1,6 +1,7 @@
 
 # This file has been generated at Wed Feb 08 14:41:44 2012
 
+from __future__ import absolute_import
 from openalea.core import *
 
 

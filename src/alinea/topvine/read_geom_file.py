@@ -1,5 +1,8 @@
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
 import numpy
+from six.moves import map
+from six.moves import range
 
 class read_geom_file(object):
     """  read geom file and return shoot params as a table """ 
@@ -9,13 +12,13 @@ class read_geom_file(object):
 
 
     def __call__(self, path_geom):
-        f = file(path_geom, 'r')
+        f = open(path_geom, 'r')
         tab_geom = IOtable.table_csv_str(f) 
         f.close()
 
         res = []
         for i in range(len(tab_geom)):
-            tab_geom[i] = map(float, tab_geom[i])
+            tab_geom[i] = list(map(float, tab_geom[i]))
             tab_geom[i]=[int(tab_geom[i][0])]+[numpy.array(tab_geom[i][1:4])]+tab_geom[i][4:]
 
             if i==0: #1ere plante

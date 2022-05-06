@@ -1,4 +1,6 @@
-﻿from numpy import exp
+﻿from __future__ import absolute_import
+from numpy import exp
+from six.moves import range
 
 # Modified on 16/11/2010 to compute An from Vc, Jmax and TPU
 

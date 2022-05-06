@@ -1,4 +1,6 @@
+from __future__ import absolute_import
 from os.path import join
+from six.moves import range
 
 def N_lignes (fichier) :
     """compte le nombre de lignes d'un fichier (compte le nombre d'elements de la liste readlines()"""
@@ -235,7 +237,7 @@ def write_dict(dict, directory, name):
         tab = conv_list2(dict)
 
 
-    out = file(join(directory, name), 'w')
+    out = open(join(directory, name), 'w')
     ecriture_csv (tab, out)  
     out.close()
     

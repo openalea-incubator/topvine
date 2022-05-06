@@ -1,6 +1,9 @@
+from __future__ import absolute_import
+from __future__ import print_function
 from math import *
 from numpy import exp
 import copy
+from six.moves import range
 
 def s_avpd(Tac):
     """ saturated vapor pressure in the ambiant air (kPa)"""
@@ -236,7 +239,7 @@ def compute_an(par_photo, PPFD, Tlc, Ci, LPI=None):
         #Vm25 = 43.31 #parametre bidon (pin, Nikolov): rq: Nikolov renseigne reponse a la tempereture de Jmax, Vmax.. differemment avec parametre Vm25, Jm25... - ce serait sans doute mieux de renseigner les reponse a la temperature par ces parametres la
         Rd = cdr*Vm25*exp(34.07 - 84450/(R*Tlk)) #eq 16 
     else:
-        print 'parameter lacking to compute Rd'
+        print('parameter lacking to compute Rd')
 
     #point de compensation T fonctions de l'age LPI(Schultz, 2003) ou pas (Nikolov, 1995)
     if b1 != None and b2 != None:
@@ -320,13 +323,13 @@ def coupling_Anci(par_photo, par_gs, meteo_dat, LPI, w=0.1, iter=50, deltaci=0.0
         Cinew = incrementCi(Ca, An, gs, gb)
         #print i, An, Cinew
         if abs(Cinew-Ci) < deltaci :   
-            print 'nb iteration Ci_'+ str(i)
+            print('nb iteration Ci_'+ str(i))
             Ci = Cinew
             break 
         else:
             Ci = Cinew
             if i>iter-2:
-                print 'warning ! Ci calculation does not converge to a solution'   
+                print('warning ! Ci calculation does not converge to a solution')   
                                       
         i=i+1
 
@@ -362,18 +365,18 @@ def cougling_Angsci(par_photo, par_gs, meteo_dat, lat=0.44, alt=0.,LPI=10., alb=
         # leaf temperature calculation loop
         Rabs = computeRabs(Rg, Tac, meteo_dat['DOY'], meteo_dat['HU'], lat, alt, alb)#% absorbed radiation short wave radiations (W m-2)
         Tlcnew, E = increment_leafT(Tac, Tlc, ea, Rabs, gs, gb) 
-        print Rabs, Tlcnew
+        print(Rabs, Tlcnew)
         if  abs(Tlcnew-Tlc) < delta_Tc :
             Tlc = Tlcnew
-            print 'nb iteration Tl_'+str(j)
+            print('nb iteration Tl_'+str(j))
             break #% to the end of Tlc loop
         else :
             Tlc = Tlcnew
             Ci = 0.7*Ca # reinitialisation of Ci
-            print 'nb iteration Tl_'+str(j)       
+            print('nb iteration Tl_'+str(j))       
         
         if j>iter-2:
-            print 'warning !!! Tlc calculation does not converge to a solution' 
+            print('warning !!! Tlc calculation does not converge to a solution') 
            
         j=j+1  
 

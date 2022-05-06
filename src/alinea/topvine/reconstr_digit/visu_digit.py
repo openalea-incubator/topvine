@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import IOtable
 from openalea.plantgl.all import *
 from math import pi
 import os
 
 from openalea.core.pkgmanager import PackageManager
+from six.moves import range
 pm = PackageManager()
 pkg = pm.get('alinea.topvine') 
 path_topvine = ''
@@ -23,7 +25,7 @@ class visu_digit(object):
 
 
     def __call__(self, f_d3D, ang_cor, coord, MaScene = Scene(), nump=1, teta_row=0):
-        f = file(f_d3D, 'r')
+        f = open(f_d3D, 'r')
         tab = IOtable.table_csv(f) #a remplacer part d3d / utiliser IOtable.table_txt
         f.close()
 

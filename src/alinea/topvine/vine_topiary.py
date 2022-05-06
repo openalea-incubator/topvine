@@ -1,10 +1,12 @@
+from __future__ import absolute_import
 import numpy
 import random
-import leaf
-import shoot
-import topiary
-from coor3D import *
-from primitive import *
+from . import leaf
+from . import shoot
+from . import topiary
+from .coor3D import *
+from .primitive import *
+from six.moves import range
 
 
 class vine_topiary(object):

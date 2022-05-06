@@ -1,8 +1,10 @@
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
 #from math import *
 from openalea.plantgl.all import *
-import primitive
+from . import primitive
 from math import pi
+from six.moves import range
 
 class visu_digit(object):
     """  visualise digitalisation data from .d3d file """ 
@@ -12,7 +14,7 @@ class visu_digit(object):
 
 
     def __call__(self, f_d3D, ang_cor, coord, MaScene = Scene(), nump=1, teta_row=0):
-        f = file(f_d3D, 'r')
+        f = open(f_d3D, 'r')
         tab = IOtable.table_csv(f) #a remplacer part d3d / utiliser IOtable.table_txt
         f.close()
 

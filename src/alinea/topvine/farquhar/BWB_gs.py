@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from numpy import exp
-from meteo_utils import *
+from .meteo_utils import *
 
 def BWB_m(psi, m0=129.30000000000001, psi0=0.37, n_gs=1.85):
     '''    compute BWB m parameter according to soil water status

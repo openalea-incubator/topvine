@@ -1,3 +1,4 @@
+from six.moves import range
 def expandOutput_phyto(caribu_dict, keys, values):
     '''    
     '''

@@ -1,5 +1,7 @@
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
 from numpy import array
+from six.moves import range
 
 
 class read_stand_file(object):
@@ -10,7 +12,7 @@ class read_stand_file(object):
 
 
     def __call__(self, path):
-        f = file(path)
+        f = open(path)
         tab = IOtable.table_csv_str(f)
         f.close()
 

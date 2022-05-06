@@ -1,6 +1,7 @@
-from BWB_gs import *
-from Jarvis_gs import *
-from meteo_utils import s_avpd
+from __future__ import absolute_import
+from .BWB_gs import *
+from .Jarvis_gs import *
+from .meteo_utils import s_avpd
 
 def compute_gs(par_gs, Tac, hs, An=0, PPFD=0, psi=0.10000000000000001, Ca=360, Pa=101.3):
     '''    compute gs according model and parameters defined in param_gs

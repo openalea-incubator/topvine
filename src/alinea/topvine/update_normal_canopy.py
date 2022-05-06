@@ -1,7 +1,9 @@
+from __future__ import absolute_import
 import numpy
 import random
-import leaf
-import shoot
+from . import leaf
+from . import shoot
+from six.moves import range
 
 
 class update_normal_canopy(object):

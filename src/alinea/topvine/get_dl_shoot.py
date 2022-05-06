@@ -1,5 +1,7 @@
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
 from numpy import array
+from six.moves import range
 
 
 class get_dl_shoot(object):
@@ -9,7 +11,7 @@ class get_dl_shoot(object):
         pass
 
     def __call__(self, path):
-        f = file(path)
+        f = open(path)
         tab = IOtable.table_csv_str(f)
         f.close()
 

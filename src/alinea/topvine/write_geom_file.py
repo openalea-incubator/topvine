@@ -1,7 +1,9 @@
-import IOtable
+from __future__ import absolute_import
+from . import IOtable
 import os
 from os.path import join
 from openalea.core.pkgmanager import PackageManager
+from six.moves import range
 
 pm = PackageManager()
 pkg = pm.get('alinea.topvine') 
@@ -23,7 +25,7 @@ class write_geom_file(object):
                 res.append(a)
 
         #ecriture du fichier
-        out = file(join(path, name), 'w')
+        out = open(join(path, name), 'w')
         IOtable.ecriture_csv (res, out)  
         out.close()
 
