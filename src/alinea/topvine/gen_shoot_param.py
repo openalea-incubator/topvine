@@ -4,11 +4,6 @@ from numpy.random import multivariate_normal, seed
 import random
 from six.moves import range
 
-def cmpf(x,y):
-    if x[0]<=y[0]:
-        return -1
-    else:
-        return 1
 
 class gen_shoot_param(object):
     """  Generates shoot parameters for a vine of n shoots """ 
@@ -88,7 +83,7 @@ class gen_shoot_param(object):
         for i in range(len(seq)):
             seq[i]=seq[i][1:]
     
-        seq.sort(cmpf)
+        seq = sorted(seq, key=lambda elt: elt[0])
     
         return seq
 

@@ -2,12 +2,9 @@ from __future__ import absolute_import
 from . import IOtable
 import os
 from os.path import join
-from openalea.core.pkgmanager import PackageManager
 from six.moves import range
 
-pm = PackageManager()
-pkg = pm.get('alinea.topvine') 
-path = pkg.path 
+topvinedir = os.path.dirname(__file__)
 
 class write_geom_file(object):
     """  save shoot params in a csv file """ 
@@ -16,7 +13,7 @@ class write_geom_file(object):
         pass
 
 
-    def __call__(self, tab_geom, name):
+    def __call__(self, tab_geom, name, outdir = topvinedir):
         #mise a plat du tableau 3 dim
         res = []
         for p in range(len(tab_geom)):
@@ -25,7 +22,7 @@ class write_geom_file(object):
                 res.append(a)
 
         #ecriture du fichier
-        out = open(join(path, name), 'w')
+        out = open(join(outdir, name), 'w')
         IOtable.ecriture_csv (res, out)  
         out.close()
 

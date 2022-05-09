@@ -8,6 +8,11 @@ from six.moves import range
 
 topvinedir = os.path.dirname(__file__)
 
+def stand_file(fn= '/data/carto.csv'):
+    from .read_stand_file import read_stand_file
+    reader = read_stand_file()
+    return reader(topvinedir + fn)
+
 def geom_file(fn = '/data/ex_geom2.csv'):
     from .read_geom_file import read_geom_file
     reader = read_geom_file()
@@ -22,11 +27,17 @@ def dl_file(fn='/data/Law-leaf-2W-Grenache.csv'):
     from .get_dl import get_dl
     reader = get_dl()
     return reader(topvinedir + fn)
+    
+def dl_shoot_file(fn='/data/2W_VSP_GRE_ramd.csv'):
+    from .get_dl_shoot import get_dl_shoot
+    reader = get_dl_shoot()
+    return reader(topvinedir + fn)
    
 def allometry_file(fn='/data/allo_Grenache.csv'):
     from .read_allometry import read_allometry    
     reader = read_allometry()
     return reader(topvinedir + fn)
+
 
 def normal_canopy():
     from .gen_normal_canopy import gen_normal_canopy
