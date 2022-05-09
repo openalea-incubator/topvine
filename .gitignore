@@ -101,3 +101,5 @@ doc/_dvlpt/
 # VS Code
 .vscode
 *.code-workspace
+
+*.bak
