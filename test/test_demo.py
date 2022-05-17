@@ -4,7 +4,8 @@ from alinea.topvine.gen_normal_canopy import gen_normal_canopy
 from alinea.topvine.vine_topiary import vine_topiary
 from alinea.topvine.gen_shoot_param import gen_shoot_param
 from alinea.topvine.translate_shoots import translate_shoots
-
+from alinea.topvine.primitive import bunch
+from openalea.plantgl.all import *
 
 def test_demo_topvine_static():
     vt = vine_topiary()
@@ -47,3 +48,9 @@ def test_demo_stand_generator():
     scene = vt(tab_shoot, dl, allometry, False, False, False)
     
     return geom
+
+
+def test_demo_bunch():
+    MaScene = bunch(Scene(), [0, 0, 0], opt="s", id_='200000000000')
+    MonViewer = Viewer
+    MonViewer.display(MaScene)
