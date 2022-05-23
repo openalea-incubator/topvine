@@ -6,6 +6,9 @@ from alinea.topvine.gen_shoot_param import gen_shoot_param
 from alinea.topvine.translate_shoots import translate_shoots
 from alinea.topvine.primitive import bunch
 from openalea.plantgl.all import *
+from alinea.topvine.reconstr_digit import visu_digit_fromcane
+import os
+
 
 def test_demo_topvine_static():
     vt = vine_topiary()
@@ -52,5 +55,15 @@ def test_demo_stand_generator():
 
 def test_demo_bunch():
     MaScene = bunch(Scene(), [0, 0, 0], opt="s", id_='200000000000')
+    MonViewer = Viewer
+    MonViewer.display(MaScene)
+
+def test_demo_digitcane_compact():   #ça manque le parti caribou bien sûr
+    carto = ds.stand_file('/data/carto_CL.csv')
+    topo = ds.shoot_file('/data/ram_moy_CL.csv')
+    dazi = [90.0, 30.0]
+    dincli = [45, 20.0]
+    par_allo = [0.14330999999999999, 2.7161, -0.74456]
+    MaScene = visu_digit_fromcane.visu_digit_fromcane(os.getcwd()+'/src/alinea/topvine/data/digitCollectionMtp10_rideau_simple.csv', carto, topo, dazi, dincli, par_allo)[0]
     MonViewer = Viewer
     MonViewer.display(MaScene)
