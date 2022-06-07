@@ -35,7 +35,7 @@ def test_demo_stand_generator():
         return geom
 
     # demo
-    carto = ds.stand_file()
+    carto = ds.stand_file() # [posxyz_plant, nb_coursons]
     spurs0, dspurs, f_azi, shoot = ds.dl_shoot_file()
     geom = _stand_generator(carto, spurs0, dspurs, f_azi, shoot)
     #write_geom(geom)
