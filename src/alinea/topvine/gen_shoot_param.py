@@ -42,7 +42,7 @@ class gen_shoot_param(object):
             seq = [[random.uniform(0.,1.),1], [random.uniform(0.,1.), 2], [random.uniform(0.,1.), 3], [random.uniform(0.,1.), 4], [random.uniform(0.,1.), 5], [random.uniform(0.,1.), 6]]
             seq = seq + [[random.uniform(0.,1.),1], [random.uniform(0.,1.), 2], [random.uniform(0.,1.), 3], [random.uniform(0.,1.), 4], [random.uniform(0.,1.), 5], [random.uniform(0.,1.), 6]]
             for i in range(12, n):
-                seq = seq + [[0., int(round(random.uniform(1.,6.), decimals=0))]]
+                seq = seq + [[0., int(round(random.uniform(1.,6.), ndigits=0))]]
     
         
         #tirage des coord x,y,z des coursons en fonction de leur rang (r)
