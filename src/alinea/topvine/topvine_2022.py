@@ -6,9 +6,10 @@ from alinea.topvine.write_geom_file import write_geom_file
 import alinea.topvine.data_samples as ds
 
 
-def top_vine_scene_2022(stand_address='/data/carto.csv', dl_shoot_address='/data/2W_VSP_GRE_ramd.csv',
-                        dl_address='/data/Law-leaf-2W-Grenache.csv', shoot_address='/data/ex_rammoy3.csv',
-                        allom_address='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom.csv', geomfile=0):
+
+def topvine(stand_path='/data/carto.csv', dl_shoot_path='/data/2W_VSP_GRE_ramd.csv',
+            dl_path='/data/Law-leaf-2W-Grenache.csv', shoot_path='/data/ex_rammoy3.csv',
+            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom.csv', geomfile=0):
     # a function that generates all types of scenes based on diverse input
 
     """
@@ -48,6 +49,7 @@ def top_vine_scene_2022(stand_address='/data/carto.csv', dl_shoot_address='/data
     if geomfile != 0:
         geom = ds.geom_file(geomfile)
     else:
+        # python version of topvine/macro/wralea/stand generator composite node
         def _stand_generator(carto, spurs0, dspurs, f_azi, shoot):
             geom = []
             generator = gen_shoot_param()
@@ -59,17 +61,17 @@ def top_vine_scene_2022(stand_address='/data/carto.csv', dl_shoot_address='/data
             return geom
 
         # demo
-        carto = ds.stand_file(stand_address)  # [posxyz_plant, nb_coursons]
-        spurs0, dspurs, f_azi, shoot = ds.dl_shoot_file(dl_shoot_address)
+        carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
+        spurs0, dspurs, f_azi, shoot = ds.dl_shoot_file(dl_shoot_path)
         geom = _stand_generator(carto, spurs0, dspurs, f_azi, shoot)
         write_geom = write_geom_file()
         write_geom(geom,name)
 
     vt = vine_topiary()
     generator = gen_normal_canopy()
-    dl = ds.dl_file(dl_address)
-    allometry = ds.allometry_file(allom_address)
-    shoot = ds.shoot_file(shoot_address)
+    dl = ds.dl_file(dl_path)
+    allometry = ds.allometry_file(allom_path)
+    shoot = ds.shoot_file(shoot_path)
     tab_shoot = generator(geom, shoot, dl)
     scene = vt(tab_shoot, dl, allometry, branches, trunk, False)   # the last parameter, "False", does nothing
 

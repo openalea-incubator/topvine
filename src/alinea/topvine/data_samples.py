@@ -38,6 +38,10 @@ def allometry_file(fn='/data/allo_Grenache.csv'):
     reader = read_allometry()
     return reader(topvinedir + fn)
 
+def digit_file(fn='data/digitCollectionMtp10_rideau_simple.csv'):
+    from .reconstr_digit.visu_digit_fromcane import mef_digitcanefile
+    reader = mef_digitcanefile
+    return reader(topvinedir + fn)
 
 def normal_canopy():
     from .gen_normal_canopy import gen_normal_canopy

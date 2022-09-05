@@ -1,10 +1,13 @@
 from __future__ import absolute_import
-from . import IOtable
+from alinea.topvine import IOtable
 import os
 from os.path import join
 from six.moves import range
 
-topvinedir = os.path.dirname(__file__)
+try:
+    topvinedir = os.path.dirname(__file__)
+except Exception as e:
+    topvinedir = os.path.dirname('C:\\GitModeles\\grapevine\\topvine\\')
 
 class write_geom_file(object):
     """  save shoot params in a csv file """ 
@@ -26,4 +29,4 @@ class write_geom_file(object):
         IOtable.ecriture_csv (res, out)  
         out.close()
 
-        return join(path, name)
+        return join(outdir, name)

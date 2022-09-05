@@ -11,6 +11,7 @@ from alinea.topvine.primitive import *
 from six.moves import map
 from six.moves import range
 
+
 def random_cyl(r=1.,h=1.): 
     d = r*r +1
     while d > r*r :
@@ -75,9 +76,10 @@ def mef_digitcanefile(csv_file_path):
 #sh, nump_ini, nump_fin, nb_pl = mef_digitcanefile(csv_file_path)
 
 
-def visu_digit_fromcane(csv_file_path, carto, topo, dazi, dincli, par_allo, l_petI=12., Hpied=None, MaScene = Scene(), forced_or=None):
+def visu_digit_fromcane(digit_data, carto, topo, dazi, dincli, par_allo, l_petI=12., Hpied=None, MaScene = Scene(), forced_or=None):
 
-    sh, nump_ini, nump_fin, nb_pl = mef_digitcanefile(csv_file_path)
+    sh, nump_ini, nump_fin, nb_pl = digit_data
+
 
     en = Cylinder(1,1,True,6)
     f = transformation(leaf0(), 1., 1., 1., -pi/2,0,0,0,0,0)
