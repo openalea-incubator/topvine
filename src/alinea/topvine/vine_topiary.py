@@ -1,12 +1,9 @@
 from __future__ import absolute_import
-import numpy
-import random
-from . import leaf
-from . import shoot
-from . import topiary
-from .coor3D import *
-from .primitive import *
+
+from alinea.topvine.topiary import topiary
+from .primitive import trunk
 from six.moves import range
+from openalea.plantgl.all import Viewer, Scene
 
 
 class vine_topiary(object):
@@ -17,13 +14,18 @@ class vine_topiary(object):
 
 
     def __call__(self, tab_shoot,  dl_leaf, allo, boolI, boolT, boolB):
-        MaScene = Scene() 
+        MaScene = Scene()
+        geometry = []
+        labels = []
         MonViewer = Viewer
         for i in range(len(tab_shoot)):
             coord = tab_shoot[i][0].geom[1]
             for j in range(len(tab_shoot[i])):
                 coord = (coord + tab_shoot[i][j].geom[1])/2
-                top = topiary.Topiary(MaScene, tab_shoot[i][j], allo, dl_leaf, visu_en = boolI) 
+                geoms = topiary(tab_shoot[i][j], allo, dl_leaf, visu_en = boolI)
+                geometry.extend(geoms)
+                for g in geoms:
+                    MaScene.add(g)
 
             # add a trunk if option is set to True
             if boolT == True:
