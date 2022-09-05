@@ -18,14 +18,14 @@ def test_demo_topvine_static():
     
     generator = gen_normal_canopy()
     tab_shoot = generator(geom, shoot, dl) 
-    scene = vt(tab_shoot, dl, allometry, False, False, False)
+    scene, geometry, labels = vt(tab_shoot, dl, allometry, False, False, False)
 
 def test_demo_stand_generator():
 
 
-    geom = topvine()
-    
-    return geom
+    geom, geometry, labels = topvine()
+
+    return geom, geometry, labels
 
 
 def test_demo_bunch():

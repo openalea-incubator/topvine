@@ -22,8 +22,9 @@ class vine_topiary(object):
             coord = tab_shoot[i][0].geom[1]
             for j in range(len(tab_shoot[i])):
                 coord = (coord + tab_shoot[i][j].geom[1])/2
-                geoms = topiary(tab_shoot[i][j], allo, dl_leaf, visu_en = boolI)
+                geoms, labs = topiary(tab_shoot[i][j], allo, dl_leaf, visu_en = boolI)
                 geometry.extend(geoms)
+                labels.extend(labs)
                 for g in geoms:
                     MaScene.add(g)
 
@@ -32,6 +33,6 @@ class vine_topiary(object):
                 trunk(MaScene, coord/100., 'cordon')
 
             # a ameliorer: / type / calcul plus precis des rangs sur moy plus larges ou sur donnees filees en entree
-
+        #TODO : generate mtg from labs and geometry
         MonViewer.display(MaScene)
-        return MaScene
+        return MaScene, geometry, labels

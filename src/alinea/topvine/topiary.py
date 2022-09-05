@@ -41,6 +41,7 @@ def topiary(shoot, allo, lawf, omega = 45*numpy.pi/180., LongPetiole = 0.12, vis
 
 
         geoms = []
+        labs = []
         NombrePhyto = len(shoot.topo)
         LongRamMoy = allo_LN(allo[0],NombrePhyto) #en metres
         LimNS = 0. 
@@ -72,6 +73,7 @@ def topiary(shoot, allo, lawf, omega = 45*numpy.pi/180., LongPetiole = 0.12, vis
                 t_ens = Shape(t_en, Material(Color3(198,179,37)))
                 t_ens.setName(vine_label(0, (phyto+1), num_shoot, num_vine))
                 geoms.append(t_ens)
+                labs.append(('internode',(phyto+1), num_shoot, num_vine))
 
             #mise en place de la feuille I
             Lin = LongPhyto
@@ -89,6 +91,7 @@ def topiary(shoot, allo, lawf, omega = 45*numpy.pi/180., LongPetiole = 0.12, vis
             fIs = Shape(fI, Material(Color3(23,140,31)))
             fIs.setName(vine_label(1, int(shoot.topo[phyto][0].id), num_shoot, num_vine)) #stockage d'un label canestra dans l'objet geom
             geoms.append(fIs)
+            labs.append(('leaf', int(shoot.topo[phyto][0].id), num_shoot, num_vine))
 
 
             #mise en place des feuilles II
@@ -108,14 +111,14 @@ def topiary(shoot, allo, lawf, omega = 45*numpy.pi/180., LongPetiole = 0.12, vis
                     fIIs = Shape(fII, Material(Color3(23,140,31)))
                     fIIs.setName(vine_label(1, int(shoot.topo[phyto][i].id), num_shoot, num_vine))
                     geoms.append(fIIs)
-
+                    labs.append(('leaf', int(shoot.topo[phyto][i].id), num_shoot, num_vine))
 
             Xi =  Xii
             Yi =  Yii
             Zi =  Zii
             CourbureActu = CourbureActu + dCourbure
 
-        return geoms
+        return geoms, labs
 
 
 
