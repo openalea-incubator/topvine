@@ -22,7 +22,7 @@ class vine_topiary(object):
             coord = tab_shoot[i][0].geom[1]
             for j in range(len(tab_shoot[i])):
                 coord = (coord + tab_shoot[i][j].geom[1])/2
-                geoms, labs = topiary(tab_shoot[i][j], allo, dl_leaf, visu_en = boolI)
+                geoms, labs = topiary(tab_shoot[i][j], allo, dl_leaf, visu_en = boolI, num_vine=i, num_shoot=j)
                 geometry.extend(geoms)
                 labels.extend(labs)
                 for g in geoms:
