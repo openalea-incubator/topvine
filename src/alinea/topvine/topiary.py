@@ -1,8 +1,6 @@
 from __future__ import absolute_import
-from . import leaf
-from . import shoot
-from .coor3D import *
-from .primitive import *
+from alinea.topvine.coor3D import *
+from alinea.topvine.primitive import *
 import math
 from six.moves import range
 

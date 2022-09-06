@@ -1,5 +1,5 @@
 from __future__ import absolute_import
-from . import copy
+from alinea.topvine import copyvine
 
-def copy(obj):
+def copyvine(obj):
     return copy.deepcopy(obj)
