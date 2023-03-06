@@ -21,3 +21,6 @@ python setup.py develop
 
 ### Test your installation
 cd test; pytest
+
+### Run the model with a qt-enabled console
+ipython --gui=qt
