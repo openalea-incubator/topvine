@@ -32,7 +32,10 @@ cd test; pytest
 
 ### Run the model with a qt-enabled console
 cd example
+
 ipython --gui=qt
+
 %run tutorial.py
+
 main()
 
