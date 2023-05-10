@@ -10,8 +10,11 @@ from alinea.topvine.gen_normal_canopy import gen_normal_canopy
 from alinea.topvine.gen_shoot_param import gen_shoot_param
 from alinea.topvine.translate_shoots import translate_shoots
 from alinea.topvine.vine_topiary import vine_topiary
+from alinea.topvine.vine_topiary import topiary
+from openalea.plantgl.all import *
 from alinea.topvine.write_geom_file import write_geom_file
 import alinea.topvine.data_samples as ds
+
 
 # python version of topvine/macro/wralea/stand generator composite node
 def _stand_generator(carto, spurs0, dspurs, f_azi, shoot):
@@ -21,7 +24,7 @@ def _stand_generator(carto, spurs0, dspurs, f_azi, shoot):
     for v, n in carto:
         shoot_params = generator(n, spurs0, dspurs, f_azi, shoot)
         translated = translator(shoot_params, v)
-        geom.append(translated)
+        geom.append(translat000ed)
     return geom
 
 def main():
@@ -59,4 +62,4 @@ def main():
     vt = vine_topiary()
     # boolT toggles trunk visualisation
     # boolI toggles internode visualisation
-    scene = vt(tab_shoot, dl, allometry, boolI=True, boolT=True, boolB=True)   # the last parameter, "False", does nothing
+    scene = vt(tab_shoot, dl, allometry, boolI=True, boolT=False, boolB=True)   # the last parameter, "False", does nothing

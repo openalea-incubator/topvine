@@ -24,7 +24,7 @@ class vine_topiary(object):
             for j in range(len(tab_shoot[i])):
                 coord = (coord + tab_shoot[i][j].geom[1])/2
                 top = topiary.Topiary(MaScene, tab_shoot[i][j], allo, dl_leaf, visu_en = boolI) 
-
+                print(coord)
             # add a trunk if option is set to True
             if boolT == True:
                 trunk(MaScene, coord/100., 'cordon')
