@@ -76,3 +76,5 @@ def topvine(stand_path='/data/carto.csv', dl_shoot_path='/data/2W_VSP_GRE_ramd.c
     scene = vt(tab_shoot, dl, allometry, branches, trunk, False)   # the last parameter, "False", does nothing
 
     return geom
+
+topvine()
