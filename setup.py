@@ -26,7 +26,7 @@ setup_kwds = dict(
     license='cecill-c',
     zip_safe=False,
 
-    packages=find_packages('src'),
+    packages=find_packages(where='src', include=['alinea', 'alinea.*'], exclude=[]),
     package_dir={'': 'src'},
     entry_points={},
     keywords='',
