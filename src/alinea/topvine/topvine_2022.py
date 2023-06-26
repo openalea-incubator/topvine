@@ -75,4 +75,4 @@ def topvine(stand_path='/data/carto.csv', shoot_path='/data/ex_rammoy3.csv',
     tab_shoot = generator(geom, shoot, dl)
     scene = vt(tab_shoot, dl, allometry, branches, trunk, False)   # the last parameter, "False", does nothing
 
-    return geom
+    return [scene, geom]
