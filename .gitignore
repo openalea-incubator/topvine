@@ -103,3 +103,4 @@ doc/_dvlpt/
 *.code-workspace
 
 *.bak
+/src/alinea/topvine/gen_shoot_param_longknown.py
