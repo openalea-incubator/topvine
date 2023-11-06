@@ -86,19 +86,17 @@ def generate_rameau_moyen(g):
     dat_result.iloc[1:dat_result.shape[0], 2] = IN_profile
     dat_result.iloc[1:dat_result.shape[0], 3] = (np.array(dat_result.iloc[1:, 0]) * g.slope_NFII_SFII + g.intercept_NFII_SFII).tolist()
     dat_result.loc[dat_result["number_of_phytomers"] == 0, "SF_II_tot"] = 0
-    return(dat_result)
+    return dat_result
 
 
 def generate_rammoy_topvine(g):
     rameau = generate_rameau_moyen(g)
-    rameau_top_vine = rameau.drop('IN_I_length', inplace=False, axis=1)
+    rameau_top_vine = rameau[['number_of_phytomers', 'SF_I', 'SF_II_tot', 'IN_I_length']]
     rameau_top_vine.iloc[:, 1] = (np.array(rameau_top_vine.iloc[:, 1]) / 1.04).tolist()
     rameau_top_vine.loc[rameau_top_vine.iloc[:, 0] != 0, "SF_II_tot"] = (
             rameau_top_vine.loc[rameau_top_vine.iloc[:,0] != 0, "SF_II_tot"] /
             (1.04 * rameau_top_vine.loc[rameau_top_vine.iloc[:, 0] != 0, "number_of_phytomers"])
     )
 
-    totlength = sum(rameau["IN_I_length"])
-
-    return([rameau_top_vine, totlength])
+    return rameau_top_vine
 

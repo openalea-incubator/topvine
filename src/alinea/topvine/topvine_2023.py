@@ -1,21 +1,23 @@
 import numpy as np
 
 import alinea.topvine.data_samples as ds
-from alinea.topvine.gen_normal_canopy import gen_normal_canopy
+from alinea.topvine.gen_normal_canopy import gen_normal_canopy_2023
 from alinea.topvine.gen_shoot_param import gen_shoot_param
 from alinea.topvine.translate_shoots import translate_shoots
-from alinea.topvine.vine_topiary import vine_topiary
+from alinea.topvine.vine_topiary import vine_topiary_2023
 from alinea.topvine.generate_rameau_moyen import generate_rammoy_topvine, Genotype
 from alinea.topvine.topologise import topologise
 from alinea.topvine import conditional_multivariate_normal as cmn
+from alinea.topvine.write_geom_file import write_geom_file
 
-stand_path = '/data/carto.csv'
-shoot_path = '/data/ex_rammoy3.csv'
-dl_shoot_path = '/data/2W_VSP_GRE_ramd.csv'
-dl_path = '/data/Law-leaf-2W-Grenache.csv'
-allom_path = '/data/allo_Grenache.csv'
-branches = True
-trunk = True
+
+# stand_path = '/data/carto.csv'
+# shoot_path = '/data/ex_rammoy3.csv'
+# dl_shoot_path = '/data/2W_VSP_GRE_ramd.csv'
+# dl_path = '/data/Law-leaf-2W-Grenache.csv'
+# allom_path = '/data/allo_Grenache.csv'
+# branches = True
+# trunk = True
 
 
 def shoot_generator(_carto, _genotype):
@@ -27,20 +29,12 @@ def shoot_generator(_carto, _genotype):
         thisplantshootlength = []
         for branch in range(0, _carto[plant][1]):
             ramtopv = generate_rammoy_topvine(_genotype)
-            shoot = topol.toponthefly(ramtopv[0].values.tolist())
+            shoot = topol.toponthefly_2023(ramtopv.values.tolist())
             thisplant.append(shoot)
-            thisplantshootlength.append(ramtopv[1])
+            thisplantshootlength.append(sum(ramtopv["IN_I_length"]))
         list_plant.append(thisplant)
         shoot_lengths.append(thisplantshootlength)
     return [list_plant, shoot_lengths]
-
-
-gen = Genotype()
-carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
-shoot_data = shoot_generator(carto,
-                             gen)  # [topology and leaf surface for each plant, length of every shoot for each plant]
-
-spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(dl_shoot_path)
 
 
 def permute_third_n_fourth(listx):
@@ -150,12 +144,8 @@ def stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, avlength, shoot_le
     return __geom
 
 
-geom = stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, gen.mean_shoot_length, shoot_data[1])
-dl = ds.dl_file(dl_path)
-
-
 def shoot_realizator(_geom, _shoot_data, _leafstats):
-    generator = gen_normal_canopy()
+    generator = gen_normal_canopy_2023()
     table_shoot = []
     for plant in range(0, len(_geom)):
         thisplant = []
@@ -165,16 +155,34 @@ def shoot_realizator(_geom, _shoot_data, _leafstats):
     return table_shoot
 
 
-tab_shoot = shoot_realizator(geom, shoot_data[0], dl)
+def topvine(stand_path='/data/carto.csv', gen=Genotype(),
+            dl_shoot_path='/data/2W_VSP_GRE_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
+            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom2023.csv', geomfile=0):
+    carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
+    shoot_data = shoot_generator(carto,
+                                 gen)  # [topology and leaf surface for each plant, length of every shoot for each plant]
+    if geomfile != 0:
+        geom = ds.geom_file(geomfile)
+    else:
 
+        spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(dl_shoot_path)
 
-vt = vine_topiary()
-allometry = ds.allometry_file(allom_path)
+        geom = stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, gen.mean_shoot_length, shoot_data[1])
+        write_geom = write_geom_file()
+        write_geom(geom, name)
+
+    dl = ds.dl_file(dl_path)
+    tab_shoot = shoot_realizator(geom, shoot_data[0], dl)
+
+    vt = vine_topiary_2023()
+    allometry = ds.allometry_file(allom_path)
+
+    scene = vt(tab_shoot, dl, allometry, branches, trunk, False)
+
+    return [scene, geom]
 
 # %gui qt5
 
-scene = vt(tab_shoot, dl, allometry, branches, trunk, False)
+# from openalea.mtg.mtg import *
 
-#from openalea.mtg.mtg import *
-
-#g = MTG()
+# g = MTG()
