@@ -41,7 +41,7 @@ class gen_normal_canopy_2023(object):
             ### topl = generate_rameau(NFI,NFII,LEN, SF, sd, sd)
             p = []
             for j in range(len(tab_geom[i])):
-                p.append(shoot.Shoot(tab_geom[i][j], topol, dl_leaf))
+                p.append(shoot.Shoot_2023(tab_geom[i][j], topol, dl_leaf))
 
             res.append(p)
 

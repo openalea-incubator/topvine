@@ -147,7 +147,7 @@ class Topiary_2023:
 
         for phyto in range(NombrePhyto):
 
-            Lin = shoot.topo[phyto][0].lin
+            Lin = shoot.topo[phyto][0].lin * 0.01  # conversion de cm à m
 
             if Lin is None:
                 Lin = LongPhyto

@@ -123,13 +123,13 @@ class Shoot_2023:
     def __init__(self, Pgeom, topol, law):
         self.geom = Pgeom
         self.topo = []
-        for i in range(len(topol)):
+        for i in range(len(topol[0])):
             self.topo.append(
                 [leaf.Leaf(rand='Cyl', lawf=law, len=topol[0][i][0], lin=topol[1][i][0], id=str((i + 1) * 100))])  # id leaf I = rang phyto*100
 
         for i in range(len(self.topo)):
-            if len(topol[i]) > 1:
-                for j in range(1, len(topol[i])):
+            if len(topol[0][i]) > 1:
+                for j in range(1, len(topol[0][i])):
                     self.topo[i].append(leaf.Leaf(rand='Cyl', lawf=law, len=topol[0][i][j], id=str(
                         (i + 1) * 100 + j)))  # id leaf II = rang phyto*100+rang feuilles II
 
