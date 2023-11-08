@@ -7,8 +7,8 @@ import alinea.topvine.data_samples as ds
 
 
 
-def topvine(stand_path='/data/carto.csv', dl_shoot_path='/data/2W_VSP_GRE_ramd.csv',
-            dl_path='/data/Law-leaf-2W-Grenache.csv', shoot_path='/data/ex_rammoy3.csv',
+def topvine(stand_path='/data/carto.csv', shoot_path='/data/ex_rammoy3.csv',
+            dl_shoot_path='/data/2W_VSP_GRE_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
             allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom.csv', geomfile=0):
     # a function that generates all types of scenes based on diverse input
 
@@ -75,4 +75,4 @@ def topvine(stand_path='/data/carto.csv', dl_shoot_path='/data/2W_VSP_GRE_ramd.c
     tab_shoot = generator(geom, shoot, dl)
     scene = vt(tab_shoot, dl, allometry, branches, trunk, False)   # the last parameter, "False", does nothing
 
-    return geom
+    return [scene, geom]
