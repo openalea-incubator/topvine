@@ -9,15 +9,7 @@ from alinea.topvine.generate_rameau_moyen import generate_rammoy_topvine, Genoty
 from alinea.topvine.topologise import topologise
 from alinea.topvine import conditional_multivariate_normal as cmn
 from alinea.topvine.write_geom_file import write_geom_file
-
-
-# stand_path = '/data/carto.csv'
-# shoot_path = '/data/ex_rammoy3.csv'
-# dl_shoot_path = '/data/2W_VSP_GRE_ramd.csv'
-# dl_path = '/data/Law-leaf-2W-Grenache.csv'
-# allom_path = '/data/allo_Grenache.csv'
-# branches = True
-# trunk = True
+from alinea.topvine.genodata import *
 
 
 def shoot_generator(_carto, _genotype):
