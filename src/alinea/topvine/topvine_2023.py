@@ -10,6 +10,17 @@ from alinea.topvine.topologise import topologise
 from alinea.topvine import conditional_multivariate_normal as cmn
 from alinea.topvine.write_geom_file import write_geom_file
 from alinea.topvine.genodata import *
+<<<<<<< HEAD
+=======
+
+# stand_path = '/data/carto.csv'
+# shoot_path = '/data/ex_rammoy3.csv'
+# dl_shoot_path = '/data/2W_VSP_GRE_ramd.csv'
+# dl_path = '/data/Law-leaf-2W-Grenache.csv'
+# allom_path = '/data/allo_Grenache.csv'
+# branches = True
+# trunk = True
+>>>>>>> 6d2e22e3788833518aced3012fdaa6f0b4324d1e
 
 
 def shoot_generator(_carto, _genotype):
@@ -148,7 +159,7 @@ def shoot_realizator(_geom, _shoot_data, _leafstats):
 
 
 def topvine(stand_path='/data/carto.csv', gen=Genotype(),
-            dl_shoot_path='/data/2W_VSP_GRE_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
+            dl_shoot_path='/data/2W_VSP_GRE_without_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
             allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom2023.csv', geomfile=0):
     carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
     shoot_data = shoot_generator(carto,
