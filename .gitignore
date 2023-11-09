@@ -103,3 +103,4 @@ doc/_dvlpt/
 *.code-workspace
 
 *.bak
+/src/alinea/topvine/geom2023.csv
