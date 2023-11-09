@@ -4,7 +4,7 @@ import numpy
 import random
 
 class Leaf:
-    def __init__(self, coord=[0.,0.,0.], rand='none', lawf='none', len=0, id='0000'):
+    def __init__(self, coord=[0.,0.,0.], rand='none', lawf='none', len=0, lin=None, id='0000'):
         """ initialize leaf object with normalised values """
         if rand == 'Box':#random coord in a box
             coord = [random.uniform(0.,1.), random.uniform(0.,1.), random.uniform(0.,1.)]
@@ -13,6 +13,7 @@ class Leaf:
 
         self.coord = numpy.array(coord)
         self.len = len
+        self.lin = lin
         self.id = id
 
         if lawf == 'none':#no CxT pair defined

@@ -24,5 +24,20 @@ class topologise(object):
 
         return topo
 
+    def toponthefly_2023(self, tab_rammoy):
+        topo = []
+        lins = []
+        for i in range(1,len(tab_rammoy)):#primary leaves
+            topo.append([tab_rammoy[i][1]])
+            lins.append([tab_rammoy[i][3]])
+
+        for i in range(1,len(tab_rammoy)):#secondary leaves
+            n = int(tab_rammoy[i][0])
+            if n>0:
+                for j in range(n):
+                    topo[i-1].append(tab_rammoy[i][2])
+
+        return [topo, lins]
+
     def check_format (self, tab_rammoy):
         pass
