@@ -170,10 +170,5 @@ def topvine(stand_path='/data/carto.csv', gen=Genotype(),
 
     scene = vt(tab_shoot, dl, allometry, branches, trunk, False)
 
-    return [scene, geom]
+    return tab_shoot
 
-# %gui qt5
-
-# from openalea.mtg.mtg import *
-
-# g = MTG()
