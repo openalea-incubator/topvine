@@ -238,5 +238,5 @@ class Topiary_2023:
             return 0  # S
 
     def vine_label(self, sp_opt, num_phy, num_ram, num_vine):
-        lab = str(int(sp_opt * 10 ** 11 + num_phy * 10 ** 6 + num_ram * 10 ** 3 + num_vine))
-        return (12 - len(lab)) * '0' + lab
+        lab = str(str(sp_opt) + "type" + str(num_phy) + "phy" + str(num_ram) + "ram" + str(num_vine) + "plant")
+        return lab

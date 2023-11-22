@@ -170,7 +170,7 @@ def topvine(stand_path='/data/carto.csv', gen=Genotype(),
 
     scene = vt(tab_shoot, dl, allometry, branches, trunk, False)
 
-    return [scene, geom]
+    return [scene, tab_shoot]
 
 # %gui qt5
 
