@@ -3,27 +3,29 @@ from alinea.topvine.topvine_2023 import topvine
 
 import pandas as pd
 
+from alinea.astk.sun_and_sky import sun_sky_sources, sky_sources
+from alinea.caribu.light import light_sources
+
+
 # %gui qt5
 
-scene, tab_shoot = topvine(branches=False, trunk=False)
-cs = CaribuScene(scene, scene_unit='cm')
-raw, agg = cs.run(direct=True, simplify=True)
 
-cs.plot(agg['Ei'])
-
-thekeys = {s.id: s.name for s in scene}
-theresult = pd.DataFrame(agg)
-
-thenewcolumn = []
-
-for key in theresult.index:
-    thenewcolumn.append(thekeys[key])
-
-theresult['id'] = thenewcolumn
-
-for key in theresult.index:
-    if theresult.loc[key]['id'] != thekeys[key]:
-        print('error in ' + key)
+def illuminate(scene, sky=None, sun=None, pattern=None):
+    if sky is None and sun is None:
+        sun,sky = sun_sky_sources()
+    elif sky == 'uoc':
+        sky = sky_sources()
+    light = []
+    if sky is not None:
+        light += light_sources(*sky)
+    if sun is not None:
+        light += light_sources(*sun)
+    infinite = False
+    if pattern is not None:
+        infinite = True
+    cs = CaribuScene(scene, light=light, scene_unit='m', pattern=pattern)
+    raw, agg = cs.run(direct=True, simplify=True, infinite=infinite)
+    return cs, raw, agg
 
 
 def getfromid(aidee, what):
@@ -39,12 +41,33 @@ def getfromid(aidee, what):
         print('wrong keyword')
 
 
-for key in theresult.index:
-    aid = theresult.loc[key]['id']
-    pl = getfromid(aid, 'plant')
-    shoot = getfromid(aid, 'ram')
-    leafid = getfromid(aid, 'phy')
-    leafnum1 = int(leafid/100)-1
-    leafnum2 = leafid - int(leafid/100)*100
-    print(aid)
-    tab_shoot[pl][shoot].topo[leafnum1][leafnum2].Ei = theresult.loc[key]['Ei']
+if __name__ == '__main__':
+    scene, tab_shoot = topvine(branches=False, trunk=False, display=False)
+
+    cs, raw, agg = illuminate(scene)
+
+    cs.plot(agg['Ei'])
+
+    thekeys = {s.id: s.name for s in scene}
+    theresult = pd.DataFrame(agg)
+
+    thenewcolumn = []
+
+    for key in theresult.index:
+        thenewcolumn.append(thekeys[key])
+
+    theresult['id'] = thenewcolumn
+
+    for key in theresult.index:
+        if theresult.loc[key]['id'] != thekeys[key]:
+            print('error in ' + key)
+
+    for key in theresult.index:
+        aid = theresult.loc[key]['id']
+        pl = getfromid(aid, 'plant')
+        shoot = getfromid(aid, 'ram')
+        leafid = getfromid(aid, 'phy')
+        leafnum1 = int(leafid / 100) - 1
+        leafnum2 = leafid - int(leafid / 100) * 100
+        print(aid)
+        tab_shoot[pl][shoot].topo[leafnum1][leafnum2].Ei = theresult.loc[key]['Ei']

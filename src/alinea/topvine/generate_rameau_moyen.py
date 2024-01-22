@@ -37,7 +37,8 @@ class Genotype(object):
         intercept_1_SF=0.20,
         max_normalized_rank_IN=0.46,
         intercept_0_IN=0.1,
-        intercept_1_IN=0.46
+        intercept_1_IN=0.46,
+        name='generic'
                  ):
         self.NFI_mean = NFI_mean
         self.NFI_sd = NFI_sd
@@ -59,6 +60,7 @@ class Genotype(object):
         norm_profile_IN = get_normalized_value(self.intercept_0_IN, self.intercept_1_IN, self.max_normalized_rank_IN, norm_rank)
         self.IN_profile = (np.array(norm_profile_IN) * self.IN_max_mean).tolist()
         self.mean_shoot_length = sum(self.IN_profile)
+        self.name=name
 
 
 
@@ -66,17 +68,17 @@ class Genotype(object):
 
 def generate_rameau_moyen(g):
     NFI_ = int(round(np.random.normal(g.NFI_mean, g.NFI_sd,1)[0],0))
-    print(NFI_)
+    # print(NFI_)
     SF_max = np.random.normal(g.SF_max_mean, g.SF_max_sd,1)[0]
     IN_max = np.random.normal(g.IN_max_mean, g.IN_max_sd,1)[0]
     dat_result = pd.DataFrame(np.zeros((NFI_ + 1, 4)))
     dat_result.columns = ["number_of_phytomers", "SF_I", "IN_I_length", "SF_II_tot"]
     dat_result.iloc[0] = [NFI_, 0, 0, 0]
-    np.random.negative_binomial(n=g.size_r_binorm, p=g.size_r_binorm / (g.size_r_binorm + g.mu_r_binorm),size=dat_result.shape[0]-7)
+    # np.random.negative_binomial(n=g.size_r_binorm, p=g.size_r_binorm / (g.size_r_binorm + g.mu_r_binorm),size=max(0,dat_result.shape[0]-7))
     dat_result.iloc[1:, 0] = 0
-    dat_result.iloc[1:dat_result.shape[0] - 6, 0] = np.random.negative_binomial(n=g.size_r_binorm,
+    dat_result.iloc[1:max(1,dat_result.shape[0] - 6), 0] = np.random.negative_binomial(n=g.size_r_binorm,
                                                                                 p=g.size_r_binorm / (g.size_r_binorm + g.mu_r_binorm),
-                                                                                size=dat_result.shape[0]-7)
+                                                                                size=max(0,dat_result.shape[0]-7))
     norm_rank = np.arange(1, NFI_ + 1) / NFI_
     norm_profile_SF = get_normalized_value(g.intercept_0_SF, g.intercept_1_SF, g.max_normalized_rank_SF, norm_rank)
     norm_profile_IN = get_normalized_value(g.intercept_0_IN, g.intercept_1_IN, g.max_normalized_rank_IN, norm_rank)

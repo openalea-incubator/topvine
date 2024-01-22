@@ -39,7 +39,7 @@ class vine_topiary_2023(object):
     def __init__(self):
         pass
 
-    def __call__(self, tab_shoot, dl_leaf, allo, boolI, boolT, boolB):
+    def __call__(self, tab_shoot, dl_leaf, allo, boolI, boolT, boolB, display=True):
         MaScene = Scene()
         MonViewer = Viewer
         for plant in range(len(tab_shoot)):
@@ -51,10 +51,10 @@ class vine_topiary_2023(object):
                                            num_shoot=shoot)
             coord = tab_shoot[plant][round(len(tab_shoot[plant]) / 2)].geom[1]
             # add a trunk if option is set to True
-            if boolT == True:
+            if boolT is True:
                 trunk(MaScene, coord / 100., 'cordon')
 
             # a ameliorer: / type / calcul plus precis des rangs sur moy plus larges ou sur donnees filees en entree
-
-        MonViewer.display(MaScene)
+        if display:
+            MonViewer.display(MaScene)
         return MaScene
