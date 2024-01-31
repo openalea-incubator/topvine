@@ -94,7 +94,7 @@ def generate_rameau_moyen(g):
 def generate_rammoy_topvine(g):
     rameau = generate_rameau_moyen(g)
     rameau_top_vine = rameau[['number_of_phytomers', 'SF_I', 'SF_II_tot', 'IN_I_length']]
-    rameau_top_vine.iloc[:, 1] = (np.array(rameau_top_vine.iloc[:, 1]) / 1.04).tolist()
+    rameau_top_vine.iloc[:, 1] = (np.array(rameau_top_vine.iloc[:, 1]) / 1.065).tolist()
     rameau_top_vine.loc[rameau_top_vine.iloc[:, 0] != 0, "SF_II_tot"] = (
             rameau_top_vine.loc[rameau_top_vine.iloc[:,0] != 0, "SF_II_tot"] /
             (1.04 * rameau_top_vine.loc[rameau_top_vine.iloc[:, 0] != 0, "number_of_phytomers"])

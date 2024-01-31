@@ -68,6 +68,9 @@ myorder.add((Vermentino,25))
 
 grandresults = multisim(myorder)
 
+
+###################### DATA ANALYSIS ##########################################
+
 medians = []
 
 for r in grandresults:
@@ -145,20 +148,11 @@ sns.histplot(rprimsec[125:150])
 sns.histplot(rprimsec[150:175])
 sns.histplot(rprimsec[175:200])
 
-
-
-gennames = []
-for pair in myorder.list:
-    for sim in range(0,pair[1]):
-        gennames.append(pair[0].name)
-
-
 sdat = pd.DataFrame({'ratioprimsec':rprimsec,'Ei medians': medians,'genotypes':gennames})
 sns.scatterplot(sdat,x='ratioprimsec',y='Ei medians',hue="genotypes").set(xlabel="ratio of primary to secondary leaf surface area")
 
 plantnumbers=[getfromid(grandresults[0].iloc[line]['id'], 'plant') for line in range(0, len(grandresults[0]))]
 leaforder=[min(getfromid(grandresults[0].iloc[line]['id'], 'phy')%100,1) + 1 for line in range(0, len(grandresults[0]))]
-
 
 grandresults[0].insert(loc=4,column='plnumbers',value=plantnumbers)
 grandresults[0].insert(loc=5,column='leaforder',value=leaforder)
@@ -188,3 +182,32 @@ psdat = pd.DataFrame({'ei_perplant': ei_perplant, 'feuilles_perplant': feuilles_
                       'eiMean_perplant': eiMean_perplant, 'SF_prim': SF_prim, 'SF_sec': SF_sec, 'SF_tot': SF_tot, 'SF_prop': SF_prop})
 
 sns.scatterplot(psdat,x='SF_tot',y='ei_perplant').set(xlabel="leaf surface area")
+
+
+
+########################################################################################################################
+######  ADDING 4 COLUMNS TO THE RESULT AND PRINTING IT CSV STYLE ########
+
+
+
+gennames = []
+for pair in myorder.list:
+    for sim in range(0,pair[1]):
+        gennames.append(pair[0].name)
+
+
+simnumber=0
+for r in grandresults:
+    genocol = [gennames[simnumber] for line in range(0, len(r))]
+    simnumber += 1
+    simnumcol = [simnumber for line in range(0, len(r))]
+    plantnumbers = [getfromid(r.iloc[line]['id'], 'plant') for line in range(0, len(r))]
+    leaforder = [min(getfromid(r.iloc[line]['id'], 'phy') % 100, 1) + 1 for line in
+                 range(0, len(r))]
+    r.insert(loc=4, column='plnumbers', value=plantnumbers)
+    r.insert(loc=5, column='leaforder', value=leaforder)
+    r.insert(loc=6, column='genotype', value=genocol)
+    r.insert(loc=7, column='simnumber', value=simnumcol)
+    r.to_csv("lightdata.csv", mode='a')
+
+
