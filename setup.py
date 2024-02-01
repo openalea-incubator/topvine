@@ -4,7 +4,7 @@
 import os
 
 # format setup arguments
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 
 short_descr = "3D reconstruction model of grapevine canopy"
@@ -16,6 +16,7 @@ with open("src/alinea/topvine/version.py") as fp:
 
 topvine_version = version["__version__"]
 
+packages=find_namespace_packages(where='src', include=['alinea.*'])
 setup_kwds = dict(
     name='alinea.topvine',
     version=topvine_version,
@@ -26,17 +27,15 @@ setup_kwds = dict(
     license='cecill-c',
     zip_safe=False,
 
-    packages=find_packages(where='src', include=['alinea', 'alinea.*'], exclude=[]),
+    packages=packages,
     package_dir={'': 'src'},
     entry_points={},
     keywords='',
     )
     
-# setup_kwds['entry_points']["wralea"] = ["topvine = alinea.topvine"]
+setup_kwds['entry_points']["wralea"] = ["topvine = alinea.topvine"]
 # setup_kwds['setup_requires'] = ['openalea.deploy']
 
-if ('CONDA_PREFIX' not in os.environ) and ('PREFIX' not in os.environ):
-    setup_kwds['namespace_packages']=['alinea'] # Never used in a conda env...
 
 # do not change things below
 setup(**setup_kwds)
