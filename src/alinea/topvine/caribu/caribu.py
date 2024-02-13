@@ -5,7 +5,7 @@ import pandas as pd
 
 from alinea.astk.sun_and_sky import sun_sky_sources, sky_sources
 from alinea.caribu.light import light_sources
-#import seaborn as sns
+
 #from alinea.topvine.genodata import *
 
 # %gui qt5
@@ -41,6 +41,38 @@ def getfromid(aidee, what):
     else:
         print('wrong keyword')
 
+def topvineANDcaribu(*args,**kwargs):
+
+    scene, tab_shoot = topvine(*args,**kwargs)
+    cs, raw, agg = illuminate(scene)
+
+    cs.plot(agg['Ei'])
+
+    thekeys = {s.id: s.name for s in scene}
+    theresult = pd.DataFrame(agg)
+
+    thenewcolumn = []
+
+    for key in theresult.index:
+        thenewcolumn.append(thekeys[key])
+
+    theresult['id'] = thenewcolumn
+
+    for key in theresult.index:
+        if theresult.loc[key]['id'] != thekeys[key]:
+            print('error in ' + key)
+
+    for key in theresult.index:
+        aid = theresult.loc[key]['id']
+        pl = getfromid(aid, 'plant')
+        shoot = getfromid(aid, 'ram')
+        leafid = getfromid(aid, 'phy')
+        leafnum1 = int(leafid / 100) - 1
+        leafnum2 = leafid - int(leafid / 100) * 100
+        tab_shoot[pl][shoot].topo[leafnum1][leafnum2].Ei = theresult.loc[key]['Ei']
+
+    return scene, tab_shoot,theresult
+
 
 if __name__ == '__main__':
     scene, tab_shoot = topvine(branches=False, trunk=False, display=False)
@@ -73,17 +105,4 @@ if __name__ == '__main__':
         print(aid)
         tab_shoot[pl][shoot].topo[leafnum1][leafnum2].Ei = theresult.loc[key]['Ei']
 
-    topvarea = [0 for key in theresult.index]
-
-    for key in theresult.index:
-        aid = theresult.loc[key]['id']
-        pl = getfromid(aid, 'plant')
-        shoot = getfromid(aid, 'ram')
-        leafid = getfromid(aid, 'phy')
-        leafnum1 = int(leafid / 100) - 1
-        leafnum2 = leafid - int(leafid / 100) * 100
-        print(key)
-        theresult.at[key, 'topvarea'] = tab_shoot[pl][shoot].topo[leafnum1][leafnum2].len * 0.00010657
-
-    sns.scatterplot(theresult, x='area', y='topvarea').set(xlabel="area")
 

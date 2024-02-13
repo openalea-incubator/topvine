@@ -1,59 +1,8 @@
-from alinea.topvine.caribu.caribu import illuminate, getfromid
-from alinea.topvine.topvine_2023 import topvine
+from multisim import Simgenorder, multisim
 from alinea.topvine.genodata import *
-
-import pandas as pd
 from statistics import median, mean
+import numpy as np
 import seaborn as sns
-# %gui qt5
-
-def simulate(**kwargs):
-    scene = topvine(branches=False, trunk=False, display=False, **kwargs)[0]
-    cs, raw, agg = illuminate(scene)
-    thekeys = {s.id: s.name for s in scene}
-    theresult = pd.DataFrame(agg)
-
-    thenewcolumn = []
-
-    for key in theresult.index:
-        thenewcolumn.append(thekeys[key])
-
-    theresult['id'] = thenewcolumn
-
-    for key in theresult.index:
-        if theresult.loc[key]['id'] != thekeys[key]:
-            print('error in ' + key)
-    return theresult
-
-class Simgenorder(object):
-
-    def __init__(self):
-        self.list=[]
-
-    def add(self, couple):
-        errline = "Error: simulation order is a list of pair of genotype and number"
-        if len(couple) != 2 or not isinstance(couple[0],Genotype) or not isinstance(couple[1],int):
-            print(errline)
-        self.list.append(couple)
-
-def multisim(orders):
-    if not isinstance(orders,Simgenorder):
-        errline = "Error: simulation order must be a Simgenorder object"
-        print(errline)
-        return
-
-    resultlist=[]
-    ornum=0
-    for order in orders.list:
-        ornum=ornum+1
-        print("serving order "+str(ornum))
-
-        for simno in range(order[1]):
-            if simno%10 == 0:
-                print("sim "+ str(simno+1)+ " of " + str(order[1]) )
-            resultlist.append(simulate(gen=order[0]))
-
-    return resultlist
 
 
 myorder = Simgenorder()
@@ -211,3 +160,19 @@ for r in grandresults:
     r.to_csv("lightdata.csv", mode='a')
 
 
+area_uniquevalueratios = []
+area_median = []
+ratioOneByTwo = []
+percentageTwoOfAll = []
+
+for r in grandresults:
+    area_uniquevalueratios.append(len(r['area'].value_counts()) / len(r['area']))
+    area_median.append(median(r['area']))
+    ratioOneByTwo.append(len(np.where(r['leaforder']==1)[0])/len(np.where(r['leaforder']==2)[0]))
+    percentageTwoOfAll.append(len(np.where(r['leaforder']==2)[0])/len(r['leaforder']))
+
+areadf = pd.DataFrame({'unique_area_ratio': area_uniquevalueratios, 'area_median' : area_median , 'ratio': ratioOneByTwo, 'percent' :percentageTwoOfAll, 'genotype': gennames})
+sns.boxplot(areadf, x="genotype", y="unique_area_ratio")
+sns.scatterplot(areadf, x="area_median", y="unique_area_ratio")
+sns.scatterplot(areadf, x="ratio", y="unique_area_ratio",hue="genotype")
+sns.scatterplot(areadf, x="ratio", y="percent",hue="genotype")
