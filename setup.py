@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 
 short_descr = "3D reconstruction model of grapevine canopy"
 
-# find version number in src/openalea/mtg/version.py
+# find version number in src/openalea/topvine/version.py
 version = {}
 with open("src/alinea/topvine/version.py") as fp:
     exec(fp.read(), version)

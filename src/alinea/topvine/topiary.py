@@ -184,7 +184,7 @@ class Topiary_2023:
                 0]) * numpy.pi / 180  # -(90-Tirage_anglesF (Tab_loi_feuilles[0][0], Tab_loi_feuilles[0][1], Tab_loi_feuilles[0][2]))*numpy.pi/180
 
             f = leaf0()  # a remplacer par primitive.leaf0()
-            fI = transformation(f, shoot.topo[phyto][0].len * 0.01, shoot.topo[phyto][0].len * 0.01, 1, tir1, 0, tir2,
+            fI = transformation(f, sqrt(shoot.topo[phyto][0].len * 0.01), sqrt(shoot.topo[phyto][0].len * 0.01), 1, tir1, 0, tir2,
                                 coordF[0], coordF[1], coordF[2])
             fIs = Shape(fI, Material(Color3(23, 140, 31)))
             fIs.setName(self.vine_label(1, int(shoot.topo[phyto][0].id), num_shoot,
@@ -207,7 +207,7 @@ class Topiary_2023:
                         0]) * numpy.pi / 180  # -(90-Tirage_anglesF (Tab_loi_feuilles[0][0], Tab_loi_feuilles[0][1], Tab_loi_feuilles[0][2]))*numpy.pi/180
 
                     f = leaf0()
-                    fII = transformation(f, shoot.topo[phyto][i].len * 0.01, shoot.topo[phyto][i].len * 0.01, 1, tir1,
+                    fII = transformation(f, sqrt(shoot.topo[phyto][i].len * 0.01), sqrt(shoot.topo[phyto][i].len * 0.01), 1, tir1,
                                          0, tir2, coordF[0], coordF[1], coordF[2])
                     fIIs = Shape(fII, Material(Color3(23, 140, 31)))
                     fIIs.setName(self.vine_label(1, int(shoot.topo[phyto][i].id), num_shoot, num_vine))
@@ -238,5 +238,5 @@ class Topiary_2023:
             return 0  # S
 
     def vine_label(self, sp_opt, num_phy, num_ram, num_vine):
-        lab = str(int(sp_opt * 10 ** 11 + num_phy * 10 ** 6 + num_ram * 10 ** 3 + num_vine))
-        return (12 - len(lab)) * '0' + lab
+        lab = str(str(sp_opt) + "type" + str(num_phy) + "phy" + str(num_ram) + "ram" + str(num_vine) + "plant")
+        return lab

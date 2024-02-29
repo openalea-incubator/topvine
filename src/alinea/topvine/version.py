@@ -1,5 +1,5 @@
 
-major = 1
+major = 2
 """(int) Version major component."""
 
 minor = 0

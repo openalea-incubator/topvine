@@ -148,7 +148,7 @@ def shoot_realizator(_geom, _shoot_data, _leafstats):
 
 def topvine(stand_path='/data/carto.csv', gen=Genotype(),
             dl_shoot_path='/data/2W_VSP_GRE_without_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
-            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom2023.csv', geomfile=0):
+            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom2023.csv', geomfile=0, display=True):
     carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
     shoot_data = shoot_generator(carto,
                                  gen)  # [topology and leaf surface for each plant, length of every shoot for each plant]
@@ -168,9 +168,9 @@ def topvine(stand_path='/data/carto.csv', gen=Genotype(),
     vt = vine_topiary_2023()
     allometry = ds.allometry_file(allom_path)
 
-    scene = vt(tab_shoot, dl, allometry, branches, trunk, False)
+    scene = vt(tab_shoot, dl, allometry, branches, trunk, False, display)
 
-    return [scene, geom]
+    return [scene, tab_shoot]
 
 # %gui qt5
 
