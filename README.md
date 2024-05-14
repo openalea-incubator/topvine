@@ -14,7 +14,7 @@ Follow instruction at https://docs.conda.io/en/latest/miniconda.html
 
 
 ### Install dependency with conda
-conda create -n topvine -c conda-forge -c openalea3 python=3.8 pytest openalea.plantgl
+conda create -n topvine -c conda-forge -c openalea3 python=3.8 pytest pandas numba openalea.plantgl statsmodels seaborn
 
 
 conda activate topvine
