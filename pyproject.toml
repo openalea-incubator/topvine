@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "alinea.topvine"
+dynamic = ["version", "readme", "dependencies"]
+description = "3D reconstruction model of grapevine canopy"
+authors = [
+    {name = "Gaetan LOUARN", email = "gaetan.louarn@inrae.fr"},
+    {name = "Rami ALBASHA", email = "rami.albasha@inrae.fr"},
+    {name = "Efstathios (Stathis) DELIVORIAS", email = "stathissupagro@gmx.com"}
+]
+maintainers = [
+    {name = "Rami ALBASHA", email = "rami.albasha@inrae.fr"}
+]
+license = "CECILL-C"
+requires-python = ">=3.12"
+keywords = []
+
+[tool.setuptools.dynamic]
+version = { attr = "alinea.topvine.version.__version__"}
+readme = { file = ["README.md"] }
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+where = ["src"]
