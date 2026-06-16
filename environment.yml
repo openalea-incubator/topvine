@@ -1,0 +1,11 @@
+name: topvine
+channels:
+  - conda-forge
+  - openalea3
+  - defaults
+dependencies:
+  - python==3.13
+  - openalea.plantgl
+  - pip
+  - pip:
+    - -e .
