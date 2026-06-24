@@ -1,6 +1,10 @@
 {% set pyproject = load_file_data("../pyproject.toml", from_recipe_dir=True) %}
 {% set project = pyproject["project"] %}
 {% set version = environ.get("GIT_DESCRIBE_TAG", "0.0.0") %}
+{% set build_deps = pyproject.get("build-system", {}).get("requires", []) %}
+{% set deps = pyproject.get("project", {}).get("dependencies", []) %}
+{% set conda_deps = pyproject.get("tool", {}).get("conda", {}).get("environment", {}).get("dependencies", []) %}
+{% set test_deps = pyproject.get("project", {}).get("optional-dependencies", {}).get("test", []) %}
 
 package:
   name: alinea.topvine
@@ -13,28 +17,33 @@ build:
   noarch: python
   preserve_egg_dir: True
   number: 1
-  script: pip install --no-deps --no-build-isolation -e .
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
   host:
     - python
-    - pip
-    - setuptools
+    {% for dep in build_deps %}
+    - {{ dep }}
+    {% endfor %}
+
   run:
     - python
-    - openalea.plantgl
-    - openalea.mtg
+    {% for dep in deps + conda_deps %}
+    - {{ dep }}
+    {% endfor %}
 
 test:
   requires:
-    - path
+    - pytest
+    {% for dep in test_deps %}
+    - {{ dep }}
+    {% endfor %}
   imports:
     - alinea.topvine
   source_files:
     - test/**
-
   commands:
-    - python -m unittest discover -s test -p "*.py" --ignore=test_aml.py  --ignore=test_stat.py
+    - python -m unittest discover -s test -p "*.py"
 
 about:
   home: {{ project.get("urls", {}).get("Homepage", "") }}
