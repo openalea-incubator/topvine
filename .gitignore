@@ -104,3 +104,6 @@ doc/_dvlpt/
 
 *.bak
 /src/alinea/topvine/geom2023.csv
+
+
+conda/environment.yaml
