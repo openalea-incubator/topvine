@@ -5,9 +5,9 @@
 # otherwise use ipython %gui magic command:
 # %gui qt5    (use this command AFTER the imports)
 
-from alinea.topvine.topvine_2023 import topvine
-from alinea.topvine.genodata import *
-from alinea.topvine.multisim import vine_label, getfromid, TopVineInput, top_multisim
+from openalea.topvine.topvine_2023 import topvine
+from openalea.topvine.genodata import *
+from openalea.topvine.multisim import vine_label, getfromid, TopVineInput, top_multisim
 from openalea.plantgl.all import surface
 import pandas as pd
 import seaborn as sns

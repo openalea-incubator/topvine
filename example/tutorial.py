@@ -6,14 +6,14 @@
 # %gui qt5
 
 
-from alinea.topvine.gen_normal_canopy import gen_normal_canopy
-from alinea.topvine.gen_shoot_param import gen_shoot_param
-from alinea.topvine.translate_shoots import translate_shoots
-from alinea.topvine.vine_topiary import vine_topiary
-from alinea.topvine.vine_topiary import topiary
+from openalea.topvine.gen_normal_canopy import gen_normal_canopy
+from openalea.topvine.gen_shoot_param import gen_shoot_param
+from openalea.topvine.translate_shoots import translate_shoots
+from openalea.topvine.vine_topiary import vine_topiary
+from openalea.topvine.vine_topiary import topiary
 from openalea.plantgl.all import *
-from alinea.topvine.write_geom_file import write_geom_file
-import alinea.topvine.data_samples as ds
+from openalea.topvine.write_geom_file import write_geom_file
+import openalea.topvine.data_samples as ds
 
 
 # python version of topvine/macro/wralea/stand generator composite node

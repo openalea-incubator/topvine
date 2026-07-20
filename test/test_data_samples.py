@@ -1,5 +1,5 @@
 import unittest
-import alinea.topvine.data_samples as ds
+import openalea.topvine.data_samples as ds
 
 class TestDataSamples(unittest.TestCase):
     def test_readers(self):

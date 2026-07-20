@@ -1,13 +1,13 @@
 """test generated from topvine demo wwralea"""
 
 import unittest
-import alinea.topvine.data_samples as ds
-from alinea.topvine.gen_normal_canopy import gen_normal_canopy
-from alinea.topvine.vine_topiary import vine_topiary
-from alinea.topvine.primitive import bunch
+import openalea.topvine.data_samples as ds
+from openalea.topvine.gen_normal_canopy import gen_normal_canopy
+from openalea.topvine.vine_topiary import vine_topiary
+from openalea.topvine.primitive import bunch
 from openalea.plantgl.all import *
-from alinea.topvine.reconstr_digit import visu_digit_fromcane
-from alinea.topvine.topvine_2022 import topvine
+from openalea.topvine.reconstr_digit import visu_digit_fromcane
+from openalea.topvine.topvine_2022 import topvine
 
 class TestDemo(unittest.TestCase):
     def test_demo_topvine_static(self):

@@ -7,7 +7,7 @@
 {% set test_deps = pyproject.get("project", {}).get("optional-dependencies", {}).get("test", []) %}
 
 package:
-  name: alinea.topvine
+  name: openalea.topvine
   version: {{ version }}
 
 source:
@@ -39,7 +39,7 @@ test:
     - {{ dep }}
     {% endfor %}
   imports:
-    - alinea.topvine
+    - openalea.topvine
   source_files:
     - test/**
   commands:

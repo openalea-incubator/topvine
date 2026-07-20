@@ -3,7 +3,7 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "alinea.topvine"
+name = "openalea.topvine"
 dynamic = ["version", "readme"]
 description = "3D reconstruction model of grapevine canopy"
 authors = [
@@ -42,7 +42,7 @@ dev = [
 ]
 
 [tool.setuptools.dynamic]
-version = { attr = "alinea.topvine.version.__version__"}
+version = { attr = "openalea.topvine.version.__version__"}
 readme = { file = ["README.md"] }
 
 [tool.setuptools.packages.find]
