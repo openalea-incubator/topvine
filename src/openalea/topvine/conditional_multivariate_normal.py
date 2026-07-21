@@ -1,6 +1,6 @@
 import numpy as np
 from numba import njit
-import statsmodels.api as sm
+
 
 """
 Inspired by https://python.quantecon.org/multivariate_normal.html
