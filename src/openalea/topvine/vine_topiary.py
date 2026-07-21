@@ -1,36 +1,45 @@
 from __future__ import absolute_import
-import numpy
-import random
-from . import leaf
-from . import shoot
-from . import topiary
-from .coor3D import *
-from .primitive import *
+
+from openalea.plantgl.all import Scene, Viewer
 from six.moves import range
 
+from openalea.topvine.primitive import trunk
+from openalea.topvine.topiary import Topiary
 
-class vine_topiary(object):
-    """  Generates a scaled PGL scene from a list of normalised shoot objects """
+
+class VineTopiary(object):
+    """Generates a scaled PGL scene from a list of normalised shoot objects."""
 
     def __init__(self):
-        pass
+        self.scene = Scene()
 
-    def __call__(self, tab_shoot, dl_leaf, allo, boolI, boolT, boolB):
-        MaScene = Scene()
-        MonViewer = Viewer
+    def generate_scene(
+            self,
+            tab_shoot,
+            dl_leaf,
+            allo,
+            boolI,
+            boolT, boolB
+    ):
         for i in range(len(tab_shoot)):
             coord = tab_shoot[i][0].geom[1]
             for j in range(len(tab_shoot[i])):
                 coord = (coord + tab_shoot[i][j].geom[1]) / 2
-                top = topiary.Topiary(MaScene, tab_shoot[i][j], allo, dl_leaf, visu_en=boolI)
-            # add a trunk if option is set to True
-            if boolT == True:
-                trunk(MaScene, coord / 100., 'cordon')
+                Topiary(
+                    scene=self.scene,
+                    shoot=tab_shoot[i][j],
+                    allo=allo,
+                    lawf=dl_leaf,
+                    visu_en=boolI
+                )
+
+            if boolT:
+                trunk(self.scene, coord / 100., 'cordon')
 
             # a ameliorer: / type / calcul plus precis des rangs sur moy plus larges ou sur donnees filees en entree
 
-        MonViewer.display(MaScene)
-        return MaScene
+        Viewer.display(self.scene)
+        return self.scene
 
 
 class vine_topiary_2023(object):

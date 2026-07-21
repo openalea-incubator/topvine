@@ -1,7 +1,7 @@
 from openalea.topvine.gen_normal_canopy import gen_normal_canopy
 from openalea.topvine.gen_shoot_param import gen_shoot_param
 from openalea.topvine.translate_shoots import translate_shoots
-from openalea.topvine.vine_topiary import vine_topiary
+from openalea.topvine.vine_topiary import VineTopiary
 from openalea.topvine.write_geom_file import write_geom_file
 import openalea.topvine.data_samples as ds
 
@@ -67,12 +67,11 @@ def topvine(stand_path='/data/carto.csv', shoot_path='/data/ex_rammoy3.csv',
         write_geom = write_geom_file()
         write_geom(geom,name)
 
-    vt = vine_topiary()
     generator = gen_normal_canopy()
     dl = ds.dl_file(dl_path)
     allometry = ds.allometry_file(allom_path)
     shoot = ds.shoot_file(shoot_path)
     tab_shoot = generator(geom, shoot, dl)
-    scene = vt(tab_shoot, dl, allometry, branches, trunk, False)   # the last parameter, "False", does nothing
+    scene = VineTopiary().generate_scene(tab_shoot, dl, allometry, branches, trunk, False)   # the last parameter, "False", does nothing
 
     return [scene, geom]

@@ -7,7 +7,7 @@ import openalea.topvine.data_samples as data_samples
 from openalea.topvine.gen_normal_canopy import gen_normal_canopy
 from openalea.topvine.gen_shoot_param import gen_shoot_param
 from openalea.topvine.translate_shoots import translate_shoots
-from openalea.topvine.vine_topiary import vine_topiary
+from openalea.topvine.vine_topiary import VineTopiary
 
 matplotlib.use('Qt5Agg')
 
@@ -64,8 +64,8 @@ def main():
         topol=shoot,
         dl_leaf=dl
     )
-    vt = vine_topiary()
-    vt(
+
+    VineTopiary().generate_scene(
         tab_shoot=tab_shoot,
         dl_leaf=dl,
         allo=allometry,

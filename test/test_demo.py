@@ -3,7 +3,7 @@
 import unittest
 import openalea.topvine.data_samples as ds
 from openalea.topvine.gen_normal_canopy import gen_normal_canopy
-from openalea.topvine.vine_topiary import vine_topiary
+from openalea.topvine.vine_topiary import VineTopiary
 from openalea.topvine.primitive import bunch
 from openalea.plantgl.all import *
 from openalea.topvine.reconstr_digit import visu_digit_fromcane
@@ -11,7 +11,6 @@ from openalea.topvine.topvine_2022 import topvine
 
 class TestDemo(unittest.TestCase):
     def test_demo_topvine_static(self):
-        vt = vine_topiary()
         allometry = ds.allometry_file()
         dl = ds.dl_file()
         geom = ds.geom_file()
@@ -19,7 +18,7 @@ class TestDemo(unittest.TestCase):
 
         generator = gen_normal_canopy()
         tab_shoot = generator(geom, shoot, dl)
-        scene = vt(tab_shoot, dl, allometry, False, False, False)
+        VineTopiary().generate_scene(tab_shoot, dl, allometry, False, False, False)
 
     def test_demo_stand_generator(self):
         geom = topvine()
