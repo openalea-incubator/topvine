@@ -1,9 +1,6 @@
 """ A python tutorial for runing topvine generator
 """
 
-# Should be run in a qt-enabled console (ipython --gui=qt)
-# otherwise use ipython %gui magic command:
-# %gui qt5
 
 
 from openalea.topvine.gen_normal_canopy import gen_normal_canopy
@@ -16,6 +13,10 @@ from openalea.topvine.write_geom_file import write_geom_file
 import openalea.topvine.data_samples as ds
 
 
+import matplotlib
+
+matplotlib.use('Qt5Agg')
+
 # python version of topvine/macro/wralea/stand generator composite node
 def _stand_generator(carto, spurs0, dspurs, f_azi, shoot):
     geom = []
@@ -24,8 +25,9 @@ def _stand_generator(carto, spurs0, dspurs, f_azi, shoot):
     for v, n in carto:
         shoot_params = generator(n, spurs0, dspurs, f_azi, shoot)
         translated = translator(shoot_params, v)
-        geom.append(translat000ed)
+        geom.append(translated)
     return geom
+
 
 def main():
     # Plot file  (stand file)    --->   carto [posxyz_plant, nb_coursons]
@@ -49,13 +51,13 @@ def main():
     # Allometry file ---> allo_Grenache
         # The first line includes the allometric parameters a & b that link the length of a shoot with its number of phytomers (L = a ⋅n+b).
     allom_path='/data/allo_Grenache.csv'
-    
-    carto = ds.stand_file(stand_path)  # 
+
+    carto = ds.stand_file(stand_path)  #
     spurs0, dspurs, f_azi, shootp = ds.dl_shoot_file(dl_shoot_path)
     allometry = ds.allometry_file(allom_path)
     shoot = ds.shoot_file(shoot_path)
     dl = ds.dl_file(dl_path)
-    
+
     geom = _stand_generator(carto, spurs0, dspurs, f_azi, shootp)
     generator = gen_normal_canopy()
     tab_shoot = generator(geom, shoot, dl)
@@ -63,3 +65,22 @@ def main():
     # boolT toggles trunk visualisation
     # boolI toggles internode visualisation
     scene = vt(tab_shoot, dl, allometry, boolI=True, boolT=False, boolB=True)   # the last parameter, "False", does nothing
+
+
+if __name__ == '__main__':
+    from IPython import get_ipython
+
+    ip = get_ipython()
+    if ip is not None:
+        ip.enable_gui("qt")
+        INTERACTIVE = True
+    else:
+        INTERACTIVE = False
+
+    main()
+
+    if not INTERACTIVE:
+        from PyQt5.QtWidgets import QApplication
+
+        QApplication.instance().exec_()
+    pass
