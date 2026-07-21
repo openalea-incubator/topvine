@@ -118,7 +118,7 @@ def render_env(
         lines.append("  - pip:")
         pip_entries = list(pip_deps)
         if editable_install:
-            pip_entries.append("-e ..")
+            pip_entries.append("-e .. --config-settings editable_mode=compat")
         lines.extend(_yaml_list(pip_entries, indent=2))
 
     lines.append("")  # trailing newline

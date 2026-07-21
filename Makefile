@@ -53,7 +53,7 @@ lock: generate
 .PHONY: env
 env: lock
 	conda-lock install --name $(name) $(LOCK_FILE)
-	conda run -n $(name) pip install -e .
+	conda run -n $(name) pip install -e . --config-settings editable_mode=compat
 
 # ---------------------------------------------------------------------------
 # Convenience — regenerate + relock + recreate dev env in one shot
