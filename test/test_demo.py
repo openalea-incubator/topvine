@@ -1,5 +1,5 @@
 """test generated from topvine demo wwralea"""
-
+import os
 import unittest
 import openalea.topvine.data_samples as ds
 from openalea.topvine.gen_normal_canopy import gen_normal_canopy
@@ -9,6 +9,10 @@ from openalea.plantgl.all import *
 from openalea.topvine.reconstr_digit import visu_digit_fromcane
 from openalea.topvine.topvine_2022 import topvine
 
+
+IS_CI = os.getenv('GITHUB_ACTIONS') == 'true'
+
+@unittest.skipIf(IS_CI, "Skipping all GUI tests in CI")
 class TestDemo(unittest.TestCase):
     def test_demo_topvine_static(self):
         allometry = ds.allometry_file()
