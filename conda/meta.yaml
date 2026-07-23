@@ -1,8 +1,14 @@
-{% set data = load_setup_py_data() %}
+{% set pyproject = load_file_data("../pyproject.toml", from_recipe_dir=True) %}
+{% set project = pyproject["project"] %}
+{% set version = environ.get("GIT_DESCRIBE_TAG", "0.0.0") %}
+{% set build_deps = pyproject.get("build-system", {}).get("requires", []) %}
+{% set deps = pyproject.get("project", {}).get("dependencies", []) %}
+{% set conda_deps = pyproject.get("tool", {}).get("conda", {}).get("environment", {}).get("dependencies", []) %}
+{% set test_deps = pyproject.get("project", {}).get("optional-dependencies", {}).get("test", []) %}
 
 package:
-  name: alinea.topvine
-  version: {{ data.get('version') }}
+  name: openalea.topvine
+  version: {{ version }}
 
 source:
   path: ..
@@ -11,32 +17,35 @@ build:
   noarch: python
   preserve_egg_dir: True
   number: 1
-  script: python setup.py install #--single-version-externally-managed --record=record.txt
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
 
 requirements:
-  build:
-    - python 
-    - openalea.deploy
+  host:
+    - python
+    {% for dep in build_deps %}
+    - {{ dep }}
+    {% endfor %}
+
   run:
-    - python >=3.6
-    - openalea.plantgl
-    - openalea.mtg
+    - python
+    {% for dep in deps + conda_deps %}
+    - {{ dep }}
+    {% endfor %}
 
 test:
   requires:
     - pytest
-    - path
+    {% for dep in test_deps %}
+    - {{ dep }}
+    {% endfor %}
   imports:
-    - alinea.topvine
+    - openalea.topvine
   source_files:
     - test/**
-
   commands:
-    - cd test
-    - pytest -v --ignore=test_aml.py  --ignore=test_stat.py
+    - python -m unittest discover -s test -p "*.py"
 
 about:
-  home: {{ data.get('url') }}
-  license: CeCILL-C
-  summary: {{ data.get('description') }}
-
+  home: {{ project.get("urls", {}).get("Homepage", "") }}
+  license: {{ project.get("license", "") }}
+  summary: {{ project.get("description", "") }}

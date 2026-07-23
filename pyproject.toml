@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openalea.topvine"
+dynamic = ["version", "readme"]
+description = "3D reconstruction model of grapevine canopy"
+authors = [
+    {name = "Gaetan LOUARN", email = "gaetan.louarn@inrae.fr"},
+    {name = "Rami ALBASHA", email = "rami.albasha@inrae.fr"},
+    {name = "Efstathios (Stathis) DELIVORIAS", email = "stathissupagro@gmx.com"}
+]
+maintainers = [
+    {name = "Rami ALBASHA", email = "rami.albasha@inrae.fr"}
+]
+license = "CECILL-C"
+requires-python = ">=3.12"
+keywords = []
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering",
+  "Framework :: OpenAlea",
+]
+
+# You can list here all dependencies that are pip-instalable, and that have a name identical to the one used by conda
+# (to allow reuse of this list in meta.yaml).
+# If conda name is different, please do not declare the pip name, and declare conda name in the next section
+dependencies = [
+    "pandas",
+    "numba",
+]
+
+[project.optional-dependencies]
+dev = [
+    "matplotlib",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "openalea.topvine.version.__version__"}
+readme = { file = ["README.md"] }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# Conda-only deps, not available on PyPI
+# Channels: openalea.plantgl → openalea3
+[tool.conda.environment]
+dependencies = [
+    "openalea.plantgl",
+]
