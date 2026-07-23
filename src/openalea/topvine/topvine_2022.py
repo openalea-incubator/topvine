@@ -9,7 +9,7 @@ import openalea.topvine.data_samples as ds
 
 def topvine(stand_path='/data/carto.csv', shoot_path='/data/ex_rammoy3.csv',
             dl_shoot_path='/data/2W_VSP_GRE_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
-            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom.csv', geomfile=0):
+            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom.csv', geomfile=None):
     # a function that generates all types of scenes based on diverse input
 
     """
@@ -46,7 +46,7 @@ def topvine(stand_path='/data/carto.csv', shoot_path='/data/ex_rammoy3.csv',
     """
 
 
-    if geomfile != 0:
+    if geomfile is not None:
         geom = ds.geom_file(geomfile)
     else:
         # python version of topvine/macro/wralea/stand generator composite node

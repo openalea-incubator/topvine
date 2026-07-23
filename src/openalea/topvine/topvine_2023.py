@@ -148,12 +148,12 @@ def shoot_realizator(_geom, _shoot_data, _leafstats):
 
 def topvine(stand_path='/data/carto.csv', gen=Genotype(),
             dl_shoot_path='/data/2W_VSP_GRE_without_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
-            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom2023.csv', geomfile=0, display=True):
+            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom2023.csv', geomfile=None, display=True):
     carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
     shoot_data = shoot_generator(carto,
                                  gen)  # [topology and leaf surface for each plant, length of every shoot for each plant]
-    if geomfile != 0:
-        geom = ds.geom_file(geomfile)
+    if geomfile is not None:
+        geom = ds.geom_file(fn=geomfile)
     else:
 
         spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(dl_shoot_path)
