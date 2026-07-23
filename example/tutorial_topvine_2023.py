@@ -7,7 +7,10 @@ from openalea.topvine.genodata import (
 from openalea.topvine.multisim import vine_label, getfromid, TopVineInput, top_multisim
 from openalea.plantgl.all import surface
 import pandas as pd
-import seaborn as sns
+
+from numpy import histogram_bin_edges
+
+from matplotlib import pyplot as plt
 
 
 def main_one_genotype():
@@ -63,13 +66,9 @@ def main_one_genotype():
             else:
                 secsurfs.append(surface(shape))
 
-    sdat = pd.DataFrame({'primarysurfs': primarysurfs})
-    sdat2 = pd.DataFrame({'secsurfs': secsurfs})
-
     # We superimpose the two histograms with the following commands:
-
-    sns.histplot(sdat, x="primarysurfs")
-    sns.histplot(sdat2, x="secsurfs")
+    plt.hist(primarysurfs, bins=28)
+    plt.hist(secsurfs, bins=28)
 
     # Now if we want to extract more detailed information from the simulation, we can use the second element of tpresult.
     # We initialize the lists which we then fill by looping through the "shoot table" which is tpresult[1].
@@ -119,11 +118,20 @@ def main_one_genotype():
                               'leafcoordz': leafcoordz,
                               'leafanglea': leafanglea, 'leafangleb': leafangleb})
 
-    # And here some data analysis:
+    fig, axs = plt.subplots(nrows=3, sharex='all')
+    bins = histogram_bin_edges(leaf_data['leafarea'], bins=30)
+    for order, group in leaf_data.groupby('leaforder'):
+        axs[0].hist(group['leafarea'], bins=bins, alpha=0.5, label=f"leaf order {str(order)}")
+        axs[0].legend()
 
-    sns.histplot(leaf_data, x='leafarea', hue='leaforder')
-    sns.histplot(leaf_data[leaf_data['leaforder'] == 1], x='leafarea', hue='plantnb')
-    sns.scatterplot(leaf_data[leaf_data['leaforder'] == 1], x="leafarea", y="phytinternode", hue='plantnb')
+    for plantnb, group in leaf_data[leaf_data['leaforder'] == 1].groupby('plantnb'):
+        axs[1].hist(group['leafarea'], bins=bins, alpha=0.5, label=f"plant {str(plantnb)}")
+        axs[1].legend()
+        axs[2].scatter(group['leafarea'], group['phytinternode'], label=f"plant {str(plantnb)}")
+        axs[2].legend()
+
+    for plantnb, group in leaf_data[leaf_data['leaforder'] == 1].groupby('plantnb'):
+        plt.scatter(group['leafarea'], group['phytinternode'], label=str(plantnb))
 
 
 def main_multiple_genotypes():
@@ -151,19 +159,20 @@ def main_multiple_genotypes():
 
     # Now using the top_multisim function with a list of TopVineInput objects, we run the series of simulations.
 
-    theresult = top_multisim(inputlist)
+    df = top_multisim(inputlist)
 
     # The result is a data frame where each line corresponds to a leaf, and the columns are leafid, plantnb, shootid,
     # leaforder, leafarea,  phytinternode, leafcoordx, leafcoordy, leafcoordz, leafanglea, leafangleb, simnumber, genotype.
 
-    splt = sns.scatterplot(theresult[(theresult['leaforder'] == 1) & (theresult['genotype'] == 'Chasselas')], x="leafarea",
-                           y="phytinternode", hue='shootid')
-
     # And now we can explore the results, for example by plotting the leaf area vs the internode length of all the leafs of
-    # a particular genotype and order, as above.  Or we can plot the leaf angle a against the hight of the leaf.
+    # a particular genotype and order.  Or we can plot the leaf angle a against the height of the leaf.
 
-    splt2 = sns.scatterplot(theresult[(theresult['leaforder'] == 1)], x="leafanglea", y="leafcoordz", hue='genotype',
-                            alpha=0.4)
+    fig, axs = plt.subplots(nrows=2)
+    for shootid, group in df[(df['leaforder'] == 1) & (df['genotype'] == 'Chasselas')].groupby('shootid'):
+        axs[0].scatter(group['leafarea'], group['phytinternode'], label=str(shootid))
+
+    for shootid, group in df[df['leaforder'] == 1].groupby('genotype'):
+        axs[1].scatter(group['leafanglea'], group['leafcoordz'], label=str(genotype), alpha=0.4)
 
 
 if __name__ == '__main__':

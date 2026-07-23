@@ -38,7 +38,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "matplotlib",
-    "seaborn",
 ]
 
 [tool.setuptools.dynamic]
