@@ -7,9 +7,17 @@ import openalea.topvine.data_samples as ds
 
 
 
-def topvine(stand_path='/data/carto.csv', shoot_path='/data/ex_rammoy3.csv',
-            dl_shoot_path='/data/2W_VSP_GRE_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
-            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom.csv', geomfile=None):
+def topvine(
+        stand_path: str = '/data/carto.csv',
+        shoot_path: str = '/data/ex_rammoy3.csv',
+        dl_shoot_path: str = '/data/2W_VSP_GRE_ramd.csv',
+        dl_path: str = '/data/Law-leaf-2W-Grenache.csv',
+        allom_path: str = '/data/allo_Grenache.csv',
+        branches: bool = True,
+        trunk: bool = True,
+        name: str = 'geom.csv',
+        geomfile: str | None = None
+):
     # a function that generates all types of scenes based on diverse input
 
     """

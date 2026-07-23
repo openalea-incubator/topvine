@@ -1,4 +1,4 @@
-""" A python tutorial for runing topvine grapevine canopy generator
+""" A python tutorial for running topvine grapevine canopy generator
 """
 
 from openalea.topvine.topvine_2023 import topvine
@@ -14,53 +14,21 @@ from matplotlib import pyplot as plt
 
 
 def main_one_genotype():
+    scene, tab_shoot = topvine(
+        stand_path='/data/carto.csv',
+        gen=Chasselas,
+        dl_shoot_path='/data/2W_VSP_GRE_ramd.csv',
+        dl_path='/data/Law-leaf-2W-Grenache.csv',
+        allom_path='/data/allo_Grenache.csv',
+        display=False
+    )
 
-    # Plot file  (stand file)    --->   carto [posxyz_plant, nb_coursons]
-    # For every plant, XYZ coordinates + number of shoots
-    stand_path = '/data/carto.csv'
-
-    # Genotype, which will generate the average shoot profile (affects topology, leaf surface and internode length).
-    # Taken from a number of statistics from firld experiments (as found in genodata.py)
-    gen = Chasselas
-
-    # Distribution laws for shoot parameters (dl shoot file) ---> 2W_VSP_GRE_ramd
-    # X0,Y0,Z0    : distribution laws for the positioning of the spurs.
-    # DX,DY,DZ    : distribution laws for the distancing of the buds in the spurs.
-    # Dist        : seems not to be used
-    # freq AZI    : frequency of shoot AZI of angle (-20, 20), (20, 160), (160, 200) and (200, 340)
-    # x (     )   : means of the 4 other shoot parameters, namely initial elevation, angle between basal and distal tangents (a.k.a curvature), proportion of shoot accounting for half the curvature and normalized length.
-    # S (    )    : Covariance matrices for the 4 other shoot parameters for each azimuth range.
-    # Note that the normalized length is included in this table because of the original architecture of the program, however it is subsequently superseded according to the simulations of the generate_rameau_moyen.py script, according to the genotype selected.
-    dl_shoot_path = '/data/2W_VSP_GRE_ramd.csv'
-
-    # Distribution laws for leaf parameters (dl file)  --->  Law-leaf-2W-Grenache
-    # Elevation South – Elevation North – Azimuth South – Azimuth North
-    dl_path = '/data/Law-leaf-2W-Grenache.csv'
-
-    # Allometry file ---> allo_Grenache
-    # The first line includes the allometric parameters a & b that link the length of a shoot with its number of phytomers (L = a ⋅n+b).
-    allom_path = '/data/allo_Grenache.csv'
-
-
-    # Here is the result of a simulation following the above input :
-
-    topvine(stand_path, gen, dl_shoot_path, dl_path, allom_path)
-
-    # But if we want to extract info from the simulation we can work like this:
-
-    tpresult = topvine(stand_path, gen, dl_shoot_path, dl_path, allom_path, display=False)
-
-    # at first, we will generate histograms of the first and secord order leaf surfaces.
-    # the result includes two elements, the first one being a plantgl scene from which we can recover all shapes:
-
-    shapes = [i for i in tpresult[0]]
-
-    # we create two lists and add to them the surface areas of primary and secondary order leaves respectively.
+    # at first, we will generate histograms of the first and second order leaf surfaces.
     primarysurfs = []
     secsurfs = []
 
-    for shape in shapes:
-        if getfromid(shape.name, 'type') == '1':
+    for shape in scene:
+        if getfromid(aidee=shape.name, what='type') == '1':
             if getfromid(shape.name, 'phy') % 100 == 0:
                 primarysurfs.append(surface(shape))
             else:
@@ -71,7 +39,7 @@ def main_one_genotype():
     plt.hist(secsurfs, bins=28)
 
     # Now if we want to extract more detailed information from the simulation, we can use the second element of tpresult.
-    # We initialize the lists which we then fill by looping through the "shoot table" which is tpresult[1].
+    # We initialize the lists which we then fill by looping through the "shoot table" which is tab_shoot.
 
     leafid = []
     plantnb = []
@@ -88,7 +56,7 @@ def main_one_genotype():
     plnb = 0
     shnb = 0
 
-    for plant in tpresult[1]:
+    for plant in tab_shoot:
         for shoot in plant:
             for phyto in shoot.topo:
                 for leaf in phyto:
@@ -112,11 +80,22 @@ def main_one_genotype():
 
     # And now we integrate all those lists into a data frame where every line corresponds to a leaf.
 
-    leaf_data = pd.DataFrame({'leafid': leafid, "plantnb": plantnb, 'shootid': shootid, 'leaforder': leaforder,
-                              'leafarea': leafarea, 'phytinternode': phytinternode, 'leafcoordx': leafcoordx,
-                              'leafcoordy': leafcoordy,
-                              'leafcoordz': leafcoordz,
-                              'leafanglea': leafanglea, 'leafangleb': leafangleb})
+
+    # And here some data analysis:
+    leaf_data = pd.DataFrame({
+        'leafid': leafid,
+        "plantnb": plantnb,
+        'shootid': shootid,
+        'leaforder': leaforder,
+        'leafarea': leafarea,
+        'phytinternode': phytinternode,
+        'leafcoordx': leafcoordx,
+        'leafcoordy': leafcoordy,
+        'leafcoordz': leafcoordz,
+        'leafanglea': leafanglea,
+        'leafangleb': leafangleb,
+    }
+    )
 
     fig, axs = plt.subplots(nrows=3, sharex='all')
     bins = histogram_bin_edges(leaf_data['leafarea'], bins=30)

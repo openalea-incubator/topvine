@@ -135,7 +135,11 @@ def stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, avlength, shoot_le
     return __geom
 
 
-def shoot_realizator(_geom, _shoot_data, _leafstats):
+def shoot_realizator(
+        _geom,
+        _shoot_data,
+        _leafstats,
+) -> list[list[gen_normal_canopy_2023]]:
     generator = gen_normal_canopy_2023()
     table_shoot = []
     for plant in range(0, len(_geom)):
@@ -146,9 +150,46 @@ def shoot_realizator(_geom, _shoot_data, _leafstats):
     return table_shoot
 
 
-def topvine(stand_path='/data/carto.csv', gen=Genotype(),
-            dl_shoot_path='/data/2W_VSP_GRE_without_ramd.csv', dl_path='/data/Law-leaf-2W-Grenache.csv',
-            allom_path='/data/allo_Grenache.csv', branches=True, trunk=True, name='geom2023.csv', geomfile=None, display=True):
+def topvine(
+        stand_path: str = '/data/carto.csv',
+        gen=Genotype(),
+        dl_shoot_path: str = '/data/2W_VSP_GRE_without_ramd.csv',
+        dl_path: str = '/data/Law-leaf-2W-Grenache.csv',
+        allom_path: str = '/data/allo_Grenache.csv',
+        branches: bool = True,
+        trunk: bool = True,
+        name: str = 'geom2023.csv',
+        geomfile: str | None = None,
+        display: bool = True
+):
+    """
+
+    Args:
+        stand_path: relative path to the file that includes the plot data (For every plant, XYZ coordinates + number of shoots (coursons))
+        gen: grapevine genotype having the average shoot profile (topology, leaf surface and internode length).
+        dl_shoot_path: relative path to the file that includes the parameters of distribution laws for shoot.
+            - X0,Y0,Z0    : distribution laws for the positioning of the spurs.
+            - DX,DY,DZ    : distribution laws for the distancing of the buds in the spurs.
+            - Dist        : seems not to be used
+            - freq AZI    : frequency of shoot AZI of angle (-20, 20), (20, 160), (160, 200) and (200, 340)
+            - x (     )   : means of the 4 other shoot parameters, namely initial elevation, angle between basal and distal tangents (a.k.a curvature), proportion of shoot accounting for half the curvature and normalized length.
+            - S (    )    : Covariance matrices for the 4 other shoot parameters for each azimuth range.
+            - Note that the normalized length is included in this table because of the original architecture of the program, however it is subsequently superseded according to the simulations of the generate_rameau_moyen.py script, according to the genotype selected.
+        dl_path: relative path to the file that includes the parameters of distribution laws for leaves.
+            - Elevation South – Elevation North – Azimuth South – Azimuth North
+        allom_path: relative path to the file that includes the allometry parameters
+            - The first line includes the allometric parameters a & b that link the length of a shoot with its number of phytomers (L = a * n + b).
+        branches: whether to show internodes (default: True)
+        trunk: whether to show trunk (default: True)
+        name: name of the geometry file (for writing)
+        geomfile: relative path to geometry file (for reading, default: None)
+        display: whether to display the resulting scene (default: True)
+
+    Returns:
+        A tuple containing:
+            - PGL scence object
+            - Shoot objects per plant
+    """
     carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
     shoot_data = shoot_generator(carto,
                                  gen)  # [topology and leaf surface for each plant, length of every shoot for each plant]
@@ -156,24 +197,30 @@ def topvine(stand_path='/data/carto.csv', gen=Genotype(),
         geom = ds.geom_file(fn=geomfile)
     else:
 
-        spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(dl_shoot_path)
+        spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(fn=dl_shoot_path)
 
         geom = stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, gen.mean_shoot_length, shoot_data[1])
         write_geom = write_geom_file()
         write_geom(geom, name)
 
     dl = ds.dl_file(dl_path)
-    tab_shoot = shoot_realizator(geom, shoot_data[0], dl)
+    tab_shoot = shoot_realizator(
+        _geom=geom,
+        _shoot_data=shoot_data[0],
+        _leafstats=dl,
+    )
 
     vt = vine_topiary_2023()
     allometry = ds.allometry_file(allom_path)
 
-    scene = vt(tab_shoot, dl, allometry, branches, trunk, False, display)
+    scene = vt(
+        tab_shoot=tab_shoot,
+        dl_leaf=dl,
+        allo=allometry,
+        boolI=branches,
+        boolT=trunk,
+        boolB=False,
+        display=display,
+    )
 
-    return [scene, tab_shoot]
-
-# %gui qt5
-
-# from openalea.mtg.mtg import *
-
-# g = MTG()
+    return scene, tab_shoot
