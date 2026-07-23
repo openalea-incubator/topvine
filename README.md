@@ -1,52 +1,105 @@
-# Overview
+# topvine
 
-`topvine` is a 3D statistical reconstruction model of grapevine (*Vitis vinifera* L.)
-that simulates canopy structure accounting for (cultivar)-(training system) pairs.
+A 3D statistical reconstruction model of grapevine (*Vitis vinifera* L.) that simulates canopy structure
+accounting for (cultivar)-(training system) pairs.
 
-# Development Environment Setup
-## Prerequisites
+
+## Quick Links
+
+- **For end-users:** [Installation](#installation) | [Usage](#usage)
+- **For contributors:** [Development Setup](#development-environment-setup) | [Contributing](#contributing)
+
+---
+
+## Installation
+
+### Requirements
+
+- Python 3.8+
+- Conda (Miniconda or Anaconda)
+
+### Install from source
+
+```bash
+git clone git@github.com:openalea-incubator/topvine.git
+cd topvine
+conda env create -f conda/conda-lock.yml
+conda activate topvine
+```
+
+Or, with a custom environment name:
+
+```bash
+conda install --name myenv --file conda/conda-lock.yml
+conda activate myenv
+```
+
+### Verify installation
+
+```bash
+python -c "import topvine; print(topvine.__version__)"
+```
+
+---
+
+## Usage
+
+See the [`examples/`](examples/) directory for usage examples.
+
+---
+
+
+## Development Environment Setup
+
+### Prerequisites
 
 The following tools must be installed and available in your shell before using the Makefile.
+Ensure that these prerequisites are installed in the **base** conda environment.
 
-### 1. Conda
+#### 1. Conda
 
-Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html) or [Anaconda](https://www.anaconda.com/products/distribution). Verify with:
+Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html) or [Anaconda](https://www.anaconda.com/products/distribution).
 
+Verify:
 ```bash
 conda --version
 ```
 
-### 2. conda-lock
-
-Install `conda-lock` in your **base** conda environment (not in a project environment):
+#### 2. conda-lock
 
 ```bash
 conda install -c conda-forge conda-lock
 ```
 
-Verify with:
-
+Verify:
 ```bash
 conda-lock --version
 ```
 
-### 3. make
+#### 3. make
 
-**Linux** — likely already installed. Verify with `make --version`. If not:
-
+**Linux:**
+```bash
+make --version  # Check if installed
+```
+If not installed:
 ```bash
 sudo apt install make        # Debian/Ubuntu
 sudo dnf install make        # RHEL/Fedora
 ```
 
-**Windows (PowerShell, run as administrator)** — install via winget:
+**macOS:**
+Usually pre-installed. If not:
+```bash
+brew install make
+```
 
+**Windows (PowerShell, run as administrator):**
 ```powershell
 winget install GnuWin32.Make
 ```
 
 Then add GnuWin32 to the system PATH (run as administrator):
-
 ```powershell
 [Environment]::SetEnvironmentVariable(
     "Path",
@@ -55,31 +108,38 @@ Then add GnuWin32 to the system PATH (run as administrator):
 )
 ```
 
-Restart your terminal and verify with `make --version`.
+Restart your terminal and verify:
+```bash
+make --version
+```
 
 ---
 
-## Clone Project
-Clone the repo into local machine; go to the directory where you would like to have the `topvine` code cloned then type
-(replace `<topvine-parent-directory>` by your directory name):
-```bash
-cd <topvine-parent-directory>
-git clone git@github.com:openalea-incubator/topvine.git
-```
+### Dependency management
 
-The dependency management workflow is driven by the following files:
+Dependencies are defined in a single source of truth: **`pyproject.toml`**
+
+The workflow is:
+
+1. **Edit** `pyproject.toml` with your changes
+2. **Run** `make update` to regenerate lock files and recreate the environment
+3. **Commit** the updated `conda/conda-lock.yml` to the repository
+
+**Key files:**
 
 ```
 project-root/
 ├── Makefile                        ← entry point for all environment commands
 ├── pyproject.toml                  ← single source of truth for all dependencies
 ├── scripts/
-│   └── generate_env_specs.py            ← generates environment.yaml from pyproject.toml
+│   └── generate_env_specs.py       ← generates environment.yaml from pyproject.toml
 └── conda/
-    ├── meta.yaml                   ← conda-build recipe, reads from pyproject.toml
-    ├── environment.yaml        ← generated, do not edit manually
-    └── conda-lock.yml          ← committed to repo, used for reproducible installs
+    ├── meta.yaml                   ← conda-build recipe
+    ├── environment.yaml            ← generated (do not edit)
+    └── conda-lock.yml              ← generated (committed to repo for reproducibility)
 ```
+
+⚠️ **Important:** `conda/environment.yaml` and `conda/conda-lock.yml` are generated artifacts. Always edit `pyproject.toml` and regenerate them using `make update`.
 
 ### Dependency ownership
 
@@ -91,11 +151,9 @@ project-root/
 | Conda channels | hardcoded in `scripts/generate_envs.py` |
 | Conda-build recipe | `conda/meta.yaml` |
 
-`conda/environment.yaml` and `conda/conda-lock.yml` are **generated artifacts** — never edit them manually. Always edit `pyproject.toml` and regenerate.
-
 ---
 
-## Makefile Targets
+### Makefile targets
 
 | Target | Description |
 |---|---|
@@ -103,12 +161,12 @@ project-root/
 | `make generate` | Generate `conda/environment.yaml` from `pyproject.toml` |
 | `make lock` | Generate `conda/conda-lock.yml` from `conda/environment.yaml` |
 | `make env` | Create the dev conda environment from the lock file |
-| `make update` | Regenerate env + relock + recreate dev environment in one shot |
+| `make update` | Regenerate env + relock + recreate dev environment (all-in-one) |
 | `make clean` | Remove generated environment file and lock file |
 
-### Custom environment name
+#### Custom environment name
 
-By default the environment is named after the project (e.g. `alinea-topvine`). You can override this at call time:
+By default, the environment is named `openalea-topvine`. Override at call time:
 
 ```bash
 make env name=myenv
@@ -116,9 +174,9 @@ make env name=myenv
 
 ---
 
-## First-Time Setup (Contributors)
+### First-time setup
 
-Clone the repository, and run from inside the project directory:
+Clone the repository and run from inside the project directory:
 
 ```bash
 make env
@@ -133,30 +191,26 @@ This single command:
 Then activate the environment:
 
 ```bash
-conda activate <Your-Env-Name>
-```
-
-Test your installation
-```bash
-python -m unittest discover -s test -p "*.py"
+conda activate openalea-topvine
 ```
 
 ---
 
-## After Editing Dependencies
+### After editing dependencies
 
-Whenever you add, remove, or change a dependency in `pyproject.toml`, run:
+Whenever you add, remove, or update a dependency in `pyproject.toml`, run:
 
 ```bash
 make update
 ```
 
-This regenerates the environment file, relocks, and recreates the conda environment.
-Commit the updated `conda/conda-lock.yml` so other contributors get the same resolution.
+This regenerates the environment, relocks, and recreates the conda environment in one step.
+
+**Always commit the updated `conda/conda-lock.yml`** so other contributors get the exact same dependency resolution.
 
 ---
 
-## Resetting the Environment
+### Resetting the environment
 
 To remove all generated files and start fresh:
 
@@ -167,25 +221,83 @@ make env
 
 ---
 
-## Notes
+## Testing
 
-- `conda/environment.yaml` is ignored but `conda/conda-lock.yml` is committed to the repository. The lock file in particular should always be committed — it is the reproducibility artifact that guarantees identical environments across machines and over time.
-- The lock file covers both `win-64` and `linux-64` platforms in a single file. `conda-lock install` automatically selects the correct platform at install time.
-- `conda/meta.yaml` reads dependencies directly from `pyproject.toml` at build time and is unaffected by this workflow.
+Run the test suite:
 
+```bash
+python -m unittest discover -s test -p "*.py"
+```
 
+Or with coverage:
 
-# Run the model with a qt-enabled console
-cd example
+```bash
+# Add coverage command here when available
+```
 
-ipython --gui=qt
+---
 
-%run tutorial.py
+## Contributing
 
-main()
+Contributions are welcome! Please:
 
-_
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/my-feature`)
+3. Make your changes and add tests
+4. Run the test suite to ensure nothing breaks
+5. Commit with clear messages
+6. Push to your fork and open a pull request
 
-# Citation
+---
 
-Gaëtan Louarn, Jérémie Lecoeur, Eric Lebon, A Three-dimensional Statistical Reconstruction Model of Grapevine (Vitis vinifera) Simulating Canopy Structure Variability within and between Cultivar/Training System Pairs, Annals of Botany, Volume 101, Issue 8, May 2008, Pages 1167–1184, https://doi.org/10.1093/aob/mcm170
+## Troubleshooting
+
+### Conda environment not found
+
+Ensure you've run `make env` in the project root and activated the environment:
+
+```bash
+conda activate openalea-topvine
+```
+
+### `conda-lock` command not found
+
+Install it in your base environment:
+
+```bash
+conda install -c conda-forge conda-lock
+```
+
+### Lock file conflicts after pulling
+
+If `conda/conda-lock.yml` was updated, regenerate your environment:
+
+```bash
+make update
+```
+
+### Permission denied on Windows (PowerShell PATH update)
+
+Run PowerShell as administrator before executing the PATH update command.
+
+---
+
+## Citation
+
+If you use topvine in your research, please cite:
+
+> Gaëtan Louarn, Jérémie Lecoeur, Eric Lebon, "A Three-dimensional Statistical Reconstruction Model of Grapevine (*Vitis vinifera*) Simulating Canopy Structure Variability within and between Cultivar/Training System Pairs," *Annals of Botany*, Volume 101, Issue 8, May 2008, Pages 1167–1184. https://doi.org/10.1093/aob/mcm170
+
+---
+
+## License
+
+CECILL-C
+
+---
+
+## Authors
+
+Gaetan LOUARN (gaetan.louarn@inrae.fr)
+Rami ALBASHA (rami.albasha@inrae.fr)
+Stathis DELIVORIAS (stathissupagro@gmx.com)
