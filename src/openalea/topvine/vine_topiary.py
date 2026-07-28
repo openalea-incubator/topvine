@@ -42,28 +42,45 @@ class VineTopiary(object):
         return self.scene
 
 
-class vine_topiary_2023(object):
+class VineTopiary2023(object):
     """  Generates a scaled PGL scene from a list of normalised shoot objects """
 
     def __init__(self):
-        pass
+        self.scene = Scene()
 
-    def __call__(self, tab_shoot, dl_leaf, allo, boolI, boolT, boolB, display=True):
-        MaScene = Scene()
-        MonViewer = Viewer
+    def generate_scene(
+            self,
+            tab_shoot,
+            dl_leaf,
+            allo,
+            boolI,
+            boolT,
+            display=True,
+    ):
         for plant in range(len(tab_shoot)):
-            # coord = tab_shoot[i][0].geom[1]
             for shoot in range(len(tab_shoot[plant])):
-                # coord = (coord + tab_shoot[i][j].geom[1]) / 2
-                top = Topiary_2023(MaScene, tab_shoot[plant][shoot], allo, dl_leaf, visu_en=boolI,
-                                           num_vine=plant,
-                                           num_shoot=shoot)
+                Topiary_2023(
+                    scene=self.scene,
+                    shoot=tab_shoot[plant][shoot],
+                    allo=allo,
+                    lawf=dl_leaf,
+                    visu_en=boolI,
+                    num_vine=plant,
+                    num_shoot=shoot,
+                )
             coord = tab_shoot[plant][round(len(tab_shoot[plant]) / 2)].geom[1]
+
             # add a trunk if option is set to True
             if boolT is True:
-                trunk(MaScene, coord / 100., 'cordon')
+                trunk(
+                    MaScene=self.scene,
+                    coord=coord / 100.,
+                    type='cordon',
+                )
 
             # a ameliorer: / type / calcul plus precis des rangs sur moy plus larges ou sur donnees filees en entree
+
         if display:
-            MonViewer.display(MaScene)
-        return MaScene
+            Viewer.display(self.scene)
+
+        return self.scene

@@ -4,7 +4,7 @@ import openalea.topvine.data_samples as ds
 from openalea.topvine.gen_normal_canopy import gen_normal_canopy_2023
 from openalea.topvine.gen_shoot_param import gen_shoot_param
 from openalea.topvine.translate_shoots import translate_shoots
-from openalea.topvine.vine_topiary import vine_topiary_2023
+from openalea.topvine.vine_topiary import VineTopiary2023
 from openalea.topvine.generate_rameau_moyen import generate_rammoy_topvine, Genotype
 from openalea.topvine.topologise import topologise
 from openalea.topvine import conditional_multivariate_normal as cmn
@@ -210,16 +210,15 @@ def topvine(
         _leafstats=dl,
     )
 
-    vt = vine_topiary_2023()
+    vt = VineTopiary2023()
     allometry = ds.allometry_file(allom_path)
 
-    scene = vt(
+    scene = vt.generate_scene(
         tab_shoot=tab_shoot,
         dl_leaf=dl,
         allo=allometry,
         boolI=branches,
         boolT=trunk,
-        boolB=False,
         display=display,
     )
 
