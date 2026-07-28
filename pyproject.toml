@@ -40,6 +40,12 @@ dev = [
     "matplotlib",
 ]
 
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"openalea.topvine" = ["data/**/*"]
+
 [tool.setuptools.dynamic]
 version = { attr = "openalea.topvine.version.__version__"}
 readme = { file = ["README.md"] }
