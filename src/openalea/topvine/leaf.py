@@ -6,9 +6,9 @@ import random
 class Leaf:
     def __init__(
             self,
-            rand='none',
-            lawf='none',
             coord: tuple[float, float, float] | None = None,
+            rand: str | None = None,
+            lawf: tuple[tuple[str, int, float, float]] | None = None,
             len: float | int = 0,
             lin: float | int | None = None,
             id: str = '0000',
@@ -27,7 +27,7 @@ class Leaf:
         self.lin = lin
         self.id = id
 
-        if lawf == 'none':#no CxT pair defined
+        if lawf is None:#no CxT pair defined
             angle = [0.,0.]
         else:
             paramelv = self.getparams(lawf,'elv')
