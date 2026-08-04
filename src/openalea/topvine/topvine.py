@@ -8,7 +8,8 @@ from openalea.topvine.topologise import topologise
 from openalea.topvine.translate_shoots import translate_shoots
 from openalea.topvine.generate_rameau_moyen import generate_rameau_moyen, Genotype
 from openalea.topvine.vine_topiary import VineTopiary2023
-from openalea.topvine.write_geom_file import write_geom_file
+# from openalea.topvine.write_geom_file import write_geom_file
+
 
 def shoot_generator(
         carto: list[tuple[np.ndarray, int]],
@@ -193,8 +194,8 @@ def topvine(
         spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(fn=dl_shoot_path)
 
         geom = stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, gen.mean_shoot_length, shoot_data[1])
-        write_geom = write_geom_file()
-        write_geom(geom, name)
+        # write_geom = write_geom_file()
+        # write_geom(geom, name)
 
     dl = ds.dl_file(dl_path)
     tab_shoot = shoot_realizator(
