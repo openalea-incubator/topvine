@@ -85,8 +85,6 @@ def update_shootstats(
         axis=0,
     )
 
-def stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, avlength, shoot_lengths):
-    __geom = []
     newmeans = np.append(
         conditional_mean,
         np.array([normalized_length]),
@@ -106,29 +104,84 @@ def translate_coordinates(
     return basal_coordinates + shift
 
 
+def set_stand_geometry(
+        carto: list[tuple[np.ndarray, int]],
+        spur_coordinates: list[list[tuple[float]]],
+        spur_bud_distance: list[tuple[float]],
+        shoot_fraction_per_azimut_sectors: list[float],
+        shoot_stats: list[tuple[np.ndarray, np.ndarray]],
+        genotype_mean_shoot_length: float,
+        shoot_lengths_per_plant: list[list[float]],
+) -> list[list[tuple[int, np.ndarray, float, float, float, float, float]]]:
+    """Sets the geometry params of each plant in the simulated stand (placette).
+
+    Args:
+        carto:
+        spur_coordinates: mean and standard deviation of x, y, z coordinates of spurs
+        spur_bud_distance: mean and standard deviation of shifts on x, y, z coordinates between spurs
+        shoot_fraction_per_azimut_sectors: (dimensionless) fraction of shoots in the four azimuth sectors
+        shoot_stats: vectors of the mean and covariance values of each of the four parameters describing a shoot coordinates, i.e.:
+            - initial inclination angle: (degrees) Basal shoot elevation angle (between -90 and 90)
+            - curvature: (degrees): the difference between basal and distal shoot tangent angle (between -180 and 180)
+            - maximum curvature point fraction: (dimensionless): ratio between the length from the origin of the shoot to the point of maximal curvature and the total length of the shoot (between 0 and 1)
+            - Normalized length: (dimensionless) ratio between the actual shoot length and the mean shoot length for the "Cultivar" x "Training system" pair considered
+        genotype_mean_shoot_length: (cm) mean shoot length of the simulated genotype
+        shoot_lengths_per_plant: (cm) length of each shoot per plant in the stand
+
+    Returns:
+        For each plant, for each shoot, the following information:
+            - (int) shoot order in the plant (dimensionless)
+            - (np.ndarray) bud coordinates, i.e. base of the shoot (m)
+            - (float) Mean shoot azimuth angle (degrees, between 0 and 360)
+            - (float) Basal shoot elevation angle (initial inclination angle, degrees, between -90 and 90)
+            - (float) Curvature (degrees), defined as the difference between basal and distal shoot tangent angle (between -180 and 180)
+            - (float) Maximum curvature point fraction (dimensionless), defined as the ratio between the length from the origin of the shoot to the point of maximal curvature and the total length of the shoot (between 0 and 1)
+            - (float) Normalized length (dimensionless), defined as the ratio between the actual shoot length and the mean shoot length for the "Cultivar" x "Training system" pair considered
+
+    """
+    stand_geometry = []
     generator = gen_shoot_param()
-    translator = translate_shoots()
-    carto_index = 0
-    for plant in shoot_lengths:
-        # print("debugging" + str(plant))
-        plantgeom = []
-        shoot_index = 0
-        for shootlength in plant:
-            # print("debugging" + str(shootlength))
-            for i in range(0, len(shootstats)):
-                newstats = list(shootstats)
-                newstats[i] = update_shootstats(shootstats[i][0], shootstats[i][1], avlength, shootlength)
-            shoot_params = spurs[shoot_index] + generator.gen_shoot(f_azi, newstats)
-            plantgeom.append(shoot_params)
-            shoot_index = shoot_index + 1
-        __geom.append(translator(plantgeom, carto[carto_index][0]))
-        carto_index = carto_index + 1
-    return __geom
-        spurs: list[tuple[int, np.ndarray]] = generator.generate_spur_coordinates(
+
+    for (plant_basal_xyz, spurs_number), plant_shoot_lengths in zip(carto, shoot_lengths_per_plant):
+        plant_geometry = []
+        spurs_params: list[tuple[int, np.ndarray]] = generator.generate_spur_coordinates(
             nb_spurs=spurs_number,
             spurs0=spur_coordinates,
             dspurs=spur_bud_distance,
         )
+
+        # For each plant, the number of spurs is equal to the number of shoots,
+        # both are generated based on the number of spurs in the carto table.
+        for (spur_order, spur_coords), shoot_length in zip(spurs_params, plant_shoot_lengths):
+            newstats : list[tuple[np.ndarray, np.ndarray]] = []
+            for i in range(len(shoot_stats)):
+                newstats.append(
+                    update_shootstats(
+                        means=shoot_stats[i][0],
+                        varcovar=shoot_stats[i][1],
+                        genotype_mean_shoot_length=genotype_mean_shoot_length,
+                        shoot_length=shoot_length,
+                    )
+                )
+
+            shoot_params: list[float] = generator.generate_shoot_spatial_params(
+                f_azi=shoot_fraction_per_azimut_sectors,
+                shoot_param=newstats,
+            )
+
+            plant_geometry.append(
+                tuple(
+                    [
+                        spur_order,
+                        translate_coordinates(basal_coordinates=spur_coords, shift=plant_basal_xyz),
+                        *shoot_params
+                    ]
+                )
+            )
+
+        stand_geometry.append(plant_geometry)
+
+    return stand_geometry
 
 
 
@@ -198,7 +251,15 @@ def topvine(
 
         spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(fn=dl_shoot_path)
 
-        geom = stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, gen.mean_shoot_length, shoot_data[1])
+        geom: list[list[tuple[int, np.ndarray, float, float, float, float, float]]] = set_stand_geometry(
+            carto=carto,
+            spur_coordinates=spurs0,
+            spur_bud_distance=dspurs,
+            shoot_fraction_per_azimut_sectors=f_azi,
+            shoot_stats=shootstats,
+            genotype_mean_shoot_length=sum(gen.primary_internode_profile),
+            shoot_lengths_per_plant=shoot_data[1],
+        )
         # write_geom = write_geom_file()
         # write_geom(geom, name)
 
