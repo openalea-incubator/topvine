@@ -21,7 +21,7 @@ def shoot_generator(_carto, _genotype):
         thisplantshootlength = []
         for branch in range(0, _carto[plant][1]):
             ramtopv = generate_rammoy_topvine(_genotype)
-            shoot = topol.toponthefly_2023(ramtopv.values.tolist())
+            shoot: tuple[list, list] = toponthefly_2023(shoot_specs= ramtopv)
             thisplant.append(shoot)
             thisplantshootlength.append(sum(ramtopv["IN_I_length"]))
         list_plant.append(thisplant)
