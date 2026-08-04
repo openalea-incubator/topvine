@@ -42,14 +42,6 @@ def permute_third_n_fourth_array(arrayx: np.ndarray) -> np.ndarray:  # meant for
     res[[2, 3], [3, 2]] = res[[3, 2], [2, 3]]
     return res
 
-def apply_perm_to_shootstats(shootstats):
-    newstats = []
-    for i in range(0, len(shootstats)):
-        means = permute_third_n_fourth(shootstats[i][0])
-        vrcvr = permute_third_n_fourth_array(shootstats[i][1])
-        newstats.append((means, vrcvr))
-    return newstats
-
 
 def compare_complex_iterables(l1, l2):  # this is just a function I created for verification purposes
     botharelists = isinstance(l1, list) and isinstance(l2, list)
@@ -74,25 +66,51 @@ def compare_complex_iterables(l1, l2):  # this is just a function I created for 
         return boool
 
 
-def update_shootstats(means, varcovar, avlength, length):
-    (reordered_means, reordered_varcovar) = apply_perm_to_shootstats([(means, varcovar)])[0]
-    normalized_length = length / avlength
-    distribution = cmn.MultivariateNormal(reordered_means, reordered_varcovar)
-    # print("reodreredmeans : "+ str(reordered_means))
-    # print("reodreredvarcov : " + str(reordered_varcovar))
-    distribution.partition(3)
-    # compute the cond. dist. of the part before index 3
-    ind = 0
-    mu2_hat, Sigma2_hat = distribution.cond_dist(ind, normalized_length)
-    newvarcovar = np.append(np.append(Sigma2_hat, np.array([[0], [0], [0]]), axis=1),
-                            np.array([[0, 0, 0, 0]]), axis=0)
-    newmeans = np.append(mu2_hat, np.array([normalized_length]), axis=0)
-    (newmeans, newvarcovar) = apply_perm_to_shootstats([(newmeans, newvarcovar)])[0]
-    return newmeans, newvarcovar
+def update_shootstats(
+        means: np.ndarray,
+        varcovar: np.ndarray,
+        genotype_mean_shoot_length: float,
+        shoot_length: float,
+):
+    reordered_means = permute_third_n_fourth(listx=means)
+    reordered_varcovar = permute_third_n_fourth_array(arrayx=varcovar)
 
+    normalized_length: float = shoot_length / genotype_mean_shoot_length
+
+    distribution = cmn.MultivariateNormal(μ=reordered_means, Σ=reordered_varcovar)
+
+    # compute the cond. dist. of the part before index 3
+    distribution.partition(3)
+
+    conditional_mean, conditional_covariance_matrix = distribution.cond_dist(
+        ind=0,
+        z=normalized_length,
+    )
+
+    newvarcovar = np.append(
+        np.append(
+            conditional_covariance_matrix,
+            np.zeros(shape=(conditional_covariance_matrix.shape[0], 1)),
+            axis=1,
+        ),
+        np.zeros(shape=(1, conditional_covariance_matrix.shape[1] + 1)),
+        axis=0,
+    )
 
 def stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, avlength, shoot_lengths):
     __geom = []
+    newmeans = np.append(
+        conditional_mean,
+        np.array([normalized_length]),
+        axis=0
+    )
+
+    return (
+        permute_third_n_fourth(listx=newmeans),
+        permute_third_n_fourth_array(arrayx=newvarcovar),
+    )
+
+
     generator = gen_shoot_param()
     translator = translate_shoots()
     carto_index = 0
