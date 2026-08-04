@@ -98,6 +98,13 @@ def stand_simulator(carto, spurs0, dspurs, f_azi, shootstats, avlength, shoot_le
     )
 
 
+def translate_coordinates(
+        basal_coordinates: np.ndarray,
+        shift: np.ndarray,
+) -> np.ndarray:
+    return basal_coordinates + shift
+
+
     generator = gen_shoot_param()
     translator = translate_shoots()
     carto_index = 0
