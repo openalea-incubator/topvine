@@ -2,12 +2,13 @@ import numpy as np
 
 import openalea.topvine.data_samples as ds
 from openalea.topvine import conditional_multivariate_normal as cmn
-from openalea.topvine.gen_normal_canopy import gen_normal_canopy_2023
+from openalea.topvine.gen_normal_canopy import create_normalized_canopy
 from openalea.topvine.gen_shoot_param import gen_shoot_param
 from openalea.topvine.topologise import topologise
 from openalea.topvine.translate_shoots import translate_shoots
 from openalea.topvine.generate_rameau_moyen import generate_rameau_moyen, Genotype
 from openalea.topvine.vine_topiary import VineTopiary2023
+from openalea.topvine.shoot import Shoot_2023
 # from openalea.topvine.write_geom_file import write_geom_file
 
 
@@ -184,20 +185,46 @@ def set_stand_geometry(
     return stand_geometry
 
 
+def generate_shoots(
+        stand_geometry: list[list[tuple[int, np.ndarray, float, float, float, float, float]]],
+        stand_topology: list[list[tuple[list[list[float]], list[list[float]]]]],
+        leaf_stats: list[tuple[str, int, float, float]],
+) -> list[list[Shoot_2023]]:
+    """Generates all shoots of the stand
 
-def shoot_realizator(
-        _geom,
-        _shoot_data,
-        _leafstats,
-) -> list[list[gen_normal_canopy_2023]]:
-    generator = gen_normal_canopy_2023()
-    table_shoot = []
-    for plant in range(0, len(_geom)):
-        thisplant = []
-        for branch in range(0, len(_geom[plant])):
-            thisplant.append(generator([[_geom[plant][branch]]], _shoot_data[plant][branch], _leafstats)[0][0])
-        table_shoot.append(thisplant)
-    return table_shoot
+    Args:
+        stand_geometry: for each plant in the stand, for each branch, the values of parameters that define the geometry of the shoot:
+            - (int) shoot order in the plant (dimensionless)
+            - (ndarray) bud coordinates, i.e. base of the shoot (m)
+            - (float) Mean shoot azimuth angle (degrees, between 0 and 360)
+            - (float) Basal shoot elevation angle (initial inclination angle, degrees, between -90 and 90)
+            - (float) Curvature (degrees), defined as the difference between basal and distal shoot tangent angle (between -180 and 180)
+            - (float) Maximum curvature point fraction (dimensionless), defined as the ratio between the length from the origin of the shoot to the point of maximal curvature and the total length of the shoot (between 0 and 1)
+            - (float) Normalized length (dimensionless), defined as the ratio between the actual shoot length and the mean shoot length for the "Cultivar" x "Training system" pair considered
+        stand_topology: for each plant in the stand, for each branch, values of parameters that define the topology of the shoot:
+            - list[list[float] leaf area (cm2) of primary (first item) and secondary (remaining items) at each primary internode of the shoot
+            - list[list[float] length (cm) of primary internodes (each internode length is set in a list)
+        dl_leaf: distribution laws for leaf orientation
+
+
+    Returns:
+        shoot objects of the stand
+
+    """
+    res: list[list[Shoot_2023]] = []
+    for i_plant in range(len(stand_geometry)):
+        plant = []
+        for i_shoot in range(len(stand_geometry[i_plant])):
+            plant.append(
+                create_normalized_canopy(
+                    shoot_params=[[stand_geometry[i_plant][i_shoot]]],
+                    topol=stand_topology[i_plant][i_shoot],
+                    dl_leaf=leaf_stats,
+                )
+            )
+
+        res.append(plant)
+    return res
 
 
 def topvine(
@@ -264,16 +291,16 @@ def topvine(
         # write_geom(geom, name)
 
     dl = ds.dl_file(dl_path)
-    tab_shoot = shoot_realizator(
-        _geom=geom,
-        _shoot_data=shoot_data[0],
-        _leafstats=dl,
+    shoots = generate_shoots(
+        stand_geometry=geom,
+        stand_topology=shoot_data[0],
+        leaf_stats=dl,
     )
 
     allometry = ds.allometry_file(allom_path)
 
     scene = VineTopiary2023().generate_scene(
-        tab_shoot=tab_shoot,
+        tab_shoot=shoots,
         dl_leaf=dl,
         allo=allometry,
         boolI=branches,
@@ -281,4 +308,4 @@ def topvine(
         display=display,
     )
 
-    return scene, tab_shoot
+    return scene, shoots
