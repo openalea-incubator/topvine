@@ -53,29 +53,6 @@ def permute_third_n_fourth_array(arrayx: np.ndarray) -> np.ndarray:  # meant for
     return res
 
 
-def compare_complex_iterables(l1, l2):  # this is just a function I created for verification purposes
-    botharelists = isinstance(l1, list) and isinstance(l2, list)
-    botharearrays = isinstance(l1, np.ndarray) and isinstance(l2, np.ndarray)
-    botharetuples = isinstance(l1, tuple) and isinstance(l2, tuple)
-    # print("botharelists "+str(botharelists) +"__botharearrays "+str(botharearrays) +"__botharetuples " + str(botharetuples) +"\n")
-    if botharelists or botharearrays or botharetuples:
-        if len(l1) == len(l2):
-            for i in range(0, len(l1)):
-                if not compare_complex_iterables(l1[i], l2[i]):
-                    return False
-            return True
-        else:
-            print(str(l1[i]) + "\n is not equal with \n" + str(l1[i]))
-            return False
-    else:
-
-        boool = l1 == l2
-        # print("not iter?? " + str(l1) + " !!  " + str(l2) +" they are " + str(boool))
-        if not boool:
-            print(str(l1) + "\n is NOOT equal with  \n" + str(l2))
-        return boool
-
-
 def update_shootstats(
         means: np.ndarray,
         varcovar: np.ndarray,
@@ -197,7 +174,7 @@ def topvine(
             - PGL scence object
             - Shoot objects per plant
     """
-    carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
+    carto: list[tuple[np.ndarray, int]] = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
     shoot_data: tuple[list, list] = shoot_generator(
         carto=carto,
         genotype=gen,
