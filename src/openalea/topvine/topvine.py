@@ -29,40 +29,18 @@ def shoot_generator(_carto, _genotype):
     return [list_plant, shoot_lengths]
 
 
-def permute_third_n_fourth(listx):
-    listp = []
-    for i in range(0, len(listx)):
-        if abs(i - 2) + abs(i - 3) > 1:
-            listp.append(listx[i])
-        elif i == 2:
-            listp.append(listx[i + 1])
-        else:
-            listp.append(listx[i - 1])
-    if type(listx) is np.ndarray:
-        listp = np.array(listp)
-    return listp
+
+def permute_third_n_fourth(listx: np.ndarray) -> np.ndarray:
+    return listx.copy().take([0, 1, 3, 2])
 
 
-def permute_third_n_fourth_array(arrayx):  # meant for 4x4 arrays
-    arrayp = []
-    for i in range(0, 4):
-        linee = []
-        for j in range(0, 4):
-            if abs(i - 2) + abs(i - 3) > 1 and abs(j - 2) + abs(j - 3) > 1:
-                linee.append(arrayx[i, j])
-            elif i == 2 and abs(j - 2) + abs(j - 3) > 1:
-                linee.append(arrayx[i + 1, j])
-            elif i == 3 and abs(j - 2) + abs(j - 3) > 1:
-                linee.append(arrayx[i - 1, j])
-            elif abs(i - 2) + abs(i - 3) > 1 and j == 2:
-                linee.append(arrayx[i, j + 1])
-            elif abs(i - 2) + abs(i - 3) > 1 and j == 3:
-                linee.append(arrayx[i, j - 1])
-            else:
-                linee.append(arrayx[i + (3 - i) + (2 - i), j + (3 - j) + (2 - j)])
-        arrayp.append(linee)
-    return np.array(arrayp)
-
+def permute_third_n_fourth_array(arrayx: np.ndarray) -> np.ndarray:  # meant for 4x4 arrays
+    res = arrayx.copy()
+    res[:2, 2:] = res[:2, -1:1:-1]
+    res[2:, :2] = res[-1:1:-1, :2]
+    res[[2, 3], [2, 3]] = res[[3, 2], [3, 2]]
+    res[[2, 3], [3, 2]] = res[[3, 2], [2, 3]]
+    return res
 
 def apply_perm_to_shootstats(shootstats):
     newstats = []
