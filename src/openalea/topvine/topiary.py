@@ -5,12 +5,24 @@ from .coor3D import *
 from .primitive import *
 import math
 from six.moves import range
+from openalea.plantgl.all import Scene
+from openalea.topvine.shoot import Shoot, Shoot_2023
 
 
 class Topiary:
 
-    def __init__(self, scene, shoot, allo, lawf, omega=45 * numpy.pi / 180., LongPetiole=0.12, visu_en=True, num_vine=1,
-                 num_shoot=1):
+    def __init__(
+            self,
+            scene: Scene,
+            shoot: Shoot,
+            allo: tuple[tuple[float, float], tuple[float, float]],
+            lawf: tuple[tuple[str, int, float, float]],
+            omega: float = 45 * numpy.pi / 180.,
+            LongPetiole: float = 0.12,
+            visu_en: bool = True,
+            num_vine: int = 1,
+            num_shoot: int = 1,
+    ):
         """ add 3D shoot to PlantGL scene object """
         # faire general ou pas?? possibilite de prendre entree topo + L + + arc ou forme topiaire?
         # ici topiairy de rameau de vigne
@@ -124,15 +136,25 @@ class Topiary:
 
 class Topiary_2023:
 
-    def __init__(self, scene, shoot, allo, lawf, omega=45 * numpy.pi / 180., LongPetiole=0.12, visu_en=True, num_vine=1,
-                 num_shoot=1):
+    def __init__(
+            self,
+            scene: Scene,
+            shoot: Shoot_2023,
+            allo: tuple[tuple[float, float], tuple[float, float]],
+            lawf: tuple[tuple[str, int, float, float]],
+            omega: float = 45 * numpy.pi / 180.,
+            LongPetiole: float = 0.12,
+            visu_en: bool = True,
+            num_vine: int = 1,
+            num_shoot: int = 1,
+    ):
         """ add 3D shoot to PlantGL scene object """
         # faire general ou pas?? possibilite de prendre entree topo + L + + arc ou forme topiaire?
         # ici topiairy de rameau de vigne
         # TT pour eventuellement piloter changement de loi de distibution avec une date et evolution des angles ?
         # ->trellis_opt=['TTnone','trellisnone'] en parametre d'entree
 
-        NombrePhyto = len(shoot.topo)
+        NombrePhyto = len(shoot.topo)  # number of primary phytomers
         LongRamMoy = self.allo_LN(allo[0], NombrePhyto)  # en metres
         LimNS = 0.
 
