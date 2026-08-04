@@ -61,7 +61,8 @@ class Leaf:
             angle = random.gauss(param1, param2) 
         elif typel == 2 :
             angle = random.uniform(param1, param2) 
-    
+        else:
+            raise ValueError("Invalid 'typel' value (must be 1 or 2)")
         return angle
 
 
