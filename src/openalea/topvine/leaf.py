@@ -32,7 +32,10 @@ class Leaf:
         else:
             paramelv = self.getparams(lawf,'elv')
             paramazi = self.getparams(lawf,'azi')
-            angle = [self.random_anglesF (paramelv[0], paramelv[1], paramelv[2]), self.random_anglesF (paramazi[0], paramazi[1], paramazi[2])]
+            angle = [
+                self.random_anglesF(paramelv[0], paramelv[1], paramelv[2]),
+                self.random_anglesF(paramazi[0], paramazi[1], paramazi[2])
+            ]
 
         self.angle=angle
 
