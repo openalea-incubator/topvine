@@ -9,7 +9,7 @@ from numpy import ndarray
 
 topvinedir = os.path.dirname(__file__)
 
-def stand_file(fn= '/data/carto.csv') -> list[list[ndarray | int]]:
+def stand_file(fn= '/data/carto.csv') -> list[tuple[ndarray, int]]:
     from .read_stand_file import read_stand_file
     reader = read_stand_file()
     return reader(topvinedir + fn)

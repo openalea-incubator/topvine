@@ -273,7 +273,7 @@ def topvine(
         genotype=gen,
     )
     if geomfile is not None:
-        geom = ds.geom_file(fn=geomfile)
+        geom: list[list[tuple[int, np.ndarray, float, float, float, float, float]]] = ds.geom_file(fn=geomfile)
     else:
 
         spurs0, dspurs, f_azi, shootstats = ds.dl_shoot_file(fn=dl_shoot_path)
