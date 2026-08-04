@@ -169,10 +169,7 @@ class Topiary_2023:
 
         for phyto in range(NombrePhyto):
 
-            Lin = shoot.topo[phyto][0].lin * 0.01  # conversion de cm à m
-
-            if Lin is None:
-                Lin = LongPhyto
+            Lin: float = LongPhyto if (_lin:=shoot.topo[phyto][0].lin) is None else _lin * 0.01
 
             if phyto < NumInflexion:
                 dCourbure = shoot.geom[3] / 2 / NumInflexion
