@@ -81,8 +81,20 @@ class Leaf:
         return angle
 
 
-    def getparams(self, lawf, typea):
-        """ recupere les parametres de la loi de distribution du CxT pair en question """
+    def getparams(
+            self,
+            lawf: tuple[tuple[str, int, float, float]],
+            typea: str,
+    ) -> tuple[int | float, int | float, int | float] | None:
+        """recupere les parametres de la loi de distribution du CxT pair en question
+
+        Args:
+            lawf: leaf distribution params
+            typea: one of ("elv", "azi")
+
+        Returns:
+            leaf distribution params
+        """
         # besoin de connaitre la position definitive de la feuille pour connaitre quelle loi utiliser! tire seulement valeur normalisees pour les lois normales
         if typea == 'elv':
             return [1, 0., 1.]
