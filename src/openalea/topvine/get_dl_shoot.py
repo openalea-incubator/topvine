@@ -28,15 +28,22 @@ class get_dl_shoot(object):
         """ recupere loi distribution des coursons et des parametre de rameau """
         
         #distribution (x,y,z) of spurs 1 to 6
-        spurs0 = [[(t[0][1],t[0][2]),(t[6][1],t[6][2]),(t[12][1],t[12][2])], [(t[1][1],t[1][2]),(t[7][1],t[7][2]),(t[12][1],t[12][2])], [(t[2][1],t[2][2]),(t[8][1],t[8][2]),(t[12][1],t[12][2])], [(t[3][1],t[3][2]),(t[9][1],t[9][2]),(t[12][1],t[12][2])], [(t[4][1],t[4][2]),(t[10][1],t[10][2]),(t[12][1],t[12][2])], [(t[5][1],t[5][2]),(t[11][1],t[11][2]),(t[12][1],t[12][2])]]
+        spurs0 = [
+            [(t[0][1], t[0][2]), (t[6][1], t[6][2]), (t[12][1], t[12][2])],
+            [(t[1][1], t[1][2]), (t[7][1], t[7][2]), (t[12][1], t[12][2])],
+            [(t[2][1], t[2][2]), (t[8][1], t[8][2]), (t[12][1], t[12][2])],
+            [(t[3][1], t[3][2]), (t[9][1], t[9][2]), (t[12][1], t[12][2])],
+            [(t[4][1], t[4][2]), (t[10][1], t[10][2]), (t[12][1], t[12][2])],
+            [(t[5][1], t[5][2]), (t[11][1], t[11][2]), (t[12][1], t[12][2])],
+        ]
         
-        #distribution for the distance beteween the two buds on a spur
-        dspurs = [(t[13][1],t[13][2]),(t[14][1],t[14][2]),(t[15][1],t[15][2])]
+        #distribution for the distance between the two buds on a spur
+        dspurs = [(t[13][1], t[13][2]), (t[14][1], t[14][2]), (t[15][1], t[15][2])]
         
         #shoot proportion in azi sectors
         f_azi = t[17][1:5]
         
-        #mean vector [alpha, phi, Ls, MX] and covariance matrix for multivarita distribution
+        #mean vector [alpha, phi, Ls, MX] and covariance matrix for multivariate distribution
         x1, x2, x3, x4 = array(t[18][1:5]), array(t[19][1:5]), array(t[20][1:5]), array(t[21][1:5])
         S1  = array([t[22][1:5], t[23][1:5], t[24][1:5], t[25][1:5]])
         S2  = array([t[26][1:5], t[27][1:5], t[28][1:5], t[29][1:5]])
