@@ -30,7 +30,7 @@ class gen_normal_canopy(object):
 def create_normalized_canopy(
         shoot_params: list[list[tuple[int, ndarray, float, float, float, float, float]]],
         topol: tuple[list[list[float]], list[list[float]]],
-        dl_leaf: list[tuple[str, int, float, float]],
+        dl_leaf: tuple[tuple[str, int, float, float]],
 ) -> shoot.Shoot_2023:
     """Generates a list of normalised shoot objects associating average topology with geometric features
     (primary shoot geom, leaf angles, leaf dimensions)

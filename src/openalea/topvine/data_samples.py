@@ -24,7 +24,7 @@ def shoot_file(fn='/data/ex_rammoy3.csv'):
     reader = topologise()
     return reader(topvinedir + fn)
     
-def dl_file(fn='/data/Law-leaf-2W-Grenache.csv'):
+def dl_file(fn='/data/Law-leaf-2W-Grenache.csv') -> tuple[tuple[str, int, float, float]]:
     from .get_dl import get_dl
     reader = get_dl()
     return reader(topvinedir + fn)
