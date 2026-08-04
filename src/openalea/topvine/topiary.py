@@ -239,12 +239,25 @@ class Topiary_2023:
 
         self.scene = scene
 
-    def allo_LN(self, allo, N):
-        L = allo[0] * N + allo[1]
-        if L <= 0.005:
-            L = 0.005
+    def allo_LN(
+            self,
+            allo: tuple[float, float],
+            N: int,
+    ) -> float:
+        """Calculates the average length of the secondary shoot, using the equation a * N + b
 
-        return L * 0.001  # en m
+        Args:
+            allo: (see notes below) allometric parameters (a, b)
+            N: number of secondary phytomers
+
+        Returns:
+            (m) average length of the secondary shoot
+
+        References:
+            Eq. IV.13 in PhD thesis of G. Louarn
+
+        """
+        return max(0.005, (allo[0] * N + allo[1])) * 0.001
 
     def set_coordF(self, coord, t, r_azi, r_incli):
         r_coord = RotateAxis(coord, r_azi, r_incli)  # remplacer par coor3D.RotateAxis()
