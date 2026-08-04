@@ -1,12 +1,12 @@
 import numpy as np
+import pandas as pd
 
 import openalea.topvine.data_samples as ds
 from openalea.topvine import conditional_multivariate_normal as cmn
 from openalea.topvine.gen_normal_canopy import create_normalized_canopy
 from openalea.topvine.gen_shoot_param import gen_shoot_param
-from openalea.topvine.topologise import topologise
-from openalea.topvine.translate_shoots import translate_shoots
 from openalea.topvine.generate_rameau_moyen import generate_rameau_moyen, Genotype
+from openalea.topvine.topologise import toponthefly_2023
 from openalea.topvine.vine_topiary import VineTopiary2023
 from openalea.topvine.shoot import Shoot_2023
 # from openalea.topvine.write_geom_file import write_geom_file
@@ -204,7 +204,7 @@ def generate_shoots(
         stand_topology: for each plant in the stand, for each branch, values of parameters that define the topology of the shoot:
             - list[list[float] leaf area (cm2) of primary (first item) and secondary (remaining items) at each primary internode of the shoot
             - list[list[float] length (cm) of primary internodes (each internode length is set in a list)
-        dl_leaf: distribution laws for leaf orientation
+        leaf_stats: distribution laws for leaf orientation
 
 
     Returns:
