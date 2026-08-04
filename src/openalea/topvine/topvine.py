@@ -188,7 +188,7 @@ def set_stand_geometry(
 def generate_shoots(
         stand_geometry: list[list[tuple[int, np.ndarray, float, float, float, float, float]]],
         stand_topology: list[list[tuple[list[list[float]], list[list[float]]]]],
-        leaf_stats: list[tuple[str, int, float, float]],
+        leaf_stats: tuple[tuple[str, int, float, float]],
 ) -> list[list[Shoot_2023]]:
     """Generates all shoots of the stand
 
@@ -290,8 +290,8 @@ def topvine(
         # write_geom = write_geom_file()
         # write_geom(geom, name)
 
-    dl = ds.dl_file(dl_path)
-    shoots = generate_shoots(
+    dl: tuple[tuple[str, int, float, float]] = ds.dl_file(dl_path)
+    shoots: list[list[Shoot_2023]] = generate_shoots(
         stand_geometry=geom,
         stand_topology=shoot_data[0],
         leaf_stats=dl,

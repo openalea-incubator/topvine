@@ -4,12 +4,23 @@ import numpy
 import random
 
 class Leaf:
-    def __init__(self, coord=[0.,0.,0.], rand='none', lawf='none', len=0, lin=None, id='0000'):
+    def __init__(
+            self,
+            rand='none',
+            lawf='none',
+            coord: tuple[float, float, float] | None = None,
+            len: float | int = 0,
+            lin: float | int | None = None,
+            id: str = '0000',
+    ):
         """ initialize leaf object with normalised values """
-        if rand == 'Box':#random coord in a box
-            coord = [random.uniform(0.,1.), random.uniform(0.,1.), random.uniform(0.,1.)]
-        elif rand == 'Cyl':#random coord in a cylinder
-            coord = self.random_cyl()
+        if coord is None:
+            if rand == 'Box':#random coord in a box
+                coord = [random.uniform(0.,1.), random.uniform(0.,1.), random.uniform(0.,1.)]
+            elif rand == 'Cyl':#random coord in a cylinder
+                coord = self.random_cyl()
+            else:
+                raise ValueError(f"the parameter {rand} is not valid (should be either 'Box' or 'Cyl'))")
 
         self.coord = numpy.array(coord)
         self.len = len
