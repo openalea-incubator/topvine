@@ -112,7 +112,6 @@ def translate_coordinates(
     for plant in shoot_lengths:
         # print("debugging" + str(plant))
         plantgeom = []
-        spurs = generator.gen_spurs(carto[carto_index][1], spurs0, dspurs)
         shoot_index = 0
         for shootlength in plant:
             # print("debugging" + str(shootlength))
@@ -125,6 +124,12 @@ def translate_coordinates(
         __geom.append(translator(plantgeom, carto[carto_index][0]))
         carto_index = carto_index + 1
     return __geom
+        spurs: list[tuple[int, np.ndarray]] = generator.generate_spur_coordinates(
+            nb_spurs=spurs_number,
+            spurs0=spur_coordinates,
+            dspurs=spur_bud_distance,
+        )
+
 
 
 def shoot_realizator(
