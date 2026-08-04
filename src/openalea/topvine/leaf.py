@@ -55,8 +55,23 @@ class Leaf:
         return [rx,ry,rz]
 
 
-    def random_anglesF (self, typel, param1, param2) :
-        """tirage d'angles de feuilles selon les parametres specifies dans le fichier Loi de distribution"""
+    def random_anglesF (
+            self,
+            typel: int,
+            param1: float,
+            param2: float,
+    ) -> float :
+        """tirage d'angles de feuilles selon les parametres specifies dans le fichier Loi de distribution
+
+        Args:
+            typel: leaf type (1 or 2)
+            param1: (degrees) mean angle value
+            param2: (degrees) standard deviation of the angle value
+
+        Returns:
+            (degrees) angle value
+
+        """
         if typel == 1 :
             angle = random.gauss(param1, param2) 
         elif typel == 2 :
