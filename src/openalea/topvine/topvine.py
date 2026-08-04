@@ -4,30 +4,40 @@ import openalea.topvine.data_samples as ds
 from openalea.topvine import conditional_multivariate_normal as cmn
 from openalea.topvine.gen_normal_canopy import gen_normal_canopy_2023
 from openalea.topvine.gen_shoot_param import gen_shoot_param
-from openalea.topvine.generate_rameau_moyen import generate_rammoy_topvine
-from openalea.topvine.genodata import *
 from openalea.topvine.topologise import topologise
 from openalea.topvine.translate_shoots import translate_shoots
+from openalea.topvine.generate_rameau_moyen import generate_rameau_moyen, Genotype
 from openalea.topvine.vine_topiary import VineTopiary2023
 from openalea.topvine.write_geom_file import write_geom_file
 
+def shoot_generator(
+        carto: list[tuple[np.ndarray, int]],
+        genotype: Genotype,
+) -> tuple[list[tuple[list, list]], list[list[float]]]:
+    """Calculates, per plant per shoot per internode: individual leaf area and internode length.
 
-def shoot_generator(_carto, _genotype):
-    list_plant = []
+    Args:
+        carto:
+        genotype: Genotype object
+
+    Returns:
+
+    """
+    plants = []
     shoot_lengths = []
-    topol = topologise()
-    for plant in range(0, len(_carto)):
+
+    for plant_xyz, nb_spurs in carto:
         thisplant = []
         thisplantshootlength = []
-        for branch in range(0, _carto[plant][1]):
-            ramtopv = generate_rammoy_topvine(_genotype)
+        for _ in range(nb_spurs):
+            ramtopv: pd.DataFrame = generate_rameau_moyen(g=genotype)
             shoot: tuple[list, list] = toponthefly_2023(shoot_specs= ramtopv)
             thisplant.append(shoot)
             thisplantshootlength.append(sum(ramtopv["IN_I_length"]))
-        list_plant.append(thisplant)
+        plants.append(thisplant)
         shoot_lengths.append(thisplantshootlength)
-    return [list_plant, shoot_lengths]
 
+    return plants, shoot_lengths
 
 
 def permute_third_n_fourth(listx: np.ndarray) -> np.ndarray:
@@ -188,8 +198,10 @@ def topvine(
             - Shoot objects per plant
     """
     carto = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
-    shoot_data = shoot_generator(carto,
-                                 gen)  # [topology and leaf surface for each plant, length of every shoot for each plant]
+    shoot_data: tuple[list, list] = shoot_generator(
+        carto=carto,
+        genotype=gen,
+    )
     if geomfile is not None:
         geom = ds.geom_file(fn=geomfile)
     else:
