@@ -40,7 +40,7 @@ class gen_shoot_param(object):
             rank and coordinates of each spur
 
         Notes:
-            cf. Section 2.2.2 in PhD thesis of G. Louarn for details on the correction factor of leaf area (1.04)
+            cf. Section IV.2.2.2 in PhD thesis of G. Louarn for details on the correction factor of leaf area (1.04)
 
         """
         #genere liste de numero de rang de courson longue de n
@@ -194,7 +194,7 @@ class gen_shoot_param(object):
 
 
         Notes:
-            cf. Section 2.2.2 in PhD thesis of G. Louarn for details
+            cf. Section IV.2.2.2 in PhD thesis of G. Louarn for details
 
         """
         # the number of azimut sectors should be equal to 4.

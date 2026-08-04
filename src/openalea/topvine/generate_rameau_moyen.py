@@ -107,7 +107,7 @@ def generate_rameau_moyen(g: Genotype) -> pd.DataFrame:
             - "SF_II_mean" (float): (cm2) average surface area of secondary leaves (float, >=0)
 
     Notes:
-        cf. Section 2.2.2 in PhD thesis of G. Louarn for details on the correction factor of leaf area (1.04)
+        cf. Section IV.2.2.2 in PhD thesis of G. Louarn for details on the correction factor of leaf area (1.04)
 
     """
     leaf_area_correction_factor = 1.04
