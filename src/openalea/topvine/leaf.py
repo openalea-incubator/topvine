@@ -91,7 +91,7 @@ class Leaf:
                 return [2, -180., 180.] #azimut uniforme pour ces deux CxT
             else:
                 return [1, 0., 1.]
-
+        return None
 
     def set_anglesF (self, lawf, NSstatus):
         """ return actual leaf angles according to measured distribution laws and canopy side """
