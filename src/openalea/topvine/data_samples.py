@@ -5,15 +5,16 @@ from __future__ import absolute_import
 import os
 from six.moves import map
 from six.moves import range
+from numpy import ndarray
 
 topvinedir = os.path.dirname(__file__)
 
-def stand_file(fn= '/data/carto.csv'):
+def stand_file(fn= '/data/carto.csv') -> list[tuple[ndarray, int]]:
     from .read_stand_file import read_stand_file
     reader = read_stand_file()
     return reader(topvinedir + fn)
 
-def geom_file(fn = '/data/ex_geom2.csv'):
+def geom_file(fn = '/data/ex_geom2.csv') -> list[list[tuple[int, ndarray, float, float, float, float, float]]]:
     from .read_geom_file import read_geom_file
     reader = read_geom_file()
     return reader(topvinedir + fn)
@@ -23,7 +24,7 @@ def shoot_file(fn='/data/ex_rammoy3.csv'):
     reader = topologise()
     return reader(topvinedir + fn)
     
-def dl_file(fn='/data/Law-leaf-2W-Grenache.csv'):
+def dl_file(fn='/data/Law-leaf-2W-Grenache.csv') -> tuple[tuple[str, int, float, float]]:
     from .get_dl import get_dl
     reader = get_dl()
     return reader(topvinedir + fn)

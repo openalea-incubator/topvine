@@ -5,12 +5,24 @@ from .coor3D import *
 from .primitive import *
 import math
 from six.moves import range
+from openalea.plantgl.all import Scene
+from openalea.topvine.shoot import Shoot, Shoot_2023
 
 
 class Topiary:
 
-    def __init__(self, scene, shoot, allo, lawf, omega=45 * numpy.pi / 180., LongPetiole=0.12, visu_en=True, num_vine=1,
-                 num_shoot=1):
+    def __init__(
+            self,
+            scene: Scene,
+            shoot: Shoot,
+            allo: tuple[tuple[float, float], tuple[float, float]],
+            lawf: tuple[tuple[str, int, float, float]],
+            omega: float = 45 * numpy.pi / 180.,
+            LongPetiole: float = 0.12,
+            visu_en: bool = True,
+            num_vine: int = 1,
+            num_shoot: int = 1,
+    ):
         """ add 3D shoot to PlantGL scene object """
         # faire general ou pas?? possibilite de prendre entree topo + L + + arc ou forme topiaire?
         # ici topiairy de rameau de vigne
@@ -124,15 +136,25 @@ class Topiary:
 
 class Topiary_2023:
 
-    def __init__(self, scene, shoot, allo, lawf, omega=45 * numpy.pi / 180., LongPetiole=0.12, visu_en=True, num_vine=1,
-                 num_shoot=1):
+    def __init__(
+            self,
+            scene: Scene,
+            shoot: Shoot_2023,
+            allo: tuple[tuple[float, float], tuple[float, float]],
+            lawf: tuple[tuple[str, int, float, float]],
+            omega: float = 45 * numpy.pi / 180.,
+            LongPetiole: float = 0.12,
+            visu_en: bool = True,
+            num_vine: int = 1,
+            num_shoot: int = 1,
+    ):
         """ add 3D shoot to PlantGL scene object """
         # faire general ou pas?? possibilite de prendre entree topo + L + + arc ou forme topiaire?
         # ici topiairy de rameau de vigne
         # TT pour eventuellement piloter changement de loi de distibution avec une date et evolution des angles ?
         # ->trellis_opt=['TTnone','trellisnone'] en parametre d'entree
 
-        NombrePhyto = len(shoot.topo)
+        NombrePhyto = len(shoot.topo)  # number of primary phytomers
         LongRamMoy = self.allo_LN(allo[0], NombrePhyto)  # en metres
         LimNS = 0.
 
@@ -147,10 +169,7 @@ class Topiary_2023:
 
         for phyto in range(NombrePhyto):
 
-            Lin = shoot.topo[phyto][0].lin * 0.01  # conversion de cm à m
-
-            if Lin is None:
-                Lin = LongPhyto
+            Lin: float = LongPhyto if (_lin:=shoot.topo[phyto][0].lin) is None else _lin * 0.01
 
             if phyto < NumInflexion:
                 dCourbure = shoot.geom[3] / 2 / NumInflexion
@@ -220,12 +239,25 @@ class Topiary_2023:
 
         self.scene = scene
 
-    def allo_LN(self, allo, N):
-        L = allo[0] * N + allo[1]
-        if L <= 0.005:
-            L = 0.005
+    def allo_LN(
+            self,
+            allo: tuple[float, float],
+            N: int,
+    ) -> float:
+        """Calculates the average length of the secondary shoot, using the equation a * N + b
 
-        return L * 0.001  # en m
+        Args:
+            allo: (see notes below) allometric parameters (a, b)
+            N: number of secondary phytomers
+
+        Returns:
+            (m) average length of the secondary shoot
+
+        References:
+            Eq. IV.13 in PhD thesis of G. Louarn
+
+        """
+        return max(0.005, (allo[0] * N + allo[1])) * 0.001
 
     def set_coordF(self, coord, t, r_azi, r_incli):
         r_coord = RotateAxis(coord, r_azi, r_incli)  # remplacer par coor3D.RotateAxis()

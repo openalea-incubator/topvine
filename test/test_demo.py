@@ -7,7 +7,7 @@ from openalea.topvine.vine_topiary import VineTopiary
 from openalea.topvine.primitive import bunch
 from openalea.plantgl.all import *
 from openalea.topvine.reconstr_digit import visu_digit_fromcane
-from openalea.topvine.topvine_2022 import topvine
+from openalea.topvine.topvine import topvine
 
 class TestDemo(unittest.TestCase):
     def test_demo_topvine_static(self):

@@ -1,6 +1,8 @@
+from functools import cached_property
+
 import numpy as np
 import pandas as pd
-
+from typing import Iterable
 
 ### recuperation des donnees observees et calculs SF et longueur du rameau
 # dat_observed = read.csv("C:/Users/joels/Desktop/Data Stage/All_Data/Data_Trait_Archi_Copy.csv", header = T, sep=",")
@@ -9,17 +11,22 @@ import pandas as pd
 # total_length_values = aggregate(dat_observed_I$LEN, by = list(dat_observed_I$ID, dat_observed_I$Genotype), sum, na.rm=T)
 
 
-def get_normalized_value(intercept_0, intercept_1, max_normalized, norm_val):
+def set_profile(
+        intercept_0: float | int,
+        intercept_1: float | int,
+        max_normalized: float | int,
+        norm_val: Iterable[float],
+        value_max: float | int = 1
+) -> list[float] :
     res_tot = []
-    for i in range(0, len(norm_val)):
-        norm_rank = norm_val[i]
-        if (norm_rank < max_normalized):
+    for norm_rank in norm_val:
+        if norm_rank < max_normalized:
             res = (1 - intercept_0) / max_normalized * norm_rank + intercept_0
-        if (norm_rank >= max_normalized):
+        else:
             res = (intercept_1 - 1) / (1 - max_normalized) * (norm_rank - max_normalized) + 1
-        res_tot.append(res)
+        res_tot.append(float(res * value_max))
 
-    return (res_tot)
+    return res_tot
 
 
 class Genotype(object):
@@ -58,54 +65,96 @@ class Genotype(object):
         self.max_normalized_rank_IN = max_normalized_rank_IN
         self.intercept_0_IN = intercept_0_IN
         self.intercept_1_IN = intercept_1_IN
-        norm_rank = np.arange(1, round(self.NFI_mean) + 1) / round(self.NFI_mean)
-        norm_profile_IN = get_normalized_value(self.intercept_0_IN, self.intercept_1_IN, self.max_normalized_rank_IN,
-                                               norm_rank)
-        self.IN_profile = (np.array(norm_profile_IN) * self.IN_max_mean).tolist()
-        self.mean_shoot_length = sum(self.IN_profile)
         self.name = name
 
-
-def generate_rameau_moyen(g):
-    NFI_ = int(round(np.random.normal(g.NFI_mean, g.NFI_sd, 1)[0], 0))
-    # print(NFI_)
-    SF_max = np.random.normal(g.SF_max_mean, g.SF_max_sd, 1)[0]
-    IN_max = np.random.normal(g.IN_max_mean, g.IN_max_sd, 1)[0]
-    while (SF_max < 0) or (IN_max < 0):
-        SF_max = np.random.normal(g.SF_max_mean, g.SF_max_sd, 1)[0]
-        IN_max = np.random.normal(g.IN_max_mean, g.IN_max_sd, 1)[0]
-    dat_result = pd.DataFrame(np.zeros((NFI_ + 1, 4)))
-    dat_result.columns = ["number_of_phytomers", "SF_I", "IN_I_length", "SF_II_tot"]
-    dat_result.iloc[0] = [NFI_, 0, 0, 0]
-    # np.random.negative_binomial(n=g.size_r_binorm, p=g.size_r_binorm / (g.size_r_binorm + g.mu_r_binorm),size=dat_result.shape[0]-7)
-    dat_result.iloc[1:, 0] = 0
-    if dat_result.shape[0] >= 7:
-        dat_result.iloc[1:dat_result.shape[0] - 6, 0] = np.random.negative_binomial(n=g.size_r_binorm,
-                                                                                    p=g.size_r_binorm / (
-                                                                                            g.size_r_binorm + g.mu_r_binorm),
-                                                                                    size=max(0,
-                                                                                             dat_result.shape[0] - 7))
-    norm_rank = np.arange(1, NFI_ + 1) / NFI_
-    norm_profile_SF = get_normalized_value(g.intercept_0_SF, g.intercept_1_SF, g.max_normalized_rank_SF, norm_rank)
-    norm_profile_IN = get_normalized_value(g.intercept_0_IN, g.intercept_1_IN, g.max_normalized_rank_IN, norm_rank)
-    SF_profile = (np.array(norm_profile_SF) * SF_max).tolist()
-    IN_profile = (np.array(norm_profile_IN) * IN_max).tolist()
-    dat_result.iloc[1:dat_result.shape[0], 1] = SF_profile
-    dat_result.iloc[1:dat_result.shape[0], 2] = IN_profile
-    dat_result.iloc[1:dat_result.shape[0], 3] = [
-        float(i * np.random.normal(g.slope_NFII_SFII, g.slope_sd_NFII_SFII, 1)[0]) for i in dat_result.iloc[1:, 0]]
-    dat_result.loc[dat_result["number_of_phytomers"] == 0, "SF_II_tot"] = 0
-    return dat_result
-
-
-def generate_rammoy_topvine(g):
-    rameau = generate_rameau_moyen(g)
-    rameau_top_vine = rameau[['number_of_phytomers', 'SF_I', 'SF_II_tot', 'IN_I_length']]
-    rameau_top_vine.columns = ["number_of_phytomers", "SF_I", "SF_II_mean", "IN_I_length"]
-    rameau_top_vine.iloc[:, 1] = (np.array(rameau_top_vine.iloc[:, 1]) / 1.04).tolist()
-    rameau_top_vine.loc[rameau_top_vine.iloc[:, 0] != 0, "SF_II_mean"] = (
-            rameau_top_vine.loc[rameau_top_vine.iloc[:, 0] != 0, "SF_II_mean"] /
-            (1.04 * rameau_top_vine.loc[rameau_top_vine.iloc[:, 0] != 0, "number_of_phytomers"])
+        # self.mean_shoot_length: float = sum(self.primary_internode_profile)
+    @cached_property
+    def primary_internode_profile(self) -> list[float]:
+            return set_profile(
+        intercept_0=self.intercept_0_IN,
+        intercept_1=self.intercept_1_IN,
+        max_normalized=self.max_normalized_rank_IN,
+        norm_val=[v  / round(self.NFI_mean) for v in range(1, round(self.NFI_mean) + 1)],
+        value_max=self.IN_max_mean
     )
 
-    return rameau_top_vine
+
+def get_positive_random_value(
+        value_mean: float | int,
+        value_sd: float | int,
+) -> float:
+    i = 0
+    while True:
+        if (res:=float(np.random.normal(value_mean, value_sd))) >= 0:
+            return res
+        i += 1
+        if i > 100:
+            raise ValueError(f"Couldn't generate a positive random number for mean ({value_mean}) and sd ({value_sd}).")
+
+
+def generate_rameau_moyen(g: Genotype) -> pd.DataFrame:
+    """Generates the topology data for an average shoot.
+
+    Args:
+        g: Genotype object
+
+    Returns:
+        DataFrame containing the following topology information for each primary internode:
+            - "number_of_phytomers" (int): number of secondary internodes connected to the current primary internode
+            - "SF_I" (float): (cm2) surface area of the primary leaf (float, >=0)
+            - "IN_I_length" (float): (cm) length of the primary internode (float, >=0)
+            - "SF_II_tot" (float): (cm2) sum of surface area of all secondary leaves (float, >=0)
+            - "SF_II_mean" (float): (cm2) average surface area of secondary leaves (float, >=0)
+
+    Notes:
+        cf. Section IV.2.2.2 in PhD thesis of G. Louarn for details on the correction factor of leaf area (1.04)
+
+    """
+    leaf_area_correction_factor = 1.04
+    nb_primary_phytomers = int(round(get_positive_random_value(value_mean=g.NFI_mean, value_sd=g.NFI_sd)))
+    leaf_area_max = get_positive_random_value(value_mean=g.SF_max_mean, value_sd=g.SF_max_sd)
+    internode_length_max = get_positive_random_value(value_mean=g.IN_max_mean, value_sd=g.IN_max_sd)
+
+    profile_nb_secondary_phytomers = np.random.negative_binomial(
+        n=g.size_r_binorm,
+        p=g.size_r_binorm / (g.size_r_binorm + g.mu_r_binorm),
+        size=max(0, nb_primary_phytomers - 6)).tolist() + [0] * 6
+
+    norm_rank_primary_leaf = [v / nb_primary_phytomers for v in range(1, nb_primary_phytomers + 1)]
+
+    profile_primary_leaf_area: list[float] = set_profile(
+        intercept_0=g.intercept_0_SF,
+        intercept_1=g.intercept_1_SF,
+        max_normalized=g.max_normalized_rank_SF,
+        norm_val=norm_rank_primary_leaf,
+        value_max=leaf_area_max / leaf_area_correction_factor,
+    )
+    profile_internode_length: list[float] = set_profile(
+        intercept_0=g.intercept_0_IN,
+        intercept_1=g.intercept_1_IN,
+        max_normalized=g.max_normalized_rank_IN,
+        norm_val=norm_rank_primary_leaf,
+        value_max=internode_length_max,
+    )
+
+    profile_secondary_leaf_area = [
+        float(i * np.random.normal(g.slope_NFII_SFII, g.slope_sd_NFII_SFII)) / leaf_area_correction_factor
+        for i in profile_nb_secondary_phytomers
+    ]
+
+    res = {
+        "number_of_phytomers": profile_nb_secondary_phytomers,
+        "SF_I": profile_primary_leaf_area,
+        "IN_I_length": profile_internode_length,
+        "SF_II_tot": profile_secondary_leaf_area,
+        "SF_II_mean": [
+            0 if nb_internodes == 0 else leaf_area / nb_internodes
+            for leaf_area, nb_internodes in zip(profile_secondary_leaf_area, profile_nb_secondary_phytomers)
+        ]
+    }
+
+    # keep legacy header row
+    for k, v in res.items():
+        v.insert(0, (0 if k!="number_of_phytomers" else nb_primary_phytomers))
+
+    return pd.DataFrame(res)

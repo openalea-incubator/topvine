@@ -120,18 +120,52 @@ class Shoot:
 
 
 class Shoot_2023:
-    def __init__(self, Pgeom, topol, law):
+    def __init__(
+            self,
+            Pgeom: tuple[int, numpy.ndarray, float, float, float, float, float],
+            topol,
+            law: tuple[tuple[str, int, float, float]],
+    ):
+        """
+
+        Args:
+            Pgeom: shoot geometry data:
+                - (int) shoot order in the plant (dimensionless)
+                - (ndarray) bud coordinates, i.e. base of the shoot (m)
+                - (float) Mean shoot azimuth angle (degrees, between 0 and 360)
+                - (float) Basal shoot elevation angle (initial inclination angle, degrees, between -90 and 90)
+                - (float) Curvature (degrees), defined as the difference between basal and distal shoot tangent angle (between -180 and 180)
+                - (float) Maximum curvature point fraction (dimensionless), defined as the ratio between the length from the origin of the shoot to the point of maximal curvature and the total length of the shoot (between 0 and 1)
+                - (float) Normalized length (dimensionless), defined as the ratio between the actual shoot length and the mean shoot length for the "Cultivar" x "Training system" pair considered
+            topol: shoot topology data:
+                - list[list[float] leaf area (cm2) of primary (first item) and secondary (remaining items) at each primary internode of the shoot
+                - list[list[float] length (cm) of primary internodes (each internode length is set in a list)
+            law: distribution laws for leaf orientation
+        """
         self.geom = Pgeom
         self.topo = []
         for i in range(len(topol[0])):
             self.topo.append(
-                [leaf.Leaf(rand='Cyl', lawf=law, len=topol[0][i][0], lin=topol[1][i][0], id=str((i + 1) * 100))])  # id leaf I = rang phyto*100
+                [
+                    leaf.Leaf(
+                        rand='Cyl',
+                        lawf=law,
+                        len=topol[0][i][0],
+                        lin=topol[1][i][0],
+                        id=str((i + 1) * 100)),  # id leaf I = rang phyto * 100
+                ]
+            )
 
         for i in range(len(self.topo)):
             if len(topol[0][i]) > 1:
                 for j in range(1, len(topol[0][i])):
-                    self.topo[i].append(leaf.Leaf(rand='Cyl', lawf=law, len=topol[0][i][j], id=str(
-                        (i + 1) * 100 + j)))  # id leaf II = rang phyto*100+rang feuilles II
+                    self.topo[i].append(
+                        leaf.Leaf(
+                            rand='Cyl',
+                            lawf=law,
+                            len=topol[0][i][j],
+                            id=str((i + 1) * 100 + j)),  # id leaf II = rang phyto * 100 + rang feuilles II
+                    )
 
     def __str__(self):  # appeler quand 'print obj'
         """ display shoot object as a string """

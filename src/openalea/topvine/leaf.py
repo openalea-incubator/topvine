@@ -4,24 +4,38 @@ import numpy
 import random
 
 class Leaf:
-    def __init__(self, coord=[0.,0.,0.], rand='none', lawf='none', len=0, lin=None, id='0000'):
+    def __init__(
+            self,
+            coord: tuple[float, float, float] | None = None,
+            rand: str | None = None,
+            lawf: tuple[tuple[str, int, float, float]] | None = None,
+            len: float | int = 0,
+            lin: float | int | None = None,
+            id: str = '0000',
+    ):
         """ initialize leaf object with normalised values """
-        if rand == 'Box':#random coord in a box
-            coord = [random.uniform(0.,1.), random.uniform(0.,1.), random.uniform(0.,1.)]
-        elif rand == 'Cyl':#random coord in a cylinder
-            coord = self.random_cyl()
+        if coord is None:
+            if rand == 'Box':#random coord in a box
+                coord = [random.uniform(0.,1.), random.uniform(0.,1.), random.uniform(0.,1.)]
+            elif rand == 'Cyl':#random coord in a cylinder
+                coord = self.random_cyl()
+            else:
+                raise ValueError(f"the parameter {rand} is not valid (should be either 'Box' or 'Cyl'))")
 
         self.coord = numpy.array(coord)
         self.len = len
         self.lin = lin
         self.id = id
 
-        if lawf == 'none':#no CxT pair defined
+        if lawf is None:#no CxT pair defined
             angle = [0.,0.]
         else:
             paramelv = self.getparams(lawf,'elv')
             paramazi = self.getparams(lawf,'azi')
-            angle = [self.random_anglesF (paramelv[0], paramelv[1], paramelv[2]), self.random_anglesF (paramazi[0], paramazi[1], paramazi[2])]
+            angle = [
+                self.random_anglesF(paramelv[0], paramelv[1], paramelv[2]),
+                self.random_anglesF(paramazi[0], paramazi[1], paramazi[2])
+            ]
 
         self.angle=angle
 
@@ -41,18 +55,46 @@ class Leaf:
         return [rx,ry,rz]
 
 
-    def random_anglesF (self, typel, param1, param2) :
-        """tirage d'angles de feuilles selon les parametres specifies dans le fichier Loi de distribution"""
+    def random_anglesF (
+            self,
+            typel: int,
+            param1: float,
+            param2: float,
+    ) -> float :
+        """tirage d'angles de feuilles selon les parametres specifies dans le fichier Loi de distribution
+
+        Args:
+            typel: leaf type (1 or 2)
+            param1: (degrees) mean angle value
+            param2: (degrees) standard deviation of the angle value
+
+        Returns:
+            (degrees) angle value
+
+        """
         if typel == 1 :
             angle = random.gauss(param1, param2) 
         elif typel == 2 :
             angle = random.uniform(param1, param2) 
-    
+        else:
+            raise ValueError("Invalid 'typel' value (must be 1 or 2)")
         return angle
 
 
-    def getparams(self, lawf, typea):
-        """ recupere les parametres de la loi de distribution du CxT pair en question """
+    def getparams(
+            self,
+            lawf: tuple[tuple[str, int, float, float]],
+            typea: str,
+    ) -> tuple[int | float, int | float, int | float] | None:
+        """recupere les parametres de la loi de distribution du CxT pair en question
+
+        Args:
+            lawf: leaf distribution params
+            typea: one of ("elv", "azi")
+
+        Returns:
+            leaf distribution params
+        """
         # besoin de connaitre la position definitive de la feuille pour connaitre quelle loi utiliser! tire seulement valeur normalisees pour les lois normales
         if typea == 'elv':
             return [1, 0., 1.]
@@ -61,7 +103,7 @@ class Leaf:
                 return [2, -180., 180.] #azimut uniforme pour ces deux CxT
             else:
                 return [1, 0., 1.]
-
+        return None
 
     def set_anglesF (self, lawf, NSstatus):
         """ return actual leaf angles according to measured distribution laws and canopy side """
