@@ -100,7 +100,6 @@ class TopVineInput(object):
             allom_path: str = '/data/allo_Grenache.csv',
             branches=True,
             trunk=True,
-            name: str = 'geom2023.csv',
             geomfile: str | None = None,
             display: bool = False
     ):

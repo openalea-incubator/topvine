@@ -235,7 +235,6 @@ def topvine(
         allom_path: str = '/data/allo_Grenache.csv',
         branches: bool = True,
         trunk: bool = True,
-        name: str = 'geom2023.csv',
         geomfile: str | None = None,
         display: bool = True
 ):
@@ -258,7 +257,6 @@ def topvine(
             - The first line includes the allometric parameters a & b that link the length of a shoot with its number of phytomers (L = a * n + b).
         branches: whether to show internodes (default: True)
         trunk: whether to show trunk (default: True)
-        name: name of the geometry file (for writing)
         geomfile: relative path to geometry file (for reading, default: None)
         display: whether to display the resulting scene (default: True)
 
