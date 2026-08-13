@@ -1,3 +1,4 @@
+from pathlib import Path
 import numpy as np
 import pandas as pd
 
@@ -228,11 +229,11 @@ def generate_shoots(
 
 
 def topvine(
-        stand_path: str = '/data/carto.csv',
+        stand_path: str | Path = '/data/carto.csv',
         gen: Genotype = Genotype(),
-        dl_shoot_path: str = '/data/2W_VSP_GRE_without_ramd.csv',
-        dl_path: str = '/data/Law-leaf-2W-Grenache.csv',
-        allom_path: str = '/data/allo_Grenache.csv',
+        dl_shoot_path: str | Path  = '/data/2W_VSP_GRE_without_ramd.csv',
+        dl_path: str | Path  = '/data/Law-leaf-2W-Grenache.csv',
+        allom_path: str | Path  = '/data/allo_Grenache.csv',
         branches: bool = True,
         trunk: bool = True,
         geomfile: str | None = None,
@@ -241,9 +242,14 @@ def topvine(
     """
 
     Args:
-        stand_path: relative path to the file that includes the plot data (For every plant, XYZ coordinates + number of shoots (coursons))
+        stand_path: path to the file that includes the plot data (For every plant, XYZ coordinates + number of shoots (coursons))
+            - if str: relative path from topvine/ dir
+            - if Path: absolute path
         gen: grapevine genotype having the average shoot profile (topology, leaf surface and internode length).
         dl_shoot_path: relative path to the file that includes the parameters of distribution laws for shoot.
+            - if str: relative path from topvine/ dir
+            - if Path: absolute path
+            * distribution laws for shoot:
             - X0,Y0,Z0    : distribution laws for the positioning of the spurs.
             - DX,DY,DZ    : distribution laws for the distancing of the buds in the spurs.
             - Dist        : seems not to be used
@@ -251,9 +257,18 @@ def topvine(
             - x (     )   : means of the 4 other shoot parameters, namely initial elevation, angle between basal and distal tangents (a.k.a curvature), proportion of shoot accounting for half the curvature and normalized length.
             - S (    )    : Covariance matrices for the 4 other shoot parameters for each azimuth range.
             - Note that the normalized length is included in this table because of the original architecture of the program, however it is subsequently superseded according to the simulations of the generate_rameau_moyen.py script, according to the genotype selected.
-        dl_path: relative path to the file that includes the parameters of distribution laws for leaves.
-            - Elevation South – Elevation North – Azimuth South – Azimuth North
-        allom_path: relative path to the file that includes the allometry parameters
+        dl_path: path to the file that includes the parameters of distribution laws for leaves.
+            - if str: relative path from topvine/ dir
+            - if Path: absolute path
+            * distribution laws for leaves:
+            - Elevation South
+            – Elevation North
+            – Azimuth South
+            – Azimuth North
+        allom_path: path to the file that includes the allometry parameters
+            - if str: relative path from topvine/ dir
+            - if Path: absolute path
+            * allometry parameters
             - The first line includes the allometric parameters a & b that link the length of a shoot with its number of phytomers (L = a * n + b).
         branches: whether to show internodes (default: True)
         trunk: whether to show trunk (default: True)
@@ -265,7 +280,7 @@ def topvine(
             - PGL scence object
             - Shoot objects per plant
     """
-    carto: list[tuple[np.ndarray, int]] = ds.stand_file(stand_path)  # [posxyz_plant, nb_coursons]
+    carto: list[tuple[np.ndarray, int]] = ds.stand_file(stand_path)
     shoot_data: tuple[list, list] = shoot_generator(
         carto=carto,
         genotype=gen,
