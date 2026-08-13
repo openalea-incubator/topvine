@@ -1,48 +1,48 @@
 """ Provides sample data for testing topvine without reference to file paths, nor needs to call package manager
 """
-
 from __future__ import absolute_import
 import os
+from pathlib import Path
 from six.moves import map
 from six.moves import range
 from numpy import ndarray
 
 topvinedir = os.path.dirname(__file__)
 
-def stand_file(fn= '/data/carto.csv') -> list[tuple[ndarray, int]]:
+def stand_file(fn: str | Path = '/data/carto.csv') -> list[tuple[ndarray, int]]:
     from .read_stand_file import read_stand_file
     reader = read_stand_file()
-    return reader(topvinedir + fn)
+    return reader((topvinedir + fn) if isinstance(fn, str) else fn)
 
-def geom_file(fn = '/data/ex_geom2.csv') -> list[list[tuple[int, ndarray, float, float, float, float, float]]]:
+def geom_file(fn: str | Path = '/data/ex_geom2.csv') -> list[list[tuple[int, ndarray, float, float, float, float, float]]]:
     from .read_geom_file import read_geom_file
     reader = read_geom_file()
-    return reader(topvinedir + fn)
+    return reader((topvinedir + fn) if isinstance(fn, str) else fn)
     
-def shoot_file(fn='/data/ex_rammoy3.csv'):
+def shoot_file(fn: str | Path = '/data/ex_rammoy3.csv'):
     from .topologise import topologise
     reader = topologise()
-    return reader(topvinedir + fn)
+    return reader((topvinedir + fn) if isinstance(fn, str) else fn)
     
-def dl_file(fn='/data/Law-leaf-2W-Grenache.csv') -> tuple[tuple[str, int, float, float]]:
+def dl_file(fn: str | Path = '/data/Law-leaf-2W-Grenache.csv') -> tuple[tuple[str, int, float, float]]:
     from .get_dl import get_dl
     reader = get_dl()
-    return reader(topvinedir + fn)
+    return reader((topvinedir + fn) if isinstance(fn, str) else fn)
     
-def dl_shoot_file(fn='/data/2W_VSP_GRE_ramd.csv'):
+def dl_shoot_file(fn: str | Path = '/data/2W_VSP_GRE_ramd.csv'):
     from .get_dl_shoot import get_dl_shoot
     reader = get_dl_shoot()
-    return reader(topvinedir + fn)
+    return reader((topvinedir + fn) if isinstance(fn, str) else fn)
    
-def allometry_file(fn='/data/allo_Grenache.csv'):
+def allometry_file(fn: str | Path = '/data/allo_Grenache.csv'):
     from .read_allometry import read_allometry    
     reader = read_allometry()
-    return reader(topvinedir + fn)
+    return reader((topvinedir + fn) if isinstance(fn, str) else fn)
 
-def digit_file(fn='data/digitCollectionMtp10_rideau_simple.csv'):
+def digit_file(fn: str | Path = 'data/digitCollectionMtp10_rideau_simple.csv'):
     from .reconstr_digit.visu_digit_fromcane import mef_digitcanefile
     reader = mef_digitcanefile
-    return reader(topvinedir + fn)
+    return reader((topvinedir + fn) if isinstance(fn, str) else fn)
 
 def normal_canopy():
     from .gen_normal_canopy import gen_normal_canopy
@@ -56,10 +56,10 @@ def vine():
     n = len(can)
     return [tortl_inst_vine(can[i], dl_file(), allometry_file()) for i in range(n)]
     
-def meteo_j(fn='/data/meteo_j_2007_californieROY.csv'):
+def meteo_j(fn: str | Path = '/data/meteo_j_2007_californieROY.csv'):
     from . import IOtable
     
-    meteo_file_path = topvinedir + fn
+    meteo_file_path = (topvinedir + fn) if isinstance(fn, str) else fn
     f = open(meteo_file_path, 'r')
     table = IOtable.table_csv_str(f)
     f.close()
