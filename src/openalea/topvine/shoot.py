@@ -4,6 +4,8 @@ import numpy
 import random
 from . import leaf
 from six.moves import range
+from openalea.plantgl.all import surface
+from openalea.topvine.primitive import leaf0
 
 class Shoot:
     def __init__(self, Pgeom, topol, law):
@@ -150,7 +152,7 @@ class Shoot_2023:
                     leaf.Leaf(
                         rand='Cyl',
                         lawf=law,
-                        len=topol[0][i][0],
+                        len=self.calc_leaf_scaling_factor(leaf_surface_area=topol[0][i][0]),
                         lin=topol[1][i][0],
                         id=str((i + 1) * 100)),  # id leaf I = rang phyto * 100
                 ]
@@ -163,7 +165,7 @@ class Shoot_2023:
                         leaf.Leaf(
                             rand='Cyl',
                             lawf=law,
-                            len=topol[0][i][j],
+                            len=self.calc_leaf_scaling_factor(leaf_surface_area=topol[0][i][j]),
                             id=str((i + 1) * 100 + j)),  # id leaf II = rang phyto * 100 + rang feuilles II
                     )
 
@@ -267,3 +269,19 @@ class Shoot_2023:
                 self.topo[i][j].len = new_topo[i][j]
 
         # return deltaII
+
+    @staticmethod
+    def calc_leaf_scaling_factor(
+        leaf_surface_area: float,
+    ) -> float:
+        """Sets the leaf surface area scaling percentage to be used when creating the topiary structure
+
+        Args:
+            leaf_surface_area: (cm2) leaf surface area
+
+        Returns:
+            (dimensionless) scaling percentage (between 0 and 100)
+
+        """
+        reference_area: float = surface(leaf0(l=1).geometry)
+        return leaf_surface_area / reference_area * 100.
