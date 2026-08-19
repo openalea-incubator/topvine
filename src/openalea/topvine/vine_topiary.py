@@ -4,7 +4,7 @@ from openalea.plantgl.all import Scene, Viewer
 from six.moves import range
 
 from openalea.topvine.primitive import trunk
-from openalea.topvine.topiary import Topiary_2023
+from openalea.topvine.topiary import Topiary
 
 
 class VineTopiary(object):
@@ -25,7 +25,7 @@ class VineTopiary(object):
             coord = tab_shoot[i][0].geom[1]
             for j in range(len(tab_shoot[i])):
                 coord = (coord + tab_shoot[i][j].geom[1]) / 2
-                Topiary_2023(
+                Topiary(
                     scene=self.scene,
                     shoot=tab_shoot[i][j],
                     allo=allo,
@@ -59,7 +59,7 @@ class VineTopiary2023(object):
     ):
         for plant in range(len(tab_shoot)):
             for shoot in range(len(tab_shoot[plant])):
-                Topiary_2023(
+                Topiary(
                     scene=self.scene,
                     shoot=tab_shoot[plant][shoot],
                     allo=allo,

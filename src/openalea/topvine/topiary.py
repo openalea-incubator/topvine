@@ -9,7 +9,7 @@ from openalea.plantgl.all import Scene
 from openalea.topvine.shoot import Shoot, Shoot_2023
 
 
-class Topiary_2023:
+class Topiary:
 
     def __init__(
             self,
