@@ -27,6 +27,27 @@ def set_profile(
     return res_tot
 
 
+def set_profile_primary_leaf_area(
+    rank_internode_at_max_leaf_area: int,
+    fraction_initial_to_max_leaf_area: float,
+    nb_primary_internodes: int,
+    leaf_area_max: float,
+) -> list[float]:
+    res: list[float] = []
+    for rank in range(1, nb_primary_internodes + 1):
+        print(rank)
+        if rank < rank_internode_at_max_leaf_area:
+            normalized_area = (
+                        fraction_initial_to_max_leaf_area + (rank - 1) / (rank_internode_at_max_leaf_area - 1) * (
+                        1 - fraction_initial_to_max_leaf_area))
+        else:
+            normalized_area = (nb_primary_internodes + 1 - rank) / (
+                        nb_primary_internodes + 1 - rank_internode_at_max_leaf_area)
+        res.append(leaf_area_max * normalized_area)
+
+    return res
+
+
 class Genotype(object):
 
     def __init__(self, NFI_mean=24.38,
