@@ -24,15 +24,18 @@ class Genotype(object):
     intercept_0_IN: float = 0.1
     intercept_1_IN: float = 0.46
     name: str = 'generic genotype'
+    rank_internode_at_max_length_mean: int | float = 9.33
+    rank_internode_at_max_length_sd: float = 2.835
+    fraction_apical_to_max_internode_length_mean: float = 0.376
+    fraction_apical_to_max_internode_length_sd: float = 0.113
 
     @property
     def primary_internode_profile(self) -> list[float]:
-        return self.set_profile(
-            intercept_0=self.intercept_0_IN,
-            intercept_1=self.intercept_1_IN,
-            max_normalized=self.max_normalized_rank_IN,
-            norm_val=[v / round(self.NFI_mean) for v in range(1, round(self.NFI_mean) + 1)],
-            value_max=self.IN_max_mean
+        return self.set_profile_primary_internode_length(
+            rank_internode_at_max_length=round(self.rank_internode_at_max_length_mean),
+            fraction_apical_to_max_length=self.fraction_apical_to_max_internode_length_mean,
+            nb_primary_internodes=round(self.NFI_mean),
+            length_max=self.IN_max_mean,
         )
 
     @staticmethod
@@ -44,7 +47,6 @@ class Genotype(object):
     ) -> list[float]:
         res: list[float] = []
         for rank in range(1, nb_primary_internodes + 1):
-            print(rank)
             if rank < rank_internode_at_max_length:
                 normalized_area = (rank - 1) / (rank_internode_at_max_length - 1)
             else:
@@ -142,12 +144,19 @@ class Genotype(object):
             norm_val=norm_rank_primary_leaf,
             value_max=leaf_area_max / leaf_area_correction_factor,
         )
-        profile_internode_length: list[float] = self.set_profile(
-            intercept_0=self.intercept_0_IN,
-            intercept_1=self.intercept_1_IN,
-            max_normalized=self.max_normalized_rank_IN,
-            norm_val=norm_rank_primary_leaf,
-            value_max=internode_length_max,
+        profile_internode_length: list[float] = self.set_profile_primary_internode_length(
+            rank_internode_at_max_length=round(
+                self.get_positive_random_value(
+                    value_mean=self.rank_internode_at_max_length_mean,
+                    value_sd=self.rank_internode_at_max_length_sd,
+                )
+            ),
+            fraction_apical_to_max_length=self.get_positive_random_value(
+                value_mean=self.fraction_apical_to_max_internode_length_mean,
+                value_sd=self.fraction_apical_to_max_internode_length_sd,
+            ),
+            nb_primary_internodes=nb_primary_phytomers,
+            length_max=internode_length_max,
         )
 
         profile_secondary_leaf_area = [
