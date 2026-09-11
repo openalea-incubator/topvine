@@ -28,6 +28,10 @@ class Genotype(object):
     rank_internode_at_max_length_sd: float = 2.835
     fraction_apical_to_max_internode_length_mean: float = 0.376
     fraction_apical_to_max_internode_length_sd: float = 0.113
+    rank_internode_at_max_leaf_area_mean: int | float = 7.985
+    rank_internode_at_max_leaf_area_sd: float = 2.151
+    fraction_initial_to_max_leaf_area_mean: float = 0.224
+    fraction_initial_to_max_leaf_area_sd: float = 0.109
 
     @property
     def primary_internode_profile(self) -> list[float]:
@@ -65,7 +69,6 @@ class Genotype(object):
     ) -> list[float]:
         res: list[float] = []
         for rank in range(1, nb_primary_internodes + 1):
-            print(rank)
             if rank < rank_internode_at_max_leaf_area:
                 normalized_area = (
                         fraction_initial_to_max_leaf_area + (rank - 1) / (rank_internode_at_max_leaf_area - 1) * (
@@ -135,14 +138,19 @@ class Genotype(object):
             p=self.size_r_binorm / (self.size_r_binorm + self.mu_r_binorm),
             size=max(0, nb_primary_phytomers - 6)).tolist() + [0] * 6
 
-        norm_rank_primary_leaf = [v / nb_primary_phytomers for v in range(1, nb_primary_phytomers + 1)]
-
-        profile_primary_leaf_area: list[float] = self.set_profile(
-            intercept_0=self.intercept_0_SF,
-            intercept_1=self.intercept_1_SF,
-            max_normalized=self.max_normalized_rank_SF,
-            norm_val=norm_rank_primary_leaf,
-            value_max=leaf_area_max / leaf_area_correction_factor,
+        profile_primary_leaf_area: list[float] = self.set_profile_primary_leaf_area(
+            rank_internode_at_max_leaf_area=round(
+                self.get_positive_random_value(
+                    value_mean=self.rank_internode_at_max_leaf_area_mean,
+                    value_sd=self.rank_internode_at_max_leaf_area_sd,
+                )
+            ),
+            fraction_initial_to_max_leaf_area=self.get_positive_random_value(
+                value_mean=self.fraction_initial_to_max_leaf_area_mean,
+                value_sd=self.fraction_initial_to_max_leaf_area_sd,
+            ),
+            nb_primary_internodes=nb_primary_phytomers,
+            leaf_area_max=leaf_area_max / leaf_area_correction_factor,
         )
         profile_internode_length: list[float] = self.set_profile_primary_internode_length(
             rank_internode_at_max_length=round(
