@@ -1,7 +1,9 @@
 from dataclasses import dataclass
+from typing import Iterable
+
 import numpy as np
 import pandas as pd
-from typing import Iterable
+
 
 ### recuperation des donnees observees et calculs SF et longueur du rameau
 # dat_observed = read.csv("C:/Users/joels/Desktop/Data Stage/All_Data/Data_Trait_Archi_Copy.csv", header = T, sep=",")
