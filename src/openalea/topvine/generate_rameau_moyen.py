@@ -5,13 +5,6 @@ import numpy as np
 import pandas as pd
 
 
-### recuperation des donnees observees et calculs SF et longueur du rameau
-# dat_observed = read.csv("C:/Users/joels/Desktop/Data Stage/All_Data/Data_Trait_Archi_Copy.csv", header = T, sep=",")
-# total_SF_values = aggregate(dat_observed$SF, by = list(dat_observed$ID, dat_observed$Genotype), sum, na.rm=T)
-# dat_observed_I = dat_observed[is.na(dat_observed$Rang_Secondaire),]
-# total_length_values = aggregate(dat_observed_I$LEN, by = list(dat_observed_I$ID, dat_observed_I$Genotype), sum, na.rm=T)
-
-
 def set_profile_primary_leaf_area(
     rank_internode_at_max_leaf_area: int,
     fraction_initial_to_max_leaf_area: float,
