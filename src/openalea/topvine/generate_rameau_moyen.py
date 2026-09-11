@@ -1,5 +1,3 @@
-from functools import cached_property
-
 import numpy as np
 import pandas as pd
 from typing import Iterable
@@ -68,7 +66,7 @@ class Genotype(object):
         self.name = name
 
         # self.mean_shoot_length: float = sum(self.primary_internode_profile)
-    @cached_property
+    @property
     def primary_internode_profile(self) -> list[float]:
             return set_profile(
         intercept_0=self.intercept_0_IN,
