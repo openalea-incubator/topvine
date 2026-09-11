@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Iterable
 
 import numpy as np
 import pandas as pd
@@ -79,24 +78,6 @@ class Genotype(object):
             res.append(leaf_area_max * normalized_area)
 
         return res
-
-    @staticmethod
-    def set_profile(
-            intercept_0: float | int,
-            intercept_1: float | int,
-            max_normalized: float | int,
-            norm_val: Iterable[float],
-            value_max: float | int = 1
-    ) -> list[float]:
-        res_tot = []
-        for norm_rank in norm_val:
-            if norm_rank < max_normalized:
-                res = (1 - intercept_0) / max_normalized * norm_rank + intercept_0
-            else:
-                res = (intercept_1 - 1) / (1 - max_normalized) * (norm_rank - max_normalized) + 1
-            res_tot.append(float(res * value_max))
-
-        return res_tot
 
     @staticmethod
     def get_positive_random_value(
