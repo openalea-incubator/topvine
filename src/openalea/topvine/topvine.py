@@ -6,7 +6,7 @@ import openalea.topvine.data_samples as ds
 from openalea.topvine import conditional_multivariate_normal as cmn
 from openalea.topvine.gen_normal_canopy import create_normalized_canopy
 from openalea.topvine.gen_shoot_param import gen_shoot_param
-from openalea.topvine.generate_rameau_moyen import Genotype
+from openalea.topvine.genotype import Genotype
 from openalea.topvine.topologise import toponthefly_2023
 from openalea.topvine.vine_topiary import VineTopiary2023
 from openalea.topvine.shoot import Shoot_2023
@@ -256,7 +256,7 @@ def topvine(
             - freq AZI    : frequency of shoot AZI of angle (-20, 20), (20, 160), (160, 200) and (200, 340)
             - x (     )   : means of the 4 other shoot parameters, namely initial elevation, angle between basal and distal tangents (a.k.a curvature), proportion of shoot accounting for half the curvature and normalized length.
             - S (    )    : Covariance matrices for the 4 other shoot parameters for each azimuth range.
-            - Note that the normalized length is included in this table because of the original architecture of the program, however it is subsequently superseded according to the simulations of the generate_rameau_moyen.py script, according to the genotype selected.
+            - Note that the normalized length is included in this table because of the original architecture of the program, however it is subsequently superseded according to the simulations of the genotype.py script, according to the genotype selected.
         dl_path: path to the file that includes the parameters of distribution laws for leaves.
             - if str: relative path from topvine/ dir
             - if Path: absolute path

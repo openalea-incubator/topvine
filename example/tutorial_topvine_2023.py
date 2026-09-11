@@ -1,6 +1,6 @@
 """ A python tutorial for running topvine grapevine canopy generator
 """
-from openalea.topvine.generate_rameau_moyen import Genotype
+from openalea.topvine.genotype import Genotype
 from openalea.topvine.topvine import topvine
 from openalea.topvine.genodata import (
     Carignan, Chasselas, Clairette,Marselan, Mauzac, Mourverde, Petit_Verdot, Vermentino)

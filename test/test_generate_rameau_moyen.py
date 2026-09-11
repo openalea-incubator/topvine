@@ -1,6 +1,6 @@
 import unittest
 
-from topvine.generate_rameau_moyen import set_profile_primary_leaf_area, set_profile_primary_internode_length
+from topvine.genotype import set_profile_primary_leaf_area, set_profile_primary_internode_length
 
 
 class TestSetProfilePrimaryLeafArea(unittest.TestCase):

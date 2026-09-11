@@ -1,4 +1,4 @@
-from openalea.topvine.generate_rameau_moyen import Genotype
+from openalea.topvine.genotype import Genotype
 
 Carignan = Genotype(NFI_mean=21.75,
                     NFI_sd=2.95,
