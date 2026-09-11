@@ -16,12 +16,6 @@ class Genotype(object):
     slope_sd_NFII_SFII: float = 2
     size_r_binorm: float = 1.68
     mu_r_binorm: float = 1.27
-    max_normalized_rank_SF: float = 0.34
-    intercept_0_SF: float = 0.26
-    intercept_1_SF: float = 0.20
-    max_normalized_rank_IN: float = 0.46
-    intercept_0_IN: float = 0.1
-    intercept_1_IN: float = 0.46
     name: str = 'generic genotype'
     rank_internode_at_max_length_mean: int | float = 9.33
     rank_internode_at_max_length_sd: float = 2.835
