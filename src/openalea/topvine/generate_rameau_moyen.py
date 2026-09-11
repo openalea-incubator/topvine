@@ -48,6 +48,25 @@ def set_profile_primary_leaf_area(
     return res
 
 
+def set_profile_primary_internode_length(
+        rank_internode_at_max_length: int,
+        fraction_apical_to_max_length: float,
+        nb_primary_internodes: int,
+        length_max: float,
+) -> list[float]:
+    res: list[float] = []
+    for rank in range(1, nb_primary_internodes + 1):
+        print(rank)
+        if rank < rank_internode_at_max_length:
+            normalized_area = (rank - 1) / (rank_internode_at_max_length - 1)
+        else:
+            normalized_area = (fraction_apical_to_max_length + (1 - fraction_apical_to_max_length) * (
+                        nb_primary_internodes + 1 - rank) / (nb_primary_internodes + 1 - rank_internode_at_max_length))
+        res.append(length_max * normalized_area)
+
+    return res
+
+
 class Genotype(object):
 
     def __init__(self, NFI_mean=24.38,
