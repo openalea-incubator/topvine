@@ -6,7 +6,7 @@ import openalea.topvine.data_samples as ds
 from openalea.topvine import conditional_multivariate_normal as cmn
 from openalea.topvine.gen_normal_canopy import create_normalized_canopy
 from openalea.topvine.gen_shoot_param import gen_shoot_param
-from openalea.topvine.generate_rameau_moyen import generate_rameau_moyen, Genotype
+from openalea.topvine.generate_rameau_moyen import Genotype
 from openalea.topvine.topologise import toponthefly_2023
 from openalea.topvine.vine_topiary import VineTopiary2023
 from openalea.topvine.shoot import Shoot_2023
@@ -33,7 +33,7 @@ def shoot_generator(
         thisplant = []
         thisplantshootlength = []
         for _ in range(nb_spurs):
-            ramtopv: pd.DataFrame = generate_rameau_moyen(g=genotype)
+            ramtopv: pd.DataFrame = genotype.generate_rameau_moyen()
             shoot: tuple[list, list] = toponthefly_2023(shoot_specs= ramtopv)
             thisplant.append(shoot)
             thisplantshootlength.append(sum(ramtopv["IN_I_length"]))
