@@ -5,46 +5,6 @@ import numpy as np
 import pandas as pd
 
 
-def set_profile_primary_leaf_area(
-    rank_internode_at_max_leaf_area: int,
-    fraction_initial_to_max_leaf_area: float,
-    nb_primary_internodes: int,
-    leaf_area_max: float,
-) -> list[float]:
-    res: list[float] = []
-    for rank in range(1, nb_primary_internodes + 1):
-        print(rank)
-        if rank < rank_internode_at_max_leaf_area:
-            normalized_area = (
-                        fraction_initial_to_max_leaf_area + (rank - 1) / (rank_internode_at_max_leaf_area - 1) * (
-                        1 - fraction_initial_to_max_leaf_area))
-        else:
-            normalized_area = (nb_primary_internodes + 1 - rank) / (
-                        nb_primary_internodes + 1 - rank_internode_at_max_leaf_area)
-        res.append(leaf_area_max * normalized_area)
-
-    return res
-
-
-def set_profile_primary_internode_length(
-        rank_internode_at_max_length: int,
-        fraction_apical_to_max_length: float,
-        nb_primary_internodes: int,
-        length_max: float,
-) -> list[float]:
-    res: list[float] = []
-    for rank in range(1, nb_primary_internodes + 1):
-        print(rank)
-        if rank < rank_internode_at_max_length:
-            normalized_area = (rank - 1) / (rank_internode_at_max_length - 1)
-        else:
-            normalized_area = (fraction_apical_to_max_length + (1 - fraction_apical_to_max_length) * (
-                        nb_primary_internodes + 1 - rank) / (nb_primary_internodes + 1 - rank_internode_at_max_length))
-        res.append(length_max * normalized_area)
-
-    return res
-
-
 @dataclass
 class Genotype(object):
     NFI_mean: float = 24.38
@@ -74,6 +34,46 @@ class Genotype(object):
             norm_val=[v / round(self.NFI_mean) for v in range(1, round(self.NFI_mean) + 1)],
             value_max=self.IN_max_mean
         )
+
+    @staticmethod
+    def set_profile_primary_internode_length(
+            rank_internode_at_max_length: int,
+            fraction_apical_to_max_length: float,
+            nb_primary_internodes: int,
+            length_max: float,
+    ) -> list[float]:
+        res: list[float] = []
+        for rank in range(1, nb_primary_internodes + 1):
+            print(rank)
+            if rank < rank_internode_at_max_length:
+                normalized_area = (rank - 1) / (rank_internode_at_max_length - 1)
+            else:
+                normalized_area = (fraction_apical_to_max_length + (1 - fraction_apical_to_max_length) * (
+                        nb_primary_internodes + 1 - rank) / (nb_primary_internodes + 1 - rank_internode_at_max_length))
+            res.append(length_max * normalized_area)
+
+        return res
+
+    @staticmethod
+    def set_profile_primary_leaf_area(
+            rank_internode_at_max_leaf_area: int,
+            fraction_initial_to_max_leaf_area: float,
+            nb_primary_internodes: int,
+            leaf_area_max: float,
+    ) -> list[float]:
+        res: list[float] = []
+        for rank in range(1, nb_primary_internodes + 1):
+            print(rank)
+            if rank < rank_internode_at_max_leaf_area:
+                normalized_area = (
+                        fraction_initial_to_max_leaf_area + (rank - 1) / (rank_internode_at_max_leaf_area - 1) * (
+                        1 - fraction_initial_to_max_leaf_area))
+            else:
+                normalized_area = (nb_primary_internodes + 1 - rank) / (
+                        nb_primary_internodes + 1 - rank_internode_at_max_leaf_area)
+            res.append(leaf_area_max * normalized_area)
+
+        return res
 
     @staticmethod
     def set_profile(

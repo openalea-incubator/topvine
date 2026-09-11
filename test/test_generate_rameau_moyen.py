@@ -1,6 +1,6 @@
 import unittest
 
-from topvine.genotype import set_profile_primary_leaf_area, set_profile_primary_internode_length
+from topvine.genotype import Genotype
 
 
 class TestSetProfilePrimaryLeafArea(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestSetProfilePrimaryLeafArea(unittest.TestCase):
         cls.nb_primary_internodes = 24
         cls.leaf_area_max = 1
 
-        cls.leaf_area_profile: list[float] = set_profile_primary_leaf_area(
+        cls.leaf_area_profile: list[float] = Genotype.set_profile_primary_leaf_area(
             rank_internode_at_max_leaf_area=cls.rank_internode_at_max_leaf_area,
             fraction_initial_to_max_leaf_area=cls.fraction_initial_to_max_leaf_area,
             nb_primary_internodes=cls.nb_primary_internodes,
@@ -45,7 +45,7 @@ class TestSetProfilePrimaryInternodeLength(unittest.TestCase):
         cls.nb_primary_internodes = 24
         cls.length_max = 1
 
-        cls.leaf_area_profile: list[float] = set_profile_primary_internode_length(
+        cls.leaf_area_profile: list[float] = Genotype.set_profile_primary_internode_length(
             rank_internode_at_max_length=cls.rank_internode_at_max_length,
             fraction_apical_to_max_length=cls.fraction_apical_to_max_length,
             nb_primary_internodes=cls.nb_primary_internodes,
