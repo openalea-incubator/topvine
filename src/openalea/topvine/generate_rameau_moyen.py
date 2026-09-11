@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 from typing import Iterable
@@ -67,45 +68,26 @@ def set_profile_primary_internode_length(
     return res
 
 
+@dataclass
 class Genotype(object):
+    NFI_mean: float = 24.38
+    NFI_sd: float = 2.33
+    SF_max_mean: float = 279
+    SF_max_sd: float = 58.5
+    IN_max_mean: float = 11.71
+    IN_max_sd: float = 0.91
+    slope_NFII_SFII: float = 50
+    slope_sd_NFII_SFII: float = 2
+    size_r_binorm: float = 1.68
+    mu_r_binorm: float = 1.27
+    max_normalized_rank_SF: float = 0.34
+    intercept_0_SF: float = 0.26
+    intercept_1_SF: float = 0.20
+    max_normalized_rank_IN: float = 0.46
+    intercept_0_IN: float = 0.1
+    intercept_1_IN: float = 0.46
+    name: str = 'generic genotype'
 
-    def __init__(self, NFI_mean=24.38,
-                 NFI_sd=2.33,
-                 SF_max_mean=279,
-                 SF_max_sd=58.5,
-                 IN_max_mean=11.71,
-                 IN_max_sd=0.91,
-                 slope_NFII_SFII=50,
-                 slope_sd_NFII_SFII=2,
-                 size_r_binorm=1.68,
-                 mu_r_binorm=1.27,
-                 max_normalized_rank_SF=0.34,
-                 intercept_0_SF=0.26,
-                 intercept_1_SF=0.20,
-                 max_normalized_rank_IN=0.46,
-                 intercept_0_IN=0.1,
-                 intercept_1_IN=0.46,
-                 name='generic genotype'
-                 ):
-        self.NFI_mean = NFI_mean
-        self.NFI_sd = NFI_sd
-        self.SF_max_mean = SF_max_mean
-        self.SF_max_sd = SF_max_sd
-        self.IN_max_mean = IN_max_mean
-        self.IN_max_sd = IN_max_sd
-        self.slope_NFII_SFII = slope_NFII_SFII
-        self.slope_sd_NFII_SFII = slope_sd_NFII_SFII
-        self.size_r_binorm = size_r_binorm
-        self.mu_r_binorm = mu_r_binorm
-        self.max_normalized_rank_SF = max_normalized_rank_SF
-        self.intercept_0_SF = intercept_0_SF
-        self.intercept_1_SF = intercept_1_SF
-        self.max_normalized_rank_IN = max_normalized_rank_IN
-        self.intercept_0_IN = intercept_0_IN
-        self.intercept_1_IN = intercept_1_IN
-        self.name = name
-
-        # self.mean_shoot_length: float = sum(self.primary_internode_profile)
     @property
     def primary_internode_profile(self) -> list[float]:
             return set_profile(
