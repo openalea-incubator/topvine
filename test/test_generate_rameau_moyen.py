@@ -1,6 +1,6 @@
 import unittest
 
-from topvine.genotype import Genotype
+from openalea.topvine.genotype import Genotype
 
 
 class TestSetProfilePrimaryLeafArea(unittest.TestCase):
